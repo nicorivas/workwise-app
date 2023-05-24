@@ -1,0 +1,8 @@
+.chroma
+.chroma/
+*.pyc
+*.ipynb
+*.pdf
+*.log
+pyrightconfig.json
+.vscode/
