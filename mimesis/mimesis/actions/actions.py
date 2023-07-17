@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:  # Only imports the below statements during type checking
-    from agent import Agent
+    from mimesis.agent.agent import Agent
 
 from abc import abstractmethod
 from typing import Any #Dict, List, Optional, Sequence, Tuple, Union

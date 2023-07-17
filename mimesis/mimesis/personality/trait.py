@@ -11,5 +11,10 @@ class Trait(BaseModel):
     self_definition: str
     examples: list[str] = []
 
+    # Save trait to JSON file
+    def save(self, filename: str):
+        with open(filename, "w") as f:
+            f.write(self.json())
+
     def __str__(self) -> str:
         return self.self_definition

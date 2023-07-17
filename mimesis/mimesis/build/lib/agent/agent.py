@@ -2,17 +2,19 @@ import json
 
 from pydantic import BaseModel
 
-from personality import Personality
-from actions import Action
-from memory import Memory
-from thought import Thought
-from model import LLM
+from mimesis.personality import Personality
+from mimesis.actions.actions import Action
+from mimesis.memory.memory import Memory
+from mimesis.thought import Thought
+from mimesis.model import LLM
+from mimesis.role import Role
 
 class Agent(BaseModel):
-    """Base Personality class"""
-    name: str = ""
+    """Base Agent class"""
+    name: str = "Agent"
     definition: str = f"You are {name}, an agent that can experience the virtual world."
-    personality: Personality
+    personality: Personality | None = None
+    role: Role | None = None
     memories: list[Memory] = []
     history: list[dict[str,str]] = []
     llm: LLM = LLM(log=True)
@@ -30,9 +32,21 @@ class Agent(BaseModel):
         prompt = f"""{self.definition}\n
 {self.personality}"""
         return prompt
+    
+    def prompt(self, definition:bool = True, action: Action | None = None) -> str:
+        prompt = ""
+        if definition:
+            prompt = self.definition
+        if self.personality is not None:
+            prompt += f"\n\n{self.personality}"
+        if self.role is not None:
+            prompt += f"\n\n{self.role.act}"
+        if action is not None:
+            prompt += f"\n\n{action.do(self)}"
+        return prompt
 
     def do(self, action: Action) -> str:
-        prompt = f"""{self.definition}\n{self.personality}\n{action.do(self)}"""
+        prompt = self.prompt(action)
         
         self.add_memory(Memory(description=action.memory(self)))
 
@@ -59,7 +73,8 @@ class Agent(BaseModel):
             agent_json = json.load(f)
             self.name = agent_json["name"]
             self.definition = agent_json["definition"]
-            self.personality = Personality(**agent_json["personality"])
+            if agent_json.get("personality"):
+                self.personality = Personality(**agent_json["personality"])
             self.memories = [Memory(**memory) for memory in agent_json["memories"]]
             self.llm = LLM(**agent_json["llm"])
     

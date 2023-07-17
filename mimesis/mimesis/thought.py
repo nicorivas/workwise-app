@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from memory import Memory
+from mimesis.memory.memory import Memory
 
 class Thought(BaseModel):
     description:str

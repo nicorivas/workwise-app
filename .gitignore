@@ -5,4 +5,8 @@
 *.pdf
 *.log
 pyrightconfig.json
+*.egg-info/
 .vscode/
+.mypy_cache/
+__pycache__/
+fingpt.egg-info/

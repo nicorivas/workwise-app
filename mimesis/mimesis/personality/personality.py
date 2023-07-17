@@ -2,10 +2,13 @@ import json
 
 from pydantic import BaseModel
 
-from trait import Trait
+from mimesis.personality.trait import Trait
 
 class Personality(BaseModel):
-    """Base Personality class"""
+    """Base Personality class
+    
+    Personalities are a collection of traits. These determine the thoughts that are generated from experiences.
+    """
     traits: list[Trait] = []
 
     def load_traits(self, filename: str):
@@ -14,6 +17,20 @@ class Personality(BaseModel):
             traits_json = json.load(f)
             for trait in traits_json["traits"]:
                 self.traits.append(Trait(**trait))
+
+    def save(self, filename):
+        """Save personality to JSON file"""
+        with open(filename, "w") as f:
+            f.write(self.json())
+    
+    @staticmethod
+    def load(filename):
+        """Load personality from JSON file"""
+        personality = Personality()
+        with open(filename) as f:
+            personality_json = json.load(f)
+            personality.traits = [Trait(**trait) for trait in personality_json["traits"]]
+        return personality
 
     def __str__(self) -> str:
         str = f"""You have personality traits that define how you react and what you remember from experiences. Your personality traits are:\n"""
