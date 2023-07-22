@@ -18,6 +18,11 @@ def get_agents():
     response = requests.get(api_url)
     return response.json()
 
+def delete_agent(agent_id):
+    api_url = f"{config.API_URL}/agents/{agent_id}"
+    response = requests.delete(api_url)
+    return response.json()
+
 def agent_do(agent_id, action_id, action_args: dict):
     api_url = f"{config.API_URL}/agents/{agent_id}/do/{action_id}/"
     response = requests.put(api_url, json=action_args)

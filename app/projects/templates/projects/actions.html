@@ -1,0 +1,14 @@
+<div class="row shadow border">
+    <div class="column bg-light">
+{% if actions %}
+{% for action in actions %}    
+        <a class="dropdown-item mt-1 mb-1" hx-post="{% url 'projects:select_action' 1 action.pk %}" hx-target="#action">
+            <h5>{{action.name}}</h5>
+            <p>{{action.description}}</p>
+        </a>
+{% endfor %}
+{% else %}
+        No actions
+{% endif %}        
+    </div>    
+</div>

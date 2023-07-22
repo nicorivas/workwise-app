@@ -41,7 +41,7 @@ class Agent(BaseModel):
         if definition:
             prompt = self.definition
         if self.personality is not None:
-            prompt += f"\n\n{self.personality}"
+            prompt += f"\n\n{self.personality.prompt()}"
         if self.role is not None:
             prompt += f"\n\n{self.role.act}"
         if action is not None:

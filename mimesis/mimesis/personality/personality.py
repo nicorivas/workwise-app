@@ -31,8 +31,8 @@ class Personality(BaseModel):
             personality_json = json.load(f)
             personality.traits = [Trait(**trait) for trait in personality_json["traits"]]
         return personality
-
-    def __str__(self) -> str:
+    
+    def prompt(self) -> str:
         str = f"""You have personality traits that define how you react and what you remember from experiences. Your personality traits are:\n"""
         str += "\n".join([f"* {trait.self_definition}" for trait in self.traits])
         return str

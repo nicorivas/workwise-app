@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ agent.name }}</h1>
+
+<p>{{agent.description}}</p>
+
+<p>Personality: {{agent.personality.name}}</p>
+
+{% for trait in agent.personality.traits.all %}
+
+<ul>
+<li>{{trait.name}}</li>
+</ul>
+
+{% endfor %}
+
+{% endblock %}
