@@ -10,3 +10,4 @@ pyrightconfig.json
 .mypy_cache/
 __pycache__/
 fingpt.egg-info/
+*.DS_Store
