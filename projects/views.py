@@ -5,6 +5,7 @@ from django.http.response import JsonResponse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+from django.conf import settings
 import json
 
 import openai
@@ -15,7 +16,7 @@ from actions.models import ActionDB
 from mimesis.agent.agent import Agent
 from mimesis.actions.project import EvaluatePrompt, WriteProject
 
-openai.api_key = "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"
+openai.api_key = settings.OPENAI_API_KEY
 
 @csrf_exempt
 def actions(request, project_id):
