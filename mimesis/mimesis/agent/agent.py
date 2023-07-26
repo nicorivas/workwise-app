@@ -38,8 +38,6 @@ class Agent(BaseModel):
     
     def prompt(self, definition:bool = True, action: Union[Action, None] = None) -> str:
         prompt = ""
-        if definition:
-            prompt = self.definition
         if self.personality is not None:
             prompt += f"\n\n{self.personality.prompt()}"
         if self.role is not None:
@@ -86,5 +84,5 @@ class Agent(BaseModel):
     def __str__(self) -> str:
         return self.name
     
-    def json(self, exclude_unset=True, exclude_none=True, indent=2, **kwargs):
-        return super().json(exclude_unset=exclude_unset, exclude_none=exclude_none, indent=indent, **kwargs)
+    def to_json(self, exclude_unset=True, exclude_none=True, indent=2, **kwargs):
+        return super().model_dump_json(exclude_unset=exclude_unset, exclude_none=exclude_none, indent=indent, **kwargs)
