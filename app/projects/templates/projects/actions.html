@@ -3,8 +3,8 @@
 {% if actions %}
 {% for action in actions %}    
         <a class="dropdown-item mt-1 mb-1" hx-post="{% url 'projects:select_action' 1 action.pk %}" hx-target="#action">
-            <h5>{{action.name}}</h5>
-            <p>{{action.description}}</p>
+            <div style="font-weight:600;">{{action.name}}</div>
+            <div style="font-size:0.9em;">{{action.description}}</div>
         </a>
 {% endfor %}
 {% else %}

@@ -9,12 +9,11 @@ import json
 
 import openai
 
-from .models import Project, Record, Message
+from .models import Project, Record, Message, Instruction, Document
 from actions.models import ActionDB
 
 from mimesis.agent.agent import Agent
-
-# This for Audio Recording
+from mimesis.actions.project import EvaluatePrompt, WriteProject
 
 openai.api_key = "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"
 
@@ -35,17 +34,78 @@ def select_action(request, project_id, action_id):
     return render(request, "projects/action.html", context)
 
 @csrf_exempt
-def call_action(request, project_id):
+def call_action(request, project_id, instruction_id, action_id):
     if request.method == 'POST':
-        print(request.POST)
-
-        agent = Agent()
-
-        messages = Message.objects.filter(project=project_id)
+        print("call_action", project_id, action_id, instruction_id)
+        instruction = get_object_or_404(Instruction, id=instruction_id)
+        agent = Agent(**json.loads(request.session['agent']))
+        action = EvaluatePrompt(project_description=request.POST.get("prompt"))
+        reply = agent.do(action)
+        project = get_object_or_404(Project, pk=project_id)
+        agent = get_object_or_404(Project, pk=project_id)
+        message = Message.objects.create(
+            project=project,
+            message=reply,
+            agent=project.agent,
+            instruction=instruction,
+            user="Agent",
+            type="comment"
+            )
+        message.save()
         context = {
-            "messages": messages,
+            "instruction": instruction,
         }
-        return render(request, "projects/messages.html", context)
+        return render(request, "projects/instruction.html", context)
+
+def parse_markdown(reply):
+    reply = json.loads(reply)
+    text = f"""# {reply["title"]}
+"""
+
+    text += """## Main objectives
+"""
+    for objective in reply["main_objectives"]:
+        text += f"""- {objective["description"]}
+"""
+
+    text += f"""## Background
+{reply["background"]}
+"""
+
+    text += f"""## Timeline
+{reply["timeline"]}
+"""
+    text += """## Stakeholders
+"""
+    for stakeholder in reply["stakeholders"]:
+        text += f"""- *{stakeholder["name"]}*: {stakeholder["role"]}
+"""
+
+    text += f"""## Risks & Assumptions
+"""
+    for rna in reply["risks_and_assumptions"]:
+        text += f"""- *{rna["type"]}*: {rna["description"]}
+"""
+
+    return text
+
+@csrf_exempt
+def write_document(request, project_id, document_id):
+    print("write_document", document_id)
+    
+    # Generate agent, and create document with corresponding action
+    agent = Agent(**json.loads(request.session['agent']))
+    action = WriteProject(project_description=request.POST.get("prompt"))
+    reply = agent.do(action)
+    markdown = parse_markdown(reply)
+    document = get_object_or_404(Document, id=document_id)
+    document.text = markdown
+    print(markdown)
+    document.save()
+    context = {
+        "document": document,
+    }
+    return render(request, "projects/document.html", context)
 
 @csrf_exempt
 def transcribe_audio(request, project_id):
@@ -65,10 +125,17 @@ def transcribe_audio(request, project_id):
     return JsonResponse({'error': 'Invalid method'})
 
 @csrf_exempt
-def gatekeeper(request, project_id):
-    print(request)
+def get_prompt(request, project_id):
     if request.method == 'POST':
-        print(request.POST)
+        agent = Agent(**json.loads(request.session['agent']))
+        action = WriteProject(project_description=request.POST.get("prompt"))
+        prompt = agent.prompt(action=action)
+        context = {"prompt":prompt}
+        return render(request, "projects/modal_prompt.html", context)
+
+@csrf_exempt
+def gatekeeper(request, project_id):
+    if request.method == 'POST':
         message = request.POST.get("fields[message]")
         model: str = "gpt-3.5-turbo"
         llm_system = "You are a senior project manager with over 20 years of experience. You answer questions using markdown."
@@ -76,15 +143,7 @@ def gatekeeper(request, project_id):
         Please consider the following transcript as context describing a new project: 
         {message}
 
-        From the project context, identify the following elements:
-        * Project title.
-        * The main objectives, ranging from 1 to a maximum of 3. Please use the SMART framework to write the objetives: each should be specific, measurable, achievable, relevant and time bound.
-        * Identify the project background. This should summarize briefly why the project is necessary and how it will benefit the organization or users.
-        * The project timeline, this should include the expected beginning and end dates. If those dates are not found in the context, please identify an estimated lenght in weeks or months. If you consider that you didn't found the project timeline in the context, assume it was "not found".
-        * Project stakeholders, describing briefly how each is one is affected or should be involved in the project. If you consider that you didn't found enough information in the context to identify project stakeholders, assume it was "not found".
-        * Risks and assumptions of the project. Describe each briefly, list a maximum of 5 risks and assumptions. If you consider that you didn't found enough information in the context to identify project stakeholders, assume it was "not found".
-
-        Now, consider all the items you have analized and write down in markdown using the following order of headers: project title, main objectives, project background, project timeline, project stakeholders, and project risks and assumptions.
+        
         """
 
         llm_messages = [{"role": "system", "content": llm_system}]
@@ -142,15 +201,37 @@ def index(request):
     context = {
         "projects": projects,
         "records": records,
-        "messages": messages,
     }
     return render(request, "projects/index.html", context)
 
 def project(request, project_id):
+
+
     project = get_object_or_404(Project, pk=project_id)
+    document = project.document
+    agent = project.agent
+    instructions = Instruction.objects.filter(project=project_id)
+
+    # Create mimesis Agent to store in session
+    mms_agent = Agent(name=agent.name, definition=agent.definition)
+    request.session['agent'] = mms_agent.json()
+    
     messages = Message.objects.filter(project=project_id, type="audio")
     context = {
         "project": project,
-        "messages": messages,
+        "document": document,
+        "instructions": instructions,
     }
     return render(request, "projects/project.html", context)
+
+@csrf_exempt
+def delete_message(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    instruction_id = message.instruction.pk
+    print(instruction_id)
+    message.delete()
+    messages = Message.objects.filter(instruction=instruction_id)
+    context = {
+        "messages": messages
+    }
+    return render(request, "projects/messages.html", context)

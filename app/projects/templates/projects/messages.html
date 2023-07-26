@@ -1,21 +1,13 @@
-{% if messages %}
-{% csrf_token %}
-<ul></ul>
-{% for message in messages %}
+{% if instruction %}
 
-<li class="list-group list-group-flush">
-    <div class="card border-primary mb-3">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-xs-2" style="font-weight: 800;">{{message.user}}</div>
-                <div class="col-xs-2">{{message.message}}</div>
-            </div>
-        </div>
-    </div>
-</li>
-
+{% for message in instruction.message_set.all %}
+{% include 'projects/message.html' %}
 {% endfor %}
-</ul>
+
 {% else %}
-<p>No hay mensajes</p>
+
+{% for message in messages %}
+{% include 'projects/message.html' %}
+{% endfor %}
+
 {% endif %}

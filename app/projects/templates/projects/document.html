@@ -1,0 +1,40 @@
+{% load markdown_extras %}
+
+<!-- Header -->
+<div class="row ms-4 me-4 mb-1 mt-3 p-2 rounded text-muted" style="background-color: white;">
+    <div class="col my-auto">
+        Versiones
+    </div>
+    <div class="col my-auto text-muted">
+    </div>
+    <div class="col text-end">
+        <div class="btn btn-light p-0 m-0 rounded-circle" style="line-height: 1;min-height:40px; min-width:40px;">
+            <div class="align-middle" style="margin-top:0.7em;">
+                <i class="bi bi-lightbulb-fill"></i>
+            </div>
+        </div>
+        <div class="btn btn-light p-0 m-0 rounded-circle" style="line-height: 1;min-height:40px; min-width:40px;">
+            <div class="align-middle" style="margin-top:0.7em;">
+                <i class="bi bi-send-fill"></i>
+            </div>
+        </div>
+        <div class="btn btn-light p-0 m-0 rounded-circle" style="line-height: 1;min-height:40px; min-width:40px;">
+            <div class="align-middle" style="margin-top:0.7em;">
+                <i class="bi bi-three-dots"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Document -->
+<div class="row ms-4 me-4 mb-4 rounded" style="background-color: white;">
+    <div class="col p-0 m-0">
+        <div class="overflow-auto p-5" style="max-height: 83vh; min-height:83vh;">
+            {% if document %}
+                {{ document.text | markdown | safe}}
+            {% else %}
+                <p class="text-muted">Document empty</p>
+            {% endif %}
+        </div>
+    </div>
+</div>

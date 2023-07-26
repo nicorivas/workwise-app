@@ -1,0 +1,161 @@
+{% load markdown_extras %}
+
+<div class="col m-3 p-2 border rounded" style="background-color:white;">
+
+  <form hx-post="{% url 'projects:call_action' project_id=1 instruction_id=instruction.pk action_id=1 %}"
+    hx-target="#instruction" hx-indicator="#loading" method="POST">
+    <input type="hidden" name="action" value="{{action.pk}}">
+
+    <!-- Thinking -->
+    <div class="row ms-0 me-0 mt-1 rounded" id="loading">
+      <div class="col my-auto pt-2 pb-2 my-indicator">
+        <span class="loader"></span> Thinking...
+      </div>
+    </div>
+
+    <!-- Prompt form -->
+    <div class="row g-1 bg-light pb-2 pt-2 mt-1 rounded">
+      <div class="col-md-auto my-auto">
+        <button type="button" class="btn btn-white mb-1" id="recordButton">
+          <i class="bi bi-mic"></i>
+        </button><br>
+        <button type="button" class="btn btn-white" id="recordButton">
+          <i class="bi bi-three-dots"></i>
+        </button>
+      </div>
+      <div class="col pt-0 mt-0">
+        {% if instruction.prompt %}
+        <textarea class="form-control border-0 p-3" name="prompt" id="instruction"
+          rows="7">{{instruction.prompt}}</textarea>
+        {% else %}
+        <textarea class="form-control border-0 p-3 text-muted" name="prompt" id="instruction"
+          rows="7">{{instruction.action.prompt_instructions}}</textarea>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Action selector -->
+    <div class="row ms-0 mb-2 me-0 mt-2 rounded">
+      <!-- Selector -->
+      <div class="col-9 bg-light my-auto border rounded">
+        <a href="#" style="text-decoration: none;padding:0;margin:0;">
+          <div class="row" hx-get="{% url 'projects:actions' 1 %}" hx-target="#actions">
+            <div class="col-11">
+              <div class="mb-2 pt-1 pb-0 ps-2">
+                {% if instruction.action %}
+                <p class="mb-0 pb-0 text-dark">{{instruction.action.name}}</p>
+                {% else %}
+                <i class="text-muted">Select an action</i>
+                {% endif %}
+                <div id="actions" class="position-absolute mt-2"></div>
+              </div>
+            </div>
+            <div class="col-1 text-end my-auto">
+              <i class="bi bi-chevron-down"></i>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-3">
+        <!-- Show prompt -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+          hx-post="{% url 'projects:get_prompt' project_id=1 %}" hx-target="#prompt_modal" hx-vals='{"prompt": "{{instruction.prompt}}"}'>
+          Show prompt
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal showing prompt -->
+    <div id="prompt_modal">
+      {% include 'projects/modal_prompt.html' %}
+    </div>
+
+    <!-- Comments -->
+    <div id="messages">
+      {% include 'projects/messages.html' %}
+    </div>
+
+    <div class="row mt-1">
+      <!-- Runner -->
+      <div class="col">
+        <button type="submit" class="btn btn-primary btn-block border rounded shadow-none"
+          style="height:100%;width:100%;">
+          Crear<!--<i class="bi bi-arrow-right-square-fill text-muted"></i>-->
+        </button>
+      </div>
+    </div>
+
+    <div class="row ms-0 me-0 mt-1"
+      hx-post="{% url 'projects:write_document' project_id=instruction.project.pk document_id=instruction.project.document.pk %}"
+      hx-target="#document">
+      <button class="btn btn-primary">Generate document</button>
+    </div>
+
+  </form>
+
+</div>
+
+{% block javascript %}
+
+<script>
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(function (stream) {
+      mediaRecorder = new MediaRecorder(stream);
+
+      document.querySelector("#recordButton").onclick = function () {
+        if (mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+          document.querySelector("#recordButton").innerHTML = '<i class="bi bi-mic"></i>';
+        } else {
+          mediaRecorder.start();
+          document.querySelector("#recordButton").innerHTML = '<i class="bi bi-stop-circle"></i>';
+        }
+      };
+
+      mediaRecorder.ondataavailable = function (e) {
+        chunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = function (e) {
+        const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+        chunks = [];
+        const audioURL = window.URL.createObjectURL(blob);
+        //document.querySelector("#audioElement").src = audioURL;
+        document.querySelector("#instruction").textContent = "Transcribing audio..."
+        document.querySelector("#instruction").classList.add("text-muted");
+        // Call the function to upload audio
+        uploadAudio(blob);
+      };
+    });
+
+  function uploadAudio(blob) {
+    let fd = new FormData();
+    fd.append('audio', blob, 'audio.ogg');
+
+    $.ajax({
+      type: 'POST',
+      url: 'transcribe_audio/',
+      data: fd,
+      processData: false,
+      contentType: false
+    }).done(function (data) {
+      document.querySelector("#instruction").classList.remove("text-muted");
+      document.querySelector("#instruction").textContent = data.fields.message;
+      /*
+      $.ajax({
+        type: 'POST',
+        url: 'gatekeeper/',
+        data: data,
+        dataType: 'json',
+      }).done(function (data1) {
+        console.log(data1)
+        //console.log('Gatekeeper response: ' + data1.message);
+        //console.log('Gatekeeper response: ' + data1.message.text);
+        console.log('Gatekeeper response: Chucha');
+      });
+      */
+    });
+  }
+</script>
+
+{% endblock %}

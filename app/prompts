@@ -1,0 +1,21 @@
+Please consider the following transcript as context describing a new project: 
+
+{message}
+
+From the project context, identify the following elements:
+* Project title.
+* The main objectives, ranging from 1 to a maximum of 3. Please use the SMART framework to write the objetives: each should be specific, measurable, achievable, relevant and time bound.
+* Identify the project background. This should summarize briefly why the project is necessary and how it will benefit the organization or users.
+* The project timeline, this should include the expected beginning and end dates. If those dates are not found in the context, please identify an estimated lenght in weeks or months. If you consider that you didn't found the project timeline in the context, assume it was "not found".
+* Project stakeholders, describing briefly how each is one is affected or should be involved in the project. If you consider that you didn't found enough information in the context to identify project stakeholders, assume it was "not found".
+* Risks and assumptions of the project. Describe each briefly, list a maximum of 5 risks and assumptions. If you consider that you didn't found enough information in the context to identify project stakeholders, assume it was "not found".
+
+Now, consider all the items you have analized and write down in markdown using the following order of headers: project title, main objectives, project background, project timeline, project stakeholders, and project risks and assumptions.
+
+
+
+
+--
+
+
+Este proyecto se trata de trabajar con una universidad y los alumnos de esa universidad para hacer de manera colaborativa, utilizando la metodología design thinking, un rediseño de las sillas donde ellos se sientan durante sus clases. En la primera etapa del proyecto, que va a durar aproximadamte un mes, vamos a hacer entrevistas a estudiantes, tres focus groups. En base a eso vamos a diseñar una convocatoria. El proceso de convocatoria para que distintos grupos de estudiantes se inscriban para poder participar en el diseño de la silla. Durante los meses siguientes vamos a seleccionar equipos de todas las personas que postularon, los vamos a capacitar en design thinking, vamos a estar acompañando al desarrollo de esos prototipos, y luego vamos a evaluar los diseños que ellos generen para identificar cuáles son los mejores y esos pilotearlos. Finalmente en el mes 6 del proyecto vamos a diseñar el plan de implementación del proyecto finalista.

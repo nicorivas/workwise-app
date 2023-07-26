@@ -4,29 +4,43 @@
 
 {% block content %}
 
-<h1>{{project.name}}</h1>
+<div class="row no-gutters vh-100" style="background-color:rgb(233, 246, 247); overflow-y:hidden;">
+<div class="col no-gutters">
 
-<div class="row">
-  <div class="col-5">
-
-    <!--<audio id="audioElement" controls></audio>-->
-
-    <div id="document" class="border p-2">
-      This is the document
-    </div>
-
-    <div id="messages">
-      {% include 'projects/messages.html' %}
-    </div>
-
+<div class="row no-gutters ">
+  <div class="col">
+    <h4 class="ms-3 mt-4">{{project.name}}</h4>
   </div>
-  <div class="col-5">
+</div>
 
-    <div id="action" class="row g-1 pb-2 pt-2 mb-2 ps-2 pe-2 rounded border">
-      {% include 'projects/action.html' %}
+<div class="row no-gutters ">
+  
+  <!-- Document -->
+  <div class="col-6">
+    <div id="document">
+      {% include 'projects/document.html' %}
     </div>
-
   </div>
+
+  <!-- Instructions -->
+  <div class="col-6">
+    <div style="max-height: 90vh; overflow-x:hidden; overflow-y:scroll;">
+      <div class="row no-gutters ">
+        <div class="col-11 rounded">
+          <!--<audio id="audioElement" controls></audio>-->
+          {% for instruction in instructions %}
+            <div class="row" id="instruction">
+              {% include 'projects/instruction.html' %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
 </div>
 
 {% endblock %}
