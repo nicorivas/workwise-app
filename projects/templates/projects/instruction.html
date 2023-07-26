@@ -75,8 +75,8 @@
       {% include 'projects/messages.html' %}
     </div>
 
+    <!-- Runner -->
     <div class="row mt-1">
-      <!-- Runner -->
       <div class="col">
         <button type="submit" class="btn btn-primary btn-block border rounded shadow-none"
           style="height:100%;width:100%;">
@@ -85,10 +85,11 @@
       </div>
     </div>
 
+    <!-- Crear documento -->
     <div class="row ms-0 me-0 mt-1"
       hx-post="{% url 'projects:write_document' project_id=instruction.project.pk document_id=instruction.project.document.pk %}"
       hx-target="#document">
-      <button class="btn btn-primary">Generate document</button>
+      <button type="button" class="btn btn-primary">Generate document</button>
     </div>
 
   </form>

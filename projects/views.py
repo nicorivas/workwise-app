@@ -92,17 +92,24 @@ def parse_markdown(reply):
 
 @csrf_exempt
 def write_document(request, project_id, document_id):
-    print("write_document", document_id)
     
-    # Generate agent, and create document with corresponding action
+    # Get document
+    document = get_object_or_404(Document, id=document_id)
+
+    # Generate agent
     agent = Agent(**json.loads(request.session['agent']))
+    # Create and execute selected action
     action = WriteProject(project_description=request.POST.get("prompt"))
     reply = agent.do(action)
+
+    # Parse reply to markdown
     markdown = parse_markdown(reply)
-    document = get_object_or_404(Document, id=document_id)
+
+    # Update document with new body
     document.text = markdown
-    print(markdown)
     document.save()
+
+    # Return updated document
     context = {
         "document": document,
     }
