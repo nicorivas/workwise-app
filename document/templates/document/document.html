@@ -1,0 +1,14 @@
+<div class="document">
+    <div class="document-header" id="document-header-{{document.pk}}">
+        {% include 'document/header.html' %}
+    </div>
+    <div class="document-body" id="document-body-{{document.pk}}">
+        {% include 'document/body.html' %}
+    </div>
+</div>
+{% if forward %}
+<div style="display:none;">
+<div id="forward" hx-trigger="load" hx-post="{{forward.url}}" hx-target="{{forward.target}}"
+  hx-indicator="{{forward.indicator}}" hx-include="[id='{{forward.forward}}']">Sending forward</div>
+</div>
+{% endif %}

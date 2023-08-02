@@ -1,15 +1,8 @@
 from django.db import models
 from agents.models import AgentDB
 from actions.models import ActionDB
-
-class Document(models.Model):
-    # TODO: Maybe documents should also keep the original reply from the model, before parsing to Markdown.
-    name = models.CharField(max_length=256)
-    text = models.TextField()
-    version = models.IntegerField(default=1)
-    
-    def __str__(self):
-        return self.name
+from document.models import Document, DocumentElement
+import json
 
 class Message(models.Model):
     project = models.ForeignKey("Project", on_delete=models.CASCADE)
@@ -48,5 +41,16 @@ class Project(models.Model):
     
 class Instruction(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    action = models.ForeignKey(ActionDB, on_delete=models.CASCADE)
+    action = models.ForeignKey(ActionDB, on_delete=models.CASCADE, null=True, blank=True)
     prompt = models.TextField(null=True, blank=True)
+    finished = models.BooleanField(default=False)
+    previous_instruction = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"Instruction {self.pk}: {self.action.name if self.action else 'No action'}"
+    
+    def get_possible_actions(self):
+        if self.previous_instruction:
+            return self.previous_instruction.action.get_next_actions()
+        else:
+            return ActionDB.objects.filter(previous_action=None)

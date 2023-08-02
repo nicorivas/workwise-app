@@ -35,9 +35,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "explorer.apps.ExplorerConfig",
     "agents.apps.AgentsConfig",
     "projects.apps.ProjectsConfig",
     "actions.apps.ActionsConfig",
+    "document.apps.DocumentConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

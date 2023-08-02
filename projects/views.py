@@ -7,14 +7,20 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.conf import settings
 import json
+from bs4 import BeautifulSoup
+
+import markdown
+import time
 
 import openai
 
-from .models import Project, Record, Message, Instruction, Document
+from .models import Project, Record, Message, Instruction#, Comment
+from document.models import Document, DocumentElement
 from actions.models import ActionDB
 
 from mimesis.agent.agent import Agent
-from mimesis.actions.project import EvaluatePrompt, WriteProject
+from mimesis.actions.project import EvaluatePrompt, WriteProject, ReviseProject, ApplyRevision
+from mimesis.actions.feedback import FeedbackGuidelines, FeedbackValues
 
 openai.api_key = settings.OPENAI_API_KEY
 
@@ -27,36 +33,139 @@ def actions(request, project_id):
     return render(request, "projects/actions.html", context)
 
 @csrf_exempt
-def select_action(request, project_id, action_id):
+def select_action(request, project_id, instruction_id, action_id):
+    project = get_object_or_404(Project, pk=project_id)
+    instruction = get_object_or_404(Instruction, id=instruction_id)
     action = get_object_or_404(ActionDB, id=action_id)
+    instruction.action = action
+    instruction.save()
+    actions = ActionDB.objects.all()
     context = {
-        "action": action,
+        "project": project,
+        "instruction": instruction,
+        "actions": actions
     }
-    return render(request, "projects/action.html", context)
+    return render(request, "projects/instruction.html", context)
+
+@csrf_exempt
+def instruction_update(request, project_id, instruction_id):
+    print("instruction_update",request)
+    project = get_object_or_404(Project, pk=project_id)
+    
+    # Update instruction
+    instruction = get_object_or_404(Instruction, id=instruction_id)
+    instruction.prompt = request.POST.get("prompt")
+    instruction.finished = False
+    instruction.save()
+
+    # Delete all instructions that depend on this one
+    Instruction.objects.filter(previous_instruction=instruction).delete()
+
+    # Return all instructions, so that the depencies are cleared
+    instructions = Instruction.objects.filter(project=project_id)
+
+    context = {
+        "project": project,
+        "document": project.document,
+        "agent": project.agent,    
+        "instructions": instructions,
+    }
+    context = forward(request, context, instruction_id)
+    return render(request, "projects/instructions.html", context)
+
+def forward(request, context, instruction_id):
+    print("forward",request,context)
+    forward_url = request.POST.get('forward_url')
+    if forward_url:
+        context["forward"] = {}
+        context["forward"]["url"] = forward_url
+        context["forward"]["instruction_id"] = instruction_id
+        context["forward"]["target"] = request.POST.get('forward_target')
+        context["forward"]["indicator"] = request.POST.get('forward_indicator')
+        context["forward"]["forward"] = request.POST.get('forward_forward')
+        print(context["forward"])
+    return context
 
 @csrf_exempt
 def call_action(request, project_id, instruction_id, action_id):
     if request.method == 'POST':
-        print("call_action", project_id, action_id, instruction_id)
+        print("call_action", request, project_id, action_id, instruction_id)
         instruction = get_object_or_404(Instruction, id=instruction_id)
         agent = Agent(**json.loads(request.session['agent']))
-        action = EvaluatePrompt(project_description=request.POST.get("prompt"))
+        action = EvaluatePrompt(project_description=instruction.prompt)
         reply = agent.do(action)
         project = get_object_or_404(Project, pk=project_id)
         agent = get_object_or_404(Project, pk=project_id)
+
+        enough_information = json.loads(reply)["enough_information"]
+        comments = json.loads(reply)["comments"]
+
+        if enough_information:
+            message_type = "status"
+        else:
+            message_type = "error"
+
         message = Message.objects.create(
             project=project,
-            message=reply,
+            message=comments,
             agent=project.agent,
             instruction=instruction,
             user="Agent",
-            type="comment"
+            type=message_type
             )
         message.save()
         context = {
             "instruction": instruction,
+            "reply": reply,
         }
+        context = forward(request,context,instruction_id)
         return render(request, "projects/instruction.html", context)
+
+def end_action(request, project_id, instruction_id):
+    print("end_action")
+    if request.method == 'POST':
+        project = get_object_or_404(Project, id=project_id)
+        instruction = get_object_or_404(Instruction, id=instruction_id)
+
+        # Check if there are any follow-up actions possible
+        actions = ActionDB.objects.filter(previous_action=instruction.action)
+        if actions:
+            # If there are, create new empty instruction
+            new_instruction = Instruction.objects.create(
+                project=project,
+                action=None,
+                prompt=None,
+                previous_instruction=instruction,
+                )
+            new_instruction.save()
+
+        instruction.finished = True
+        instruction.save()
+
+        instructions = Instruction.objects.filter(project=project_id)
+
+        context = {
+            "project": project,
+            "document": project.document,
+            "agent": project.agent,    
+            "instructions": instructions,
+        }
+
+        return render(request, "projects/instructions.html", context)
+
+@csrf_exempt
+def comment_consider(request, project_id, document_id, comment_id):
+    # Get comment
+    #comment = get_object_or_404(Comment, id=comment_id)
+    # Set consider to True
+    #comment.consider = not comment.consider
+    #comment.save()
+    # Return updated comment
+    #context = {
+    #    "comment": comment,
+    #}
+    context = {}
+    return render(request, "projects/document_element_comment.html", context)
 
 def parse_markdown(reply):
     reply = json.loads(reply)
@@ -91,29 +200,165 @@ def parse_markdown(reply):
     return text
 
 @csrf_exempt
-def write_document(request, project_id, document_id):
+def write_document(request, project_id, document_id, instruction_id):
+    print("write_document")
     
+    # Get project
+    project = get_object_or_404(Project, id=project_id)
+
     # Get document
     document = get_object_or_404(Document, id=document_id)
+    document.clear()
+
+    # Get instruction
+    instruction = get_object_or_404(Instruction, id=instruction_id)
+
+    # Remove follow-up instructions in case they existed
+    Instruction.objects.filter(previous_instruction=instruction).delete()
 
     # Generate agent
     agent = Agent(**json.loads(request.session['agent']))
     # Create and execute selected action
-    action = WriteProject(project_description=request.POST.get("prompt"))
+    action = WriteProject(project_description=instruction.prompt)
     reply = agent.do(action)
+
+    # Save returned JSON
+    document.json = reply
+    document.create_elements_from_json()
+    document.save()
+
+    time.sleep(2)
+
+    # Return updated document
+    context = {
+        "document": document,
+    }
+    context = forward(request,context, instruction_id)
+    return render(request, "document/document.html", context)
+
+@csrf_exempt
+def feedback(request, project_id, document_id, instruction_id):
+    print("feedback", request)
+    
+    # Get project
+    project = get_object_or_404(Project, id=project_id)
+
+    # Get document
+    document = get_object_or_404(Document, id=document_id)
+    document.clear()
+
+    # Get instruction
+    instruction = get_object_or_404(Instruction, id=instruction_id)
+    
+    # Remove follow-up instructions in case they existed
+    Instruction.objects.filter(previous_instruction=instruction).delete()
+
+    # Generate agent
+    agent = Agent(**json.loads(request.session['agent']))
+    # Create and execute selected action
+    action = FeedbackGuidelines(situation=instruction.prompt)
+    reply = agent.do(action)
+    print(reply)
+
+    # Save returned
+    document.text = reply
+    document.create_element_from_reply(markdown=True)
+    document.save()
+
+    time.sleep(2)
+
+    # Return updated document
+    context = {
+        "document": document,
+    }
+    context = forward(request,context, instruction_id)
+    return render(request, "document/document.html", context)
+
+@csrf_exempt
+def feedback_values(request, project_id, document_id, instruction_id):
+    print("feedback_values", request)
+    context = {}
+
+    # Generate agent
+    agent = Agent(**json.loads(request.session['agent']))
+
+    # Get instruction
+    instruction = get_object_or_404(Instruction, id=instruction_id)
+
+    # Get document
+    document = get_object_or_404(Document, id=document_id)
+    document.clear()
+
+    action = FeedbackValues(feedback=document.text)
+    reply = agent.do(action)
+
+    # Save returned
+    document.text = reply
+    document.create_element_from_reply(markdown=True)
+    document.save()
+
+    context = {
+        "document": document,
+    }
+    context = forward(request,context,instruction_id)
+    return render(request, "document/document.html", context)
+
+@csrf_exempt
+def revise_document(request, project_id, document_id):
+    print("revise_document")
+    
+    # Get document
+    document = get_object_or_404(Document, id=document_id)
+    document.clear()
+
+    # Generate agent
+    agent = Agent(**json.loads(request.session['agent']))
+    # Create and execute selected action
+    action = ReviseProject(project_charter=document.json)
+    reply = agent.do(action)
+    document.json = reply
+    document.create_elements_from_json()
+    document.save()
 
     # Parse reply to markdown
     markdown = parse_markdown(reply)
 
     # Update document with new body
-    document.text = markdown
+    document.markdown = markdown
+    document.save()
+
+    time.sleep(2)
+    # Return updated document
+    context = {
+        "document": document,
+    }
+    context = forward(request,context,document_id)
+    return render(request, "document/document.html", context)
+
+@csrf_exempt
+def apply_revision(request, project_id, document_id):
+    print("apply_revision")
+
+    # Get document
+    document = get_object_or_404(Document, id=document_id)
+    document.clear()
+
+    # Generate agent
+    agent = Agent(**json.loads(request.session['agent']))
+    # Create and execute selected action
+    action = ApplyRevision(project_charter=document.json)
+    reply = agent.do(action)
+    reply = reply[reply.find("{"):]
+    document.json = reply
+    document.create_elements_from_json(comments=False)
     document.save()
 
     # Return updated document
     context = {
         "document": document,
     }
-    return render(request, "projects/document.html", context)
+    context = forward(request,context,document_id)
+    return render(request, "document/document.html", context)
 
 @csrf_exempt
 def transcribe_audio(request, project_id):
@@ -201,7 +446,17 @@ def record_detail(request, record_id):
     }
     return render(request, "core/record_detail.html", context)
 
-# Create your views here.
+@csrf_exempt
+def delete_message(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    instruction_id = message.instruction.pk
+    print(instruction_id)
+    message.delete()
+    messages = Message.objects.filter(instruction=instruction_id)
+    context = {
+        "messages": messages
+    }
+    return render(request, "projects/messages.html", context)
 
 def index(request):
     projects = Project.objects.order_by("name")
@@ -214,11 +469,11 @@ def index(request):
 
 def project(request, project_id):
 
-
     project = get_object_or_404(Project, pk=project_id)
     document = project.document
     agent = project.agent
     instructions = Instruction.objects.filter(project=project_id)
+    actions = ActionDB.objects.all()
 
     # Create mimesis Agent to store in session
     mms_agent = Agent(name=agent.name, definition=agent.definition)
@@ -229,17 +484,7 @@ def project(request, project_id):
         "project": project,
         "document": document,
         "instructions": instructions,
+        "agent": agent,
+        "actions": actions
     }
     return render(request, "projects/project.html", context)
-
-@csrf_exempt
-def delete_message(request, message_id):
-    message = get_object_or_404(Message, id=message_id)
-    instruction_id = message.instruction.pk
-    print(instruction_id)
-    message.delete()
-    messages = Message.objects.filter(instruction=instruction_id)
-    context = {
-        "messages": messages
-    }
-    return render(request, "projects/messages.html", context)

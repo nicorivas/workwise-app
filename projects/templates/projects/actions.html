@@ -1,14 +1,15 @@
-<div class="row shadow border">
-    <div class="column bg-light">
-{% if actions %}
-{% for action in actions %}    
-        <a class="dropdown-item mt-1 mb-1" hx-post="{% url 'projects:select_action' 1 action.pk %}" hx-target="#action">
-            <div style="font-weight:600;">{{action.name}}</div>
-            <div style="font-size:0.9em;">{{action.description}}</div>
-        </a>
-{% endfor %}
-{% else %}
-        No actions
-{% endif %}        
+<div class="row shadow m-0 p-0" style="border: 1px solid #aaa;width:500px;">
+    <div class="col bg-light">
+{% for action in instruction.get_possible_actions %}
+        <div class="action row p-2"
+            hx-post="{% url 'projects:select_action' instruction.project.pk instruction.pk action.pk %}"
+            hx-target="#instruction_{{instruction.pk}}"
+            hx-trigger="click">
+            <div class="col">
+                <div style="font-size:0.9em;font-weight:600;">{{action.name}}</div>
+                <div style="font-size:0.9em;">{{action.description}}</div>
+            </div>
+        </div>
+{% endfor %} 
     </div>    
 </div>

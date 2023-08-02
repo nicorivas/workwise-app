@@ -1,104 +1,157 @@
 {% load markdown_extras %}
+{% load static %}
 
-<div class="col m-3 p-2 border rounded" style="background-color:white;">
+<div class="row m-2 mb-4" style="background-color:white;border: 1px solid #ddd">
+  <div class="col p-0 m-0">
 
-  <form hx-post="{% url 'projects:call_action' project_id=1 instruction_id=instruction.pk action_id=1 %}"
-    hx-target="#instruction" hx-indicator="#loading" method="POST">
     <input type="hidden" name="action" value="{{action.pk}}">
 
-    <!-- Thinking -->
-    <div class="row ms-0 me-0 mt-1 rounded" id="loading">
-      <div class="col my-auto pt-2 pb-2 my-indicator">
-        <span class="loader"></span> Thinking...
-      </div>
-    </div>
-
-    <!-- Prompt form -->
-    <div class="row g-1 bg-light pb-2 pt-2 mt-1 rounded">
-      <div class="col-md-auto my-auto">
-        <button type="button" class="btn btn-white mb-1" id="recordButton">
-          <i class="bi bi-mic"></i>
-        </button><br>
-        <button type="button" class="btn btn-white" id="recordButton">
-          <i class="bi bi-three-dots"></i>
-        </button>
-      </div>
-      <div class="col pt-0 mt-0">
-        {% if instruction.prompt %}
-        <textarea class="form-control border-0 p-3" name="prompt" id="instruction"
-          rows="7">{{instruction.prompt}}</textarea>
-        {% else %}
-        <textarea class="form-control border-0 p-3 text-muted" name="prompt" id="instruction"
-          rows="7">{{instruction.action.prompt_instructions}}</textarea>
-        {% endif %}
-      </div>
-    </div>
-
     <!-- Action selector -->
-    <div class="row ms-0 mb-2 me-0 mt-2 rounded">
-      <!-- Selector -->
-      <div class="col-9 bg-light my-auto border rounded">
-        <a href="#" style="text-decoration: none;padding:0;margin:0;">
-          <div class="row" hx-get="{% url 'projects:actions' 1 %}" hx-target="#actions">
-            <div class="col-11">
-              <div class="mb-2 pt-1 pb-0 ps-2">
-                {% if instruction.action %}
-                <p class="mb-0 pb-0 text-dark">{{instruction.action.name}}</p>
-                {% else %}
-                <i class="text-muted">Select an action</i>
-                {% endif %}
-                <div id="actions" class="position-absolute mt-2"></div>
-              </div>
-            </div>
-            <div class="col-1 text-end my-auto">
-              <i class="bi bi-chevron-down"></i>
-            </div>
+    <div id="action-selector">
+      {% include "projects/action_selector.html" %}
+    </div>
+
+    {% if instruction.action %}
+    <!-- Specific action details -->
+    <div id="action_details" class="m-4">
+
+      <!-- Action form -->
+      <div id="action_form">
+        {% include "actions/form.html" %}
+      </div>
+
+      <div class="row mt-2 mb-0">
+        <div class="col p-0">
+          <button type="button" class="btn btn-primary btn-block" style="height:100%;width:100%;"
+            hx-post="{% url 'projects:instruction_update' project_id=instruction.project.pk instruction_id=instruction.pk %}"
+            hx-trigger="click"
+            hx-target="#instructions"
+            hx-indicator="#loading_message_saving_instruction_{{instruction.pk}}"
+            hx-include="#forward_{{instruction.action.identifier}}_{{instruction.pk}},#instruction-text">
+            {{instruction.action.action_label}}
+          </button>
+        </div>
+      </div>
+
+      <div style="display:none;">
+        {% if forward and forward.instruction_id == instruction.pk %}
+        {% if forward.forward%}
+        <div id="forward_{{instruction.pk}}" hx-trigger="load" hx-post="{{forward.url}}" hx-target="{{forward.target}}"
+          hx-indicator="{{forward.indicator}}" hx-include="[id='{{forward.forward}}']">Sending forward</div>
+        {% else %}
+        <div id="forward_{{instruction.pk}}" hx-trigger="load" hx-post="{{forward.url}}" hx-target="{{forward.target}}"
+          hx-indicator="{{forward.indicator}}">Sending forward</div>
+        {% endif %}
+        {% endif %}
+        <!-- docs -->
+        <div id="forward_project_charter_check_description_{{instruction.pk}}">
+          <input name="forward_url"
+            value="{% url 'projects:call_action' project_id=instruction.project.pk instruction_id=instruction.pk action_id=instruction.action.pk %}">
+          <input name="forward_target" value="#instruction_{{instruction.pk}}">
+          <input name="forward_indicator" value="#loading_message_evaluate_document_{{instruction.pk}}">
+          <input name="forward_forward" value="forward_write_document_{{instruction.pk}}">
+        </div>
+        <div id="forward_project_charter_create_{{instruction.pk}}">
+          <input name="forward_url"
+            value="{% url 'projects:write_document' project_id=instruction.project.pk document_id=instruction.project.document.pk instruction_id=instruction.pk %}">
+          <input name="forward_target" value="#document">
+          <input name="forward_indicator" value="#loading_message_write_document_{{instruction.pk}}">
+          <input name="forward_forward" value="forward_finish_{{instruction.pk}}">
+        </div>
+        <div id="forward_project_charter_revise_{{instruction.pk}}">
+          <input name="forward_url"
+            value="{% url 'projects:revise_document' project_id=instruction.project.pk document_id=instruction.project.document.pk %}">
+          <input name="forward_target" value="#document">
+          <input name="forward_indicator" value="#loading_message_revise_document_{{instruction.pk}}">
+          <input name="forward_forward" value="forward_finish_{{instruction.pk}}">
+        </div>
+        <div id="forward_project_charter_apply_revision_{{instruction.pk}}">
+          <input name="forward_url"
+            value="{% url 'projects:apply_revision' project_id=instruction.project.pk document_id=instruction.project.document.pk %}">
+          <input name="forward_target" value="#document">
+          <input name="forward_indicator" value="#loading_message_apply_revision_{{instruction.pk}}">
+          <input name="forward_forward" value="forward_finish_{{instruction.pk}}">
+        </div>
+        <!-- feedback -->
+        <div id="forward_feedback_advice_{{instruction.pk}}">
+          <input name="forward_url"
+            value="{% url 'projects:feedback' project_id=instruction.project.pk document_id=instruction.project.document.pk instruction_id=instruction.pk%}">
+          <input name="forward_target" value="#document">
+          <input name="forward_indicator" value="#loading_message_feedback_{{instruction.pk}}">
+          <input name="forward_forward" value="forward_finish_{{instruction.pk}}">
+        </div>
+        <div id="forward_feedback_align_with_values_{{instruction.pk}}">
+          <input name="forward_url"
+            value="{% url 'projects:feedback_values' project_id=instruction.project.pk document_id=instruction.project.document.pk instruction_id=instruction.pk%}">
+          <input name="forward_target" value="#document">
+          <input name="forward_indicator" value="#loading_message_feedback_values_{{instruction.pk}}">
+        </div>
+        <!-- finish -->
+        <div id="forward_finish_{{instruction.pk}}">
+          <input name="forward_url"
+            value="{% url 'projects:end_action' project_id=instruction.project.pk instruction_id=instruction.pk %}">
+          <input name="forward_target" value="#instructions">
+          <input name="forward_indicator" value="#loading_message_finish_{{instruction.pk}}">
+        </div>
+      </div>
+
+      <div class="mt-4 htmx-indicator" id="loading_message_saving_instruction_{{instruction.pk}}">
+        {% include "agents/message.html" with message="Saving instruction..." %}
+      </div>
+
+      <div class="mt-4 htmx-indicator" id="loading_message_evaluate_document_{{instruction.pk}}">
+        {% include "agents/message.html" with message="Let me check if I have the necessary information..." %}
+      </div>
+
+      <div class="mt-4 htmx-indicator" id="loading_message_feedback_{{instruction.pk}}">
+        {% include "agents/message.html" with message="I will write a guideline on how to give this feedback..." %}
+      </div>
+
+      <div class="mt-4 htmx-indicator" id="loading_message_feedback_values_{{instruction.pk}}">
+        {% include "agents/message.html" with message="Checking if feedback you are giving is aligned with company values..." %}
+      </div>
+
+      <!-- Comments -->
+      <div class="row mt-0 mb-0">
+        <div class="col p-0">
+          <div id="messages">
+            {% include 'projects/messages.html' %}
           </div>
-        </a>
+        </div>
       </div>
-      <div class="col-3">
-        <!-- Show prompt -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-          hx-post="{% url 'projects:get_prompt' project_id=1 %}" hx-target="#prompt_modal" hx-vals='{"prompt": "{{instruction.prompt}}"}'>
-          Show prompt
-        </button>
+
+      <div class="mt-4 htmx-indicator" id="loading_message_write_document_{{instruction.pk}}">
+        {% include "agents/message.html" with message="I'm writing the best project charter ever..." %}
       </div>
-    </div>
 
-    <!-- Modal showing prompt -->
-    <div id="prompt_modal">
-      {% include 'projects/modal_prompt.html' %}
-    </div>
-
-    <!-- Comments -->
-    <div id="messages">
-      {% include 'projects/messages.html' %}
-    </div>
-
-    <!-- Runner -->
-    <div class="row mt-1">
-      <div class="col">
-        <button type="submit" class="btn btn-primary btn-block border rounded shadow-none"
-          style="height:100%;width:100%;">
-          Crear<!--<i class="bi bi-arrow-right-square-fill text-muted"></i>-->
-        </button>
+      <div class="mt-4 htmx-indicator" id="loading_message_finish_{{instruction.pk}}">
+        {% include "agents/message.html" with message="Almost done!" %}
       </div>
+
+      <div class="mt-4 htmx-indicator" id="loading_message_revise_document_{{instruction.pk}}">
+        {% include "agents/message.html" with message="Let me revise the project charter..." %}
+      </div>
+
+      <div class="mt-4 htmx-indicator" id="loading_message_apply_revision_{{instruction.pk}}">
+        {% include "agents/message.html" with message="I'm rewriting the project charter to include the comments..." %}
+      </div>
+
     </div>
-
-    <!-- Crear documento -->
-    <div class="row ms-0 me-0 mt-1"
-      hx-post="{% url 'projects:write_document' project_id=instruction.project.pk document_id=instruction.project.document.pk %}"
-      hx-target="#document">
-      <button type="button" class="btn btn-primary">Generate document</button>
-    </div>
-
-  </form>
-
+    
+    {% endif %}
+  </div>
 </div>
+
+{% if instruction.finished %}
+{% if instruction.action and instruction.action.follow_message %}
+  {% include "agents/message.html" with message=instruction.action.follow_message %}
+{% endif %}
+{% endif %}
 
 {% block javascript %}
 
 <script>
+
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(function (stream) {
       mediaRecorder = new MediaRecorder(stream);
@@ -122,8 +175,8 @@
         chunks = [];
         const audioURL = window.URL.createObjectURL(blob);
         //document.querySelector("#audioElement").src = audioURL;
-        document.querySelector("#instruction").textContent = "Transcribing audio..."
-        document.querySelector("#instruction").classList.add("text-muted");
+        document.querySelector("#instruction-text").textContent = "Transcribing audio..."
+        document.querySelector("#instruction-text").classList.add("text-muted");
         // Call the function to upload audio
         uploadAudio(blob);
       };
@@ -140,23 +193,17 @@
       processData: false,
       contentType: false
     }).done(function (data) {
-      document.querySelector("#instruction").classList.remove("text-muted");
-      document.querySelector("#instruction").textContent = data.fields.message;
-      /*
-      $.ajax({
-        type: 'POST',
-        url: 'gatekeeper/',
-        data: data,
-        dataType: 'json',
-      }).done(function (data1) {
-        console.log(data1)
-        //console.log('Gatekeeper response: ' + data1.message);
-        //console.log('Gatekeeper response: ' + data1.message.text);
-        console.log('Gatekeeper response: Chucha');
-      });
-      */
+      document.querySelector("#instruction-text").classList.remove("text-muted");
+      document.querySelector("#instruction-text").textContent = data.fields.message;
     });
   }
+
+  // Show actions on click of dropdown
+  $(".actions-dropdown").on('click', function(event){
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    $(this).siblings(".actions-list").toggle();
+  })
 </script>
 
 {% endblock %}

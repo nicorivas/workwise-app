@@ -1,0 +1,36 @@
+{% load static %}
+
+<div class="agent_card mt-3 me-3 pb-4 rounded" style="width:30%;display:inline-block;vertical-align:top;box-shadow:2px 2px rgb(201, 233, 235);height:300px;">
+
+    <div class="row p-3 pt-4">
+        {% include 'agents/message_profile_picture.html' with large=1 padding_left=1 padding_right=0.5 %}
+        <div class="col my-auto">
+            <!-- Agent title -->
+            <div class="row p-0 m-0">
+                <div class="agent_short_title col p-0 m-0">
+                    <p class="p-0 m-0">{{agent.short_title}}</p>
+                </div>
+            </div>
+            <!-- Agent name -->
+            <div class="row p-0 m-0">
+                <div class="agent_card_name col p-0 m-0">
+                    {{agent.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% for action in agent.actions.all %}
+    <div class="row ps-3 pb-0">
+        <div class="col-10">
+            <div class="agent_card_action d-flex align-items-center" style="border-bottom: 1px solid #f3f3f3;height:2rem;" hx-post="action_select">
+                {{action.name}}
+            </div>
+        </div>
+        <div class="col-2 d-flex align-items-center align-items-right">
+            <i class="bi bi-pass"></i>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>

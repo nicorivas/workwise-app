@@ -1,7 +1,22 @@
 {% load markdown_extras %}
-
-<div class="row ms-0 me-0 mt-1 ps-0 rounded border border-warning">
+{% load static %}
+{% if message.type == 'status' %}
+<div class="row ms-0 me-0 mt-1 ps-0 rounded" style="border: 2px solid rgb(169, 169, 169)">
+{% elif message.type == 'error' %}
+<div class="row ms-0 me-0 mt-1 ps-0 rounded" style="border: 2px solid rgb(232, 159, 159)">
+{% endif %}
     <div class="col m-0 p-0">
+        
+        <!-- Body -->
+        <div class="row ms-3 mb-2 me-0 mt-3 rounded">
+            <div class="col-auto" style="padding: 0em 1em 0em 0em;">
+                <img src="{% static 'assets/images/profile.png' %}"
+                        style="border-radius:50%;width:35px;height:35px;">
+            </div>
+            <div class="col my-auto text-left" style="padding: 0em 1em 0em 0em;">
+                <span style="font-size:0.9em;">{{message.message | markdown | safe}}</span>
+            </div>
+        </div>
 
         <!-- Header -->
         <div class="row m-0 pb-1 pt-1 ps-2 pe-2 text-muted shadow-sm" style="background-color: rgb(255, 255, 255);">
@@ -18,13 +33,6 @@
                         <i class="bi bi-trash text-muted"></i>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Body -->
-        <div class="row p-2 m-0" style="max-height:250px; overflow-y:scroll;">
-            <div class="col">
-                <p>{{message.message | markdown | safe}}</p>
             </div>
         </div>
 

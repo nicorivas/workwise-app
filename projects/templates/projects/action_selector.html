@@ -1,0 +1,32 @@
+<!-- This is the action selector for the project page -->
+<!-- It is a dropdown menu that shows the list of actions -->
+
+<div class="row g-0 p-0 m-0">
+    <div class="col-12 p-0 m-0">
+        <div class="inner" style="position: relative;">
+            <!-- Dropdown -->
+            <div id="actions-dropdown-{{instruction.pk}}" class="actions-dropdown">
+                <div class="row g-0 p-0 m-0">
+                    <!-- Action label -->
+                    <div class="col-11 p-0 m-0">
+                        <div class="mb-2 pt-1 pb-0 ps-3">
+                            {% if instruction.action %}
+                            <p class="mb-0 pb-0 text-dark">{{instruction.action.name}}</p>
+                            {% else %}
+                            <i class="text-muted">Select an action</i>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Dropdown down arrow -->
+                    <div class="col-1 text-end my-auto pe-3">
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- List of actions -->
+            <div id="actions-list" class="position-absolute actions-list" style="display:none;">
+                {% include "projects/actions.html" %}
+            </div>
+        </div>
+    </div>
+</div>

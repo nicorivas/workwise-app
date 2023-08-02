@@ -1,0 +1,27 @@
+{% load static %}
+
+<div id="comment_{{comment.pk}}" class="mt-2 bg-light comment"
+    style="width:400px;position:absolute;left:-400px;top:30px;display:none;">
+    <div class="row">
+        <div class="col-auto my-auto" style="padding: 2em 1em 1em 2em;">
+            <img src="{% static 'assets/images/profile.png' %}"
+                style="border-radius:50%;width:35px;height:35px;">
+        </div>
+        <div class="col my-auto text-left" style="padding: 2em 2em 1em 0em; font-weight: 600;">
+            {{document.project_set.first.agent.name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col" style="padding: 0em 2em 0em 2em;">
+            {{comment.text}}
+        </div>
+    </div>
+    <div class="row text-right">
+        <div class="col" style="padding: 1em 2em 2em 2em;">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" hx-post="{% url 'projects:comment_consider' 1 comment.document_element.document.pk comment.pk %}" {{comment.consider|yesno:'checked,'}}>
+                <label class="form-check-label font-italic" for="flexSwitchCheckDefault">Considerar en revisión</label>
+            </div>
+        </div>
+    </div>
+</div>
