@@ -1,0 +1,18 @@
+<div class="row mt-2 mb-0">
+  <div class="col p-0">
+    <button 
+      type="button"
+      class="btn btn-primary btn-block"
+      style="height:100%;width:100%;"
+      hx-post="{% url 'action_element:call' action_id=action.pk action_element_id=element.pk %}"
+      hx-trigger="click"
+      hx-indicator="#loading_message_agent_call_{{action.pk}}_{{element.pk}}"
+      hx-include="[class='test']">
+      {{element.button_label}}
+    </button>
+  </div>
+</div>
+
+<div class="mt-4 htmx-indicator" id="loading_message_agent_call_{{action.pk}}_{{element.pk}}">
+  {% include "agents/message.html" with message="Did you call me?..." %}
+</div>

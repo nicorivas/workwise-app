@@ -6,12 +6,14 @@ from django.apps import apps
 
 from agents.models import AgentDB
 
+import commonmark
+
 class DocumentElement(models.Model):
     """Element of a document
     """
     document = models.ForeignKey("Document", on_delete=models.CASCADE)
     text = models.TextField()
-    html = models.TextField()
+    html = models.TextField(null=True, blank=True)
     markdown = models.TextField(null=True, blank=True)
     
     def __str__(self):
@@ -41,7 +43,8 @@ class Document(models.Model):
 
     def create_element_from_reply(self, markdown=False):
         if markdown:
-            de = DocumentElement(document=self, text=self.text, html=f"<p>{self.text}</p>", markdown=self.text)
+            html = commonmark.commonmark(self.text)
+            de = DocumentElement(document=self, text=self.text, html=html, markdown=self.text)
             de.save()
         else:
             de = DocumentElement(document=self, text=self.text, html=self.text)

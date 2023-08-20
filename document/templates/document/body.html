@@ -1,10 +1,10 @@
 {% load markdown_extras %}
 
-<div class="row ms-4 me-4 mb-4 rounded" style="background-color: white;">
+<div class="row g-0">
     <div class="col p-0 m-0">
         <div class="overflow-auto p-5" style="max-height: 78vh; min-height:78vh;">
             <div class="document-element">
-                <div class="row">
+                <div class="row g-0">
                     {% for document_element in document.documentelement_set.all %}
                         {% include 'document/element.html' %}
                     {% endfor %}

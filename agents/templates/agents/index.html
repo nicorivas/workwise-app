@@ -2,21 +2,25 @@
 
 {% block content %}
 
-<h1 class="mt-4 mb-4">Agents</h1>
+<div class="section-header">
+    <h3>Agents</h3>
+    <p>Your work partners help you in their expertise based on your instructions.</p>
+</div>
+
+<div class="row ps-5 g-0">
+    <div class="col-12">
 
 {% if agents %}
 {% for agent in agents %}
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
-        <h5 class="card-title">{{agent.name}}</h5>
-        <p class="card-text">{{agent.definition}}</p>
-        <a href="{% url 'agents:detail' agent.id %}" class="btn btn-primary">Edit</a>
-        <a href="#" class="btn btn-primary">Delete</a>
-    </div>
-</div>
+
+{% include 'agents/card.html' with show_action=0 show_description=1 %}
+
 {% endfor %}
 {% else %}
 <p>No agents are available.</p>
 {% endif %}
 
 {% endblock %}
+
+</div>
+</div>

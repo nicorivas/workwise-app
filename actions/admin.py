@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from .models import ActionDB, ActionFormElement, ActionFormElementType
+from .models import Action#, ActionElement, ActionElementType
 
-admin.site.register(ActionDB)
-admin.site.register(ActionFormElement)
-admin.site.register(ActionFormElementType)
+admin.site.register(Action)

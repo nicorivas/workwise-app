@@ -21,9 +21,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("", include("explorer.urls")),
+    path("action_element/", include("action_element.urls")),
+    path("actions/", include("actions.urls")),
+    path("company/", include("company.urls")),
     path("agents/", include("agents.urls")),
     path("projects/", include("projects.urls")),
     path("document/", include("document.urls")),
+    path("instruction/", include("instruction.urls")),
     path('admin/', admin.site.urls),
     #path("__reload__/", include("django_browser_reload.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,30 @@
+{% block css %}
+<style>
+    #company-nav {
+        box-shadow: 2px 2px rgb(201, 233, 235);
+        border-radius:10px;
+        background-color: #fff;
+    }
+</style>
+{% endblock %}
+
+<div class="section-header">
+    <h3>{{company.name}}</h3>
+    <p>Provide information about your company to use as context in each document</p>
+</div>
+
+<div class="row ps-5 pe-5 g-0">
+    <div class="col p-0">
+        <div id="company-nav">
+            {% include 'company/nav.html' %}
+        </div>
+    </div>
+</div>
+
+<div class="row ps-5 pe-5 pt-2 g-0">
+    <div class="col-6 p-0" style="border-radius:10px;">
+        <div id="company-main">
+            {% include 'company/strategy.html' %}
+        </div>
+    </div>
+</div>

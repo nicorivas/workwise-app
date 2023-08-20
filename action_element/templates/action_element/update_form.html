@@ -1,0 +1,13 @@
+<p>{{element.type}}</p>
+
+<form action="{% url 'action_element:update' action.pk element.pk %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+<form action="{% url 'action_element:delete' action.pk %}" method="post">
+    {% csrf_token %}
+    <input name="action_element_id" value="{{element.pk}}" hidden>
+    <input type="submit" value="Delete">
+</form>

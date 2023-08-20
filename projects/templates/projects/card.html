@@ -1,0 +1,84 @@
+{% block css %}
+<style>
+    .project_card {
+        background-color: #fff;
+    }
+
+    .project_card .agent_name {
+        font-size: 0.9rem;
+        font-weight: normal;
+        color: #aaa;
+    }
+
+    .project_card .agent_short_title {
+        font-size: 1.1rem;
+        font-weight: normal;
+    }
+
+    .project_card a {
+        text-decoration: none;
+        color: #000;
+    }
+</style>
+{% endblock %}
+
+<div class="row g-0 position-relative">
+    <div class="col">
+
+        <div class="project_card mt-3 pb-4 rounded"
+            style="width:20vw;display:inline-block;vertical-align:top;box-shadow:2px 2px rgb(201, 233, 235);{% if show_actions %}height:200px;{%else%}height:200px;{%endif%}">
+
+            <div class="row p-3 pt-4">
+                <div class="col my-auto">
+                    <!-- Job title -->
+                    <div class="row p-0 m-0">
+                        <div class="agent_short_title col p-0 m-0">
+                            <p class="p-0 m-0">{{project.name}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 text-end" style="z-index: 10;">
+                    <div class="btn btn-light p-0 m-0 rounded-circle"
+                        style="line-height: 1;min-height:40px; min-width:40px;">
+                        <div class="align-middle" style="margin-top:0.7em;">
+                            <a href="{% url 'projects:delete' project.pk %}" ><i class="bi bi-trash3-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            {% if show_description %}
+            <div class="agent_description">
+                <div class="row ps-4 pb-0 pe-4">
+                    <div class="col-12">
+                        {{project.description}}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row p-3 pt-4">
+                {% include 'agents/message_profile_picture.html' with large=1 padding_left=1 padding_right=0.5 agent=project.agent %}
+                <div class="col my-auto">
+                    <!-- Agent title -->
+                    <div class="row p-0 m-0">
+                        <div class="agent_short_title col p-0 m-0">
+                            <p class="p-0 m-0">{{project.agent.short_title}}</p>
+                        </div>
+                    </div>
+                    <!-- Agent name -->
+                    <div class="row p-0 m-0">
+                        <div class="agent_name col p-0 m-0">
+                            {{project.agent.name}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a class="stretched-link" href="{% url 'projects:project' project.id %}"></a>
+
+        </div>
+
+    </div>
+</div>

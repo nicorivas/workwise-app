@@ -1,0 +1,8 @@
+<ul class="p-2 nav nav-pills">
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.namespaces.0 == 'explorer' %}active{% endif %}" href="#" hx-target="#company-main" hx-get="{% url 'company:strategy' company.pk %}">Strategy</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.namespaces.0 == 'explorer' %}active{% endif %}" href="#" hx-target="#company-main" hx-get="{% url 'company:values' company.pk %}">Values</a>
+    </li>
+</ul>

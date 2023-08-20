@@ -1,0 +1,33 @@
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.namespaces.0 == 'explorer' %}active{% endif %}" href="{% url 'explorer:index' %}">
+            <i class="bi bi-rocket-takeoff-fill"></i> Explorer
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.namespaces.0 == 'projects' %}active{% endif %}" href="{% url 'projects:index' %}">
+            <i class="bi bi-file-text-fill"></i> Jobs
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.namespaces.0 == 'agents' %}active{% endif %}" href="{% url 'agents:index' %}">
+            <i class="bi bi-file-earmark-person-fill"></i> Agents
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.namespaces.0 == 'company' %}active{% endif %}" href="{% url 'company:index' 1 %}">
+            <i class="bi bi-file-earmark-person-fill"></i> Company
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.namespaces.0 == 'actions' %}active{% endif %}" href="{% url 'actions:index' %}">
+            <i class="bi bi-rocket-takeoff-fill"></i> Actions
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#">...</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#">...</a>
+    </li>
+</ul>

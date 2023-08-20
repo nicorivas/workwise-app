@@ -12,4 +12,5 @@ __pycache__/
 fingpt.egg-info/
 *.DS_Store
 .env
-prompts
+.prompts
+prompts*

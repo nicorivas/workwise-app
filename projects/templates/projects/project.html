@@ -2,20 +2,48 @@
 
 {% load static %}
 
+{% block css %}
+<style>
+  #instructions {
+    background-color: rgb(253, 255, 249);
+    max-height: 100vh;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border-left: 1px solid #ccc;
+    padding: 1em;
+    padding-bottom: 10em;
+  }
+
+  #project_header {
+    background-color: #fff;
+    border-bottom: #ccc 1px solid;
+    padding: 1em;
+  }
+
+  #project_header h4 {
+    font-size: 1em;
+    margin: 0;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
-<div class="row no-gutters vh-100" style="background-color:rgb(233, 246, 247); overflow-y:hidden;">
-  <div class="col no-gutters">
+<div class="row g-0 vh-100" style="background-color:rgb(233, 246, 247); overflow-y:hidden;">
+  <div class="col">
 
     <!-- Project header -->
-    <div class="row no-gutters ">
-      <div class="col">
-        <h4 class="ms-3 mt-4">{{project.name}}</h4>
+    <div id="project_header">
+      <div class="row g-0">
+        <div class="col">
+          <h4>{{project.name}}</h4>
+        </div>
       </div>
     </div>
 
     <!-- Project body -->
-    <div class="row no-gutters ">
+    <div class="row g-0">
 
       <!-- Document -->
       <div class="col-6">
@@ -26,7 +54,7 @@
 
       <!-- Instructions -->
       <div class="col-6">
-        <div id="instructions" style="max-height: 90vh; overflow-x:hidden; overflow-y:scroll;">
+        <div id="instructions">
           {% include 'projects/instructions.html' %}
         </div>
       </div>

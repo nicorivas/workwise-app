@@ -1,12 +1,26 @@
 from django.db import models
 from agents.models import AgentDB
-from actions.models import ActionDB
+from actions.models import Action
 from document.models import Document, DocumentElement
 import json
+import commonmark
+
+class MessageBlock(models.Model):
+    message = models.ForeignKey("Message", on_delete=models.CASCADE)
+    text = models.TextField(default="", null=True, blank=True)
+    html = models.TextField(default="", null=True, blank=True)
+    selectable = models.BooleanField(default=True)
+    selected = models.BooleanField(default=True)
+
+    def generate_html(self):
+        self.html = commonmark.commonmark(self.text)
+
+    def __str__(self):
+        return self.text
 
 class Message(models.Model):
     project = models.ForeignKey("Project", on_delete=models.CASCADE)
-    instruction = models.ForeignKey("Instruction", on_delete=models.CASCADE, null=True, blank=True)
+    #instruction = models.ForeignKey("Instruction", on_delete=models.CASCADE, null=True, blank=True)
     message = models.CharField(max_length=256)
     agent = models.ForeignKey(AgentDB, on_delete=models.CASCADE, null=True, blank=True)
     user = models.CharField(max_length=256, null=True, blank=True)
@@ -14,6 +28,15 @@ class Message(models.Model):
 
     def __str__(self):
         return self.message
+    
+    def text(self):
+        # Get all message blocks
+        blocks = MessageBlock.objects.filter(message=self)
+        text = ""
+        for block in blocks:
+            if block.selected:
+                text += block.text + "\n"
+        return text
 
 class Record(models.Model):
     voice_record = models.FileField(upload_to="records")
@@ -38,19 +61,3 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
-    
-class Instruction(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    action = models.ForeignKey(ActionDB, on_delete=models.CASCADE, null=True, blank=True)
-    prompt = models.TextField(null=True, blank=True)
-    finished = models.BooleanField(default=False)
-    previous_instruction = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-
-    def __str__(self):
-        return f"Instruction {self.pk}: {self.action.name if self.action else 'No action'}"
-    
-    def get_possible_actions(self):
-        if self.previous_instruction:
-            return self.previous_instruction.action.get_next_actions()
-        else:
-            return ActionDB.objects.filter(previous_action=None)

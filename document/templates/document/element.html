@@ -2,12 +2,12 @@
 {% load markdown_extras %}
 
 <div class="content col-11 my-auto">
-    {% if document_element.markdown %}
-    {{ document_element.markdown | markdown | safe }}
-    {% elif document_element.html %}
-    {{ document_element.html | safe }}
+    {% if document_element.html %}
+        {{ document_element.html | safe }}
+    {% elif document_element.markdown %}
+        {{ document_element.markdown | markdown | safe }}
     {% else %}
-    {{ document_element.text }}
+        {{ document_element.text}}
     {% endif %}
 </div>
 <div class="revision col-1 my-auto">

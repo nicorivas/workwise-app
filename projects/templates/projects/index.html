@@ -2,20 +2,16 @@
 
 {% block content %}
 
-<h1 class="mt-4 mb-4">Projects</h1>
+<div class="section-header">
+    <h3>Jobs</h3>
+    <p>Your jobs-to-be-done with the help of our expert Agents</p>
+</div>
 
-<div class="row">
+<div class="row ms-4">
     {% if projects %}
     {% for project in projects %}
     <div class="col-auto">
-        <div class="card" style="width: 22rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{project.name}}</h5>
-                <p class="card-text">{{project.description}}</p>
-                <a href="{% url 'projects:project' project.id %}" class="btn btn-primary">View</a>
-                <a href="#" class="btn btn-primary">Delete</a>
-            </div>
-        </div>
+        {% include 'projects/card.html'%}
     </div>
     {% endfor %}
     {% else %}

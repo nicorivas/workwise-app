@@ -1,40 +1,46 @@
 {% load markdown_extras %}
 {% load static %}
 {% if message.type == 'status' %}
-<div class="row ms-0 me-0 mt-1 ps-0 rounded" style="border: 2px solid rgb(169, 169, 169)">
-{% elif message.type == 'error' %}
-<div class="row ms-0 me-0 mt-1 ps-0 rounded" style="border: 2px solid rgb(232, 159, 159)">
-{% endif %}
-    <div class="col m-0 p-0">
-        
-        <!-- Body -->
-        <div class="row ms-3 mb-2 me-0 mt-3 rounded">
-            <div class="col-auto" style="padding: 0em 1em 0em 0em;">
-                <img src="{% static 'assets/images/profile.png' %}"
-                        style="border-radius:50%;width:35px;height:35px;">
-            </div>
-            <div class="col my-auto text-left" style="padding: 0em 1em 0em 0em;">
-                <span style="font-size:0.9em;">{{message.message | markdown | safe}}</span>
-            </div>
-        </div>
+<div class="row ms-0 me-0 mt-1 ps-0 rounded message" style="border: 2px solid rgb(169, 169, 169)">
+    {% elif message.type == 'error' %}
+    <div class="row ms-0 me-0 mt-1 ps-0 rounded message" style="border: 2px solid rgb(232, 159, 159)">
+        {% else %}
+        <div class="row ms-0 me-0 mt-1 ps-0 rounded message">
+            {% endif %}
+            <div class="col m-0 p-0">
 
-        <!-- Header -->
-        <div class="row m-0 pb-1 pt-1 ps-2 pe-2 text-muted shadow-sm" style="background-color: rgb(255, 255, 255);">
-            <div class="col my-auto">
-            </div>
-            <div class="col my-auto text-muted">
-            </div>
-            <div class="col text-end">
-                <div class="btn btn-light p-0 m-0 rounded-circle"
-                    style="line-height: 1;min-height:30px; min-width:30px;"
-                    hx-post="{% url 'projects:delete_message' message.pk %}"
-                    hx-target="#messages">
-                    <div class="align-middle" style="margin-top:0.5em;">
-                        <i class="bi bi-trash text-muted"></i>
+                <!-- Body -->
+                <div class="row ms-3 mb-2 me-0 mt-3 rounded">
+                    <div class="col-auto" style="padding: 0em 1em 0em 0em;">
+                        <img src="{% static 'assets/images/profile.png' %}"
+                            style="border-radius:50%;width:35px;height:35px;">
+                    </div>
+                    <div class="col my-auto text-left" style="padding: 0em 1em 0em 0em;">
+                        {% for block in message.messageblock_set.all %}
+                        <div id="message_block_{{block.pk}}">
+                            {% include 'projects/message_block.html' with block=block %}
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
+
+                <!-- Footer -->
+                <div class="row m-0 pb-1 pt-1 ps-2 pe-2 text-muted shadow-sm"
+                    style="background-color: rgb(255, 255, 255);">
+                    <div class="col my-auto">
+                    </div>
+                    <div class="col my-auto text-muted">
+                    </div>
+                    <div class="col text-end">
+                        <div class="btn btn-light p-0 m-0 rounded-circle"
+                            style="line-height: 1;min-height:30px; min-width:30px;"
+                            hx-post="{% url 'projects:delete_message' message.pk %}" hx-target="#messages">
+                            <div class="align-middle" style="margin-top:0.5em;">
+                                <i class="bi bi-trash text-muted"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-
-    </div>
-</div>

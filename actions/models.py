@@ -1,24 +1,12 @@
+import importlib
+import json
+
 from django.db import models
 
+import mimesis.actions as actions
+from mimesis.agent.agent import Agent
 
-class ActionFormElementType(models.Model):
-    name = models.CharField(max_length=256)
-    description = models.CharField(max_length=512)
-
-    def __str__(self):
-        return self.name
-
-class ActionFormElement(models.Model):
-    action = models.ForeignKey('ActionDB', on_delete=models.CASCADE)
-    type = models.ForeignKey(ActionFormElementType, on_delete=models.CASCADE)
-    name = models.CharField(max_length=256)
-    guide = models.CharField(max_length=512, null=True, blank=True)
-    audio = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.name
-
-class ActionDB(models.Model):
+class Action(models.Model):
     name = models.CharField(max_length=256)
     identifier = models.CharField(max_length=256, default="Not set")
     description = models.CharField(max_length=512)
@@ -27,10 +15,25 @@ class ActionDB(models.Model):
     follow_message = models.CharField(max_length=512, null=True, blank=True)
     previous_action = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     agent = models.ForeignKey('agents.AgentDB', related_name='actions', on_delete=models.CASCADE, null=True, blank=True)
+    mimesis_class = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):
         return self.name
     
     def get_next_actions(self):
-        return ActionDB.objects.filter(previous_action=self)
-        
+        return Action.objects.filter(previous_action=self)
+
+    def call_agent(self, request):
+
+        # Get submodule from mimesis_class
+        module_name = self.mimesis_class.split(".")[0]
+        mimesis_class_name = self.mimesis_class.split(".")[1]
+
+        # Import the class of the action based on its name and submodule        
+        submodule = importlib.import_module(f".{module_name}", actions.__name__)
+        ActionClass = getattr(submodule, mimesis_class_name)
+        action = ActionClass()
+
+        # Load Agent from caché
+        agent = Agent(**json.loads(request.session['agent']))
+        agent.do(action)

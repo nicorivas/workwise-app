@@ -1,7 +1,7 @@
 {% load markdown_extras %}
 {% load static %}
 
-<div class="row m-2 mb-4" style="background-color:white;border: 1px solid #ddd">
+<div class="row mb-4 g-0 instruction-action">
   <div class="col p-0 m-0">
 
     <input type="hidden" name="action" value="{{action.pk}}">
@@ -58,9 +58,10 @@
           <input name="forward_indicator" value="#loading_message_write_document_{{instruction.pk}}">
           <input name="forward_forward" value="forward_finish_{{instruction.pk}}">
         </div>
+        <!-- revise -->
         <div id="forward_project_charter_revise_{{instruction.pk}}">
           <input name="forward_url"
-            value="{% url 'projects:revise_document' project_id=instruction.project.pk document_id=instruction.project.document.pk %}">
+            value="{% url 'projects:revise_document' project_id=instruction.project.pk document_id=instruction.project.document.pk instruction_id=instruction.pk%}">
           <input name="forward_target" value="#document">
           <input name="forward_indicator" value="#loading_message_revise_document_{{instruction.pk}}">
           <input name="forward_forward" value="forward_finish_{{instruction.pk}}">
