@@ -3,7 +3,6 @@
 
 <!-- List of instructions -->
 {% for instruction in instructions %}
-<div id="instruction_{{instruction.pk}}" class="instruction">
-    {% include "projects/instruction.html" %}
+<div id="instruction_{{instruction.pk}}" class="instruction" hx-trigger="load" hx-target="this" hx-get="{% url 'instruction:read' instruction.pk %}">
 </div>
 {% endfor %}

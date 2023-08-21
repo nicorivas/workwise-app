@@ -1,16 +1,20 @@
 from django.shortcuts import render
 from django.views import View
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
+from django.urls import reverse
 
 from .forms import ActionElementCreateForm, ActionElementUpdateForm, AgentCallUpdateForm
 from .models import ActionElement, ActionElementAgentCall, ActionElementMessage, ActionElementTextInput
-from actions.models import Action
+from instruction.models import Instruction
+# Forwards
+from document.views import DocumentRefreshView
+from instruction.views import InstructionReadView
 
 class ElementCreateView(View):
 
-    def post(self, request, action_id:int):
-        action = get_object_or_404(Action, id=action_id)
+    def post(self, request, instruction_id:int):
+        instruction = get_object_or_404(Instruction, id=instruction_id)
         form = ActionElementCreateForm(request.POST)
         if form.is_valid():
             action_element = form.save(commit=False)
@@ -29,8 +33,8 @@ class ElementCreateView(View):
 
 class ElementReadView(View):
 
-    def get(self, request, action_id:int, action_element_id:int):
-        action = get_object_or_404(Action, id=action_id)
+    def get(self, request, instruction_id:int, action_element_id:int):
+        instruction = get_object_or_404(Instruction, id=instruction_id)
         action_element = get_object_or_404(ActionElement, id=action_element_id)
         if action_element.type.name == action_element.type.ActionElementTypes.AGENT_CALL:
             action_element = get_object_or_404(ActionElementAgentCall, id=action_element_id)
@@ -41,22 +45,18 @@ class ElementReadView(View):
 
 class ElementUpdateView(View):
 
-    def post(self, request, action_id:int, action_element_id:int):
+    def post(self, request, instruction_id:int, action_element_id:int):
         print("ElementUpdateView.post")
 
-        action = get_object_or_404(Action, id=action_id)
+        instruction = get_object_or_404(Instruction, id=instruction_id)
         action_element = get_object_or_404(ActionElement, id=action_element_id)
         form = ActionElementUpdateForm(request.POST, instance=action_element)
         if form.is_valid():
-            print("1")
             form.save()
             if action_element.type.name == action_element.type.ActionElementTypes.AGENT_CALL:
                 agent_call = get_object_or_404(ActionElementAgentCall, id=action_element_id)
-                print("agent_call: ", agent_call)
                 agent_call_form = AgentCallUpdateForm(request.POST, instance=agent_call)
-                print("agent_call_form: ", agent_call_form)
                 if agent_call_form.is_valid():
-                    print("2")
                     agent_call_form.save()
 
         return redirect("actions:action", action_id=action_id)
@@ -71,9 +71,39 @@ class ElementDeleteView(View):
 
 class ElementCallView(View):
 
-    def post(self, request, action_id:int, action_element_id:int):
-        
+    def post(self, request, instruction_id:int, action_element_id:int):
+        """Triggered by call elements on push of button.
+
+        Main idea here is to call the agent and update what is necessary after the agent call.
+        Agent is called on model of the ActionElementAgentCall(ActionElement).
+
+        Args:
+            request (HttpRequest): Request object
+            instruction_id (int): Instruction id
+            action_element_id (int): Action element id
+        """
+
+        print("ElementCallView.post")
+
+        instruction = get_object_or_404(Instruction, id=instruction_id)
         agent_call = get_object_or_404(ActionElementAgentCall, id=action_element_id)
-        reply = agent_call.call_agent(request)
-        print(reply)
-        return redirect("actions:action", action_id=action_id)
+        replies = agent_call.call_agent(request)
+        for reply in replies:
+            if reply["type"] == "document":
+                document = instruction.project.document
+                document.clear()
+                document.text = reply["text"]
+                document.create_element_from_reply(markdown=True)
+                document.save()
+            if reply["type"] == "message":
+                instruction.delete_messages()
+                instruction.add_message(reply["text"])
+                pass
+
+        
+        # Forwards
+        response = HttpResponse()
+        response = DocumentRefreshView.forward(response, document) # Refresh the document
+        response = InstructionReadView.forward(response, instruction) # Refresh the instruction
+
+        return response

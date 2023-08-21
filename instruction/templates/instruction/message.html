@@ -18,7 +18,7 @@
                     <div class="col my-auto text-left" style="padding: 0em 1em 0em 0em;">
                         {% for block in message.messageblock_set.all %}
                         <div id="message_block_{{block.pk}}">
-                            {% include 'projects/message_block.html' with block=block %}
+                            {% include 'instruction/message_block.html' with block=block %}
                         </div>
                         {% endfor %}
                     </div>

@@ -1,6 +1,4 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404
-from django.template import loader
 from django.http.response import JsonResponse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
@@ -9,16 +7,11 @@ from django.conf import settings
 from django.shortcuts import redirect
 
 import json
-from bs4 import BeautifulSoup
-
-import markdown
-import commonmark
 import time
-
 import openai
 
-from .models import Project, Record, Message, MessageBlock#, Instruction#, Comment
-from document.models import Document, DocumentElement
+from .models import Project, Record
+from document.models import Document
 from actions.models import Action
 from instruction.models import Instruction
 
@@ -427,19 +420,25 @@ def index(request):
     }
     return render(request, "projects/index.html", context)
 
-def project(request, project_id):
+def read(request, project_id):
+    """Read project, that is, show the main view of a project
+
+    Args:
+        request (HttpRequest): Django request object
+        project_id (int): Project ID
+    """
 
     project = get_object_or_404(Project, pk=project_id)
     document = project.document
     agent = project.agent
-    instructions = Instruction.objects.filter(project=project_id)
     actions = Action.objects.all()
+    instructions = Instruction.objects.filter(project=project_id)
+    print(instructions)
 
     # Create mimesis Agent to store in session
     mms_agent = Agent(name=agent.name, definition=agent.definition)
     request.session['agent'] = mms_agent.json()
     
-    messages = Message.objects.filter(project=project_id, type="audio")
     context = {
         "project": project,
         "document": document,

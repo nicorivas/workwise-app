@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from actions.models import Action
+from instruction.models import Instruction
 
 from mimesis.agent.agent import Agent
 import mimesis.actions as actions
@@ -32,8 +33,11 @@ class ActionElementType(models.Model):
             return "action_element/instruction/agent_call.html"
 
 class ActionElement(models.Model):
+    """An action element is an element of an action, part of an instruction.
+    """
 
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
+    instruction = models.ForeignKey(Instruction, on_delete=models.CASCADE)
     index = models.IntegerField(default=0)
     type = models.ForeignKey(ActionElementType, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
@@ -87,9 +91,7 @@ class ActionElementAgentCall(ActionElement):
         return self.name
     
     def call_agent(self, request):
-
-
-        print(request.POST)
+        print(f"ActionElementAgentCall.call_agent() called: {request.POST}")
 
         # Get all inputs from action
         # For now we only have text inputs
@@ -102,13 +104,14 @@ class ActionElementAgentCall(ActionElement):
             text_input.save()
             action_parameters[text_input.name] = request.POST[text_input.name]
 
-        # Get submodule from mimesis_class
+        # Get submodule of action or chain from mimesis_class, that is, the name of the class (with module name).
         module_name = self.mimesis_action.split(".")[0]
         mimesis_class_name = self.mimesis_action.split(".")[1]
 
-        # Import the class of the action based on its name and submodule        
+        # Import the class of the action based on its name and submodule 
         submodule = importlib.import_module(f".{module_name}", actions.__name__)
         ActionClass = getattr(submodule, mimesis_class_name)
+        # Here is where we initialize the action with the parameters from the form
         actionClass = ActionClass(**action_parameters)
 
         # Load Agent from caché

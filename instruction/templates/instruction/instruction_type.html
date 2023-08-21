@@ -1,0 +1,22 @@
+<!-- Create new actions elements -->
+<form action="{% url 'action_element:create' action.pk %}" method="post">
+    {% csrf_token %}
+    {{ action_element_create_form }}
+    <input type="submit" value="Submit">
+</form>
+
+<div class="row g-0">
+
+<!-- Action elements -->
+<div class="action_elements col-6 p-5">
+    {% for element in elements %}
+    <div id="action_element_{element.pk}" class="action_element" hx-trigger="load" hx-target="this"
+        hx-get="{% url 'action_element:read' action.pk element.pk %}">
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Instruction -->
+<div class="action_form col-6 p-5">
+    {% include 'instruction/instruction.html' %}
+</div>

@@ -10,13 +10,8 @@
     </div>
 
     <div class="col pt-2 pb-2 ps-0 mt-0">
-        {% if instruction.prompt %}
-        <textarea class="form-control border-0 p-3 test" name="{{element.name}}" id="instruction-text" rows="7"
-            style="font-size: 0.9em;">{{instruction.prompt}}</textarea>
-        {% else %}
-        <textarea class="form-control border-0 p-3 text-muted test" name="{{element.name}}" id="instruction-text"
-            rows="7"></textarea>
-        {% endif %}
+        <textarea class="form-control border-0 p-3 instruction-input" name="{{element.name}}" id="instruction-text" rows="7"
+            style="font-size: 0.9em;">{{element.message}}</textarea>
     </div>
 
     <!-- Show prompt -->

@@ -280,6 +280,12 @@
       color: #ccc;
     }
 
+    .header-nav {
+        box-shadow: 2px 2px rgb(201, 233, 235);
+        border-radius:10px;
+        background-color: #fff;
+    }
+
   </style>
 
   {% block css %}
@@ -309,6 +315,11 @@
 
   {% block javascript %}
   {% endblock %}
+
+  <div id="forward">
+    {% block forward %}
+    {% endblock %}
+  </div>
 
 </body>
 

@@ -1,7 +1,7 @@
 import json
 
 from django.db import models
-
+from django.utils.translation import gettext_lazy as _
 from django.apps import apps
 
 from agents.models import AgentDB
@@ -31,8 +31,14 @@ class Comment(models.Model):
         return self.text
 
 class Document(models.Model):
+
+    class DocumentType(models.TextChoices):
+        PROJECT_CHARTER = "PRCH", _("Project Charter")
+        FEEDBACK_GUIDELINE = "FBGD", _("Feedback Guideline")
+
     # TODO: Maybe documents should also keep the original reply from the model, before parsing to Markdown.
     name = models.CharField(max_length=256)
+    type = models.CharField(max_length=4, choices=DocumentType.choices, default=DocumentType.PROJECT_CHARTER)
     text = models.TextField()
     version = models.IntegerField(default=1)
     json = models.TextField(null=True, blank=True)

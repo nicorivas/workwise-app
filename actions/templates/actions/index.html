@@ -11,7 +11,12 @@
     {% if actions %}
     {% for action in actions %}
     <ul>
-        <li><a href="{% url 'actions:action' action.pk %}">{{action.name}}</a></li>
+        <li><a href="{% url 'actions:read' action.pk %}">{{action.name}}</a></li>
+        {% for instruction in action.instruction_set.all %}
+        <ul>
+            <li><a href="{% url 'instruction:read' instruction.pk %}">{{instruction.name}}</a></li>
+        </ul>
+        {% endfor %}
     </ul>
     {% endfor %}
     {% else %}

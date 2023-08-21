@@ -5,10 +5,20 @@ from django.views import View
 from document.models import Document
 from django.urls import reverse
 
-class DocumentView(View):
+class DocumentReadView(View):
     
     def get(self, request, document_id):
-        print("DocumentView.get")
+        print("DocumentReadView.get")
+        document = get_object_or_404(Document, pk=document_id)
+        context = {
+            "document": document,
+        }
+        return render(request, "document/index.html", context)
+
+class DocumentUpdateView(View):
+    
+    def get(self, request, document_id):
+        print("DocumentUpdateView.get")
         document = get_object_or_404(Document, pk=document_id)
         context = {
             "document": document,
@@ -53,8 +63,15 @@ class DocumentBodyView(View):
     def get(self, request, document_id):
         print("DocumentBodyView.get")
         document = get_object_or_404(Document, pk=document_id)
-        time.sleep(2)
         context = {
             "document": document,
         }
         return render(request, "document/body.html", context)
+    
+class DocumentRefreshView(View):
+    
+    @staticmethod
+    def forward(response, document):
+        url = reverse("document:refresh", kwargs={"document_id":document.pk})
+        response.write(f"<div hx-trigger='load' hx-get='{url}' hx-target='#document-body-{document.pk}' hidden></div>")
+        return response

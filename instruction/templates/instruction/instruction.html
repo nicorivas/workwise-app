@@ -1,0 +1,23 @@
+<!-- Instruction -->
+<div class="instruction">
+    
+    <form>
+        {% for element in elements %}
+        {% if instruction %}
+        {% include element.template with action=instruction.type.action agent=agent element=element %}
+        {% else %}
+        {% include element.template with action=action agent=agent element=element %}
+        {% endif %}
+        {% endfor %}
+    </form>
+
+    <!-- Comments -->
+    <div class="row mt-0 mb-0">
+        <div class="col p-0">
+            <div id="messages">
+                {% include 'instruction/messages.html' %}
+            </div>
+        </div>
+    </div>
+
+</div>

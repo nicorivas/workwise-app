@@ -1,13 +1,13 @@
 from django.urls import path
 
-from .views import EvaluateProjectCharter, ActionView, ActionsView, ActionCallView
+from .views import ActionReadView, ActionsView, ActionCallView, ActionReadInstructionTypesView, ActionInstructionsCreateView
 
 app_name = "actions"
 
 urlpatterns = [
     path("", ActionsView.as_view(), name="index"),
-    path("<int:action_id>", ActionView.as_view(), name="action"),
+    path("<int:action_id>/", ActionReadView.as_view(), name="read"),
+    path("<int:action_id>/instructions", ActionReadInstructionTypesView.as_view(), name="read_instruction_types"),
+    path("<int:action_id>/instructions/create/", ActionInstructionsCreateView.as_view(), name="create_instruction"),
     path("<int:action_id>/test", ActionCallView.as_view(), name="action_call"),
-    path("<int:action_id>/project_charter/evaluate", EvaluateProjectCharter.as_view(), name="project_charter_evaluate"),
-    #path("<int:action_id>/project_charter/write", WriteProjectCharter.as_view(), name="project_charter_write"),
 ]

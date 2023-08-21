@@ -7,12 +7,11 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("new/<int:action_id>", views.new, name="new"),
     path("delete/<int:project_id>", views.delete, name="delete"),
-    path("<int:project_id>/", views.project, name="project"),
+    path("<int:project_id>/", views.read, name="read"),
     path('<int:project_id>/transcribe_audio/', views.transcribe_audio, name='transcribe_audio'),
     path('<int:project_id>/instruction/<int:instruction_id>/call_action/<int:action_id>', views.call_action, name='call_action'),
     path('<int:project_id>/instruction/<int:instruction_id>/end_action', views.end_action, name='end_action'),
     path('<int:project_id>/instruction/<int:instruction_id>/update', views.instruction_update, name='instruction_update'),
-    path('<int:project_id>/instruction/<int:message_block_id>/select', views.select_message_block, name='select_message_block'),
     # Charter
     path('<int:project_id>/document/<int:document_id>/revise/<int:instruction_id>', views.revise_document, name='revise_document'),
     path('<int:project_id>/document/<int:document_id>/write/<int:instruction_id>', views.write_document, name='write_document'),

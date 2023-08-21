@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import InstructionType, Instruction, Message, MessageBlock
+
+admin.site.register(Instruction)
+admin.site.register(InstructionType)
+admin.site.register(Message)
+admin.site.register(MessageBlock)

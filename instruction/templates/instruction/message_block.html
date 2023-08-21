@@ -1,6 +1,6 @@
 {% load markdown_extras %}
 {% load static %}
-<div class="row message-block position-relative {%if not block.selected%}message-block-unselected{%endif%}" hx-trigger="click" hx-post="{% url 'projects:select_message_block' project.id block.pk%}" hx-target="#message_block_{{block.pk}}">
+<div class="row message-block position-relative {%if not block.selected%}message-block-unselected{%endif%}" hx-trigger="click" hx-post="{% url 'instruction:select_message_block' block.pk%}" hx-target="#message_block_{{block.pk}}">
     <div class="col">
         {% if block.html %}
         <span style="font-size:0.9em;">{{block.html | safe}}</span>
