@@ -9,7 +9,7 @@ class AgentType(models.Model):
     profile_picture = models.ImageField(upload_to="agents", null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.pk}. {self.name} - {self.short_title}"
 
 class Trait(models.Model):
 
@@ -32,11 +32,12 @@ class Personality(models.Model):
 class Agent(models.Model):
     
     type = models.ForeignKey(AgentType, on_delete=models.CASCADE)
-    name =  models.CharField(max_length=256)
-    definition = models.CharField(max_length=512)
+    company = models.ManyToManyField("company.Company")
+    name =  models.CharField(max_length=256, null=True, blank=True) # Fields are optional as they could deafult to type.
+    definition = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     short_title = models.CharField(max_length=512, null=True, blank=True)
-    object = models.JSONField()
+    object = models.JSONField(null=True, blank=True)
     personality = models.ForeignKey(Personality, null=True, blank=True, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to="agents", null=True, blank=True)
     show_in_explorer = models.BooleanField(default=True)
