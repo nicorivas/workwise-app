@@ -65,6 +65,27 @@
       min-height: 100vh;
     }
 
+    .header {
+      background-color: #171129;
+      text-align: right;
+      padding: 0.5em 0 0.5em 0;
+    }
+
+    .header .icon {
+      color: #fff;
+      padding: 0 0.5em 0 0.5em;
+      font-size: 1.2em;
+    }
+
+    .header p {
+      color: #e0e1eb;
+      margin: 0px;
+    }
+
+    .header .logo {
+      font-size: 1em;
+    }
+
     .section-header {
       padding-left: 3em;
       padding-top: 3em;
@@ -351,10 +372,11 @@
 
   <div class="container-fluid p-0">
 
+    {% include 'header.html' %}
+
     <div class="row g-0">
 
       <div id="sidebar" class="col-1">
-        <h3 class="mt-3 mb-3">WorkWise</h3>
         {% include 'menu.html' %}
       </div>
 
