@@ -1,0 +1,17 @@
+.chroma
+.chroma/
+*.pyc
+*.ipynb
+*.pdf
+*.log
+pyrightconfig.json
+*.egg-info/
+.vscode/
+.mypy_cache/
+__pycache__/
+fingpt.egg-info/
+*.DS_Store
+.env
+/prompts*
+staticfiles
+/db.sqlite3*
