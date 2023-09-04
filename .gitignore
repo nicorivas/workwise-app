@@ -14,3 +14,4 @@ fingpt.egg-info/
 .env
 .prompts
 prompts*
+staticfiles
