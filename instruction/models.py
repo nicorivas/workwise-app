@@ -68,10 +68,12 @@ class InstructionType(models.Model):
 
     Attributes:
         name (str): The name of the instruction.
+        description (str): The description of the instruction.
         action (Action): The action that this instruction belongs to.
         previous_instruction (Instruction): The previous instruction that this instruction depends on.
     """
     name = models.CharField(max_length=255)
+    description = models.TextField(default="", null=True, blank=True)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     previous_instruction = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
@@ -84,7 +86,6 @@ class InstructionType(models.Model):
         else:
             return Action.objects.filter(previous_action=None)
 
-
 class Instruction(models.Model):
     """An instruction is a step of an action. It is a container to stablish the logic between the different steps.
 
@@ -92,11 +93,15 @@ class Instruction(models.Model):
         name (str): The name of the instruction.
         action (Action): The action that this instruction belongs to.
         project (Project): The project that this instruction belongs to.
+        show_as_possible (bool): If True, this instruction will be shown as a possible action in the instruction panel.
     """
     type = models.ForeignKey(InstructionType, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
+    preview = models.BooleanField(default=False)
+    show_as_possible = models.BooleanField(default=True)
     finished = models.BooleanField(default=False)
     previous_instruction = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    data = models.JSONField(default=dict, null=True, blank=True)
 
     def __str__(self):
         return f"Instruction: {self.pk}, Type: {self.type.name if self.type else 'None'}"
@@ -114,3 +119,10 @@ class Instruction(models.Model):
             return self.previous_instruction.action.get_next_actions()
         else:
             return Action.objects.filter(previous_action=None)
+        
+    def update(self, request):
+        """Update the data object based on a request, that contains the values of the form elements.
+        """
+        for key, value in request.items():
+            self.data[key] = value
+        super().save()

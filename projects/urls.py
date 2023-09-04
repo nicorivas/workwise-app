@@ -5,9 +5,10 @@ from . import views
 app_name = "projects"
 urlpatterns = [
     path("", views.index, name="index"),
-    path("new/<int:action_id>", views.new, name="new"),
-    path("delete/<int:project_id>", views.delete, name="delete"),
+    path("create/<int:action_id>", views.create, name="create"), # TODO action_id shouldn't be an url parameter, but a POST parameter
     path("<int:project_id>/", views.read, name="read"),
+    path("<int:project_id>/update/name", views.update_name, name="update_name"),
+    path("delete/<int:project_id>", views.delete, name="delete"),
     path('<int:project_id>/transcribe_audio/', views.transcribe_audio, name='transcribe_audio'),
     path('<int:project_id>/instruction/<int:instruction_id>/call_action/<int:action_id>', views.call_action, name='call_action'),
     path('<int:project_id>/instruction/<int:instruction_id>/end_action', views.end_action, name='end_action'),

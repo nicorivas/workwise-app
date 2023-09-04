@@ -1,4 +1,4 @@
-<div class="row mt-2 mb-0">
+<div class="row g-0 mt-2 mb-0">
   <div class="col p-0">
     <button 
       type="button"
@@ -15,5 +15,5 @@
 </div>
 
 <div class="mt-4 htmx-indicator" id="loading_message_agent_call_{{action.pk}}_{{element.pk}}">
-  {% include "agents/message.html" with message="Did you call me?..." %}
+  {% include "agents/message.html" with message=element.working_message %}
 </div>

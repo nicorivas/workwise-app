@@ -320,15 +320,16 @@ def transcribe_audio(request, project_id):
     if request.method == 'POST':
         audio_file = request.FILES['audio']
         transcript = openai.Audio.transcribe("whisper-1", audio_file)
-        message = Message.objects.create(
-            project_id=project_id,
-            message=transcript["text"],
-            user="Nico",
-            type="audio"
-            )
-        message.save()
-        serialized_obj = serializers.serialize('json', [message, ])
-        return JsonResponse(json.loads(serialized_obj)[0], safe=False)
+
+        #message = Message.objects.create(
+        #    project_id=project_id,
+        #    message=transcript["text"],
+        #    user="Nico",
+        #    type="audio"
+        #    )
+        #message.save()
+        #serialized_obj = serializers.serialize('json', [message, ])
+        return JsonResponse({"text":transcript["text"]}, safe=False)
 
     return JsonResponse({'error': 'Invalid method'})
 
@@ -420,7 +421,25 @@ def index(request):
     }
     return render(request, "projects/index.html", context)
 
-def read(request, project_id):
+def create(request, action_id:int):
+    action = get_object_or_404(Action, pk=action_id)
+    agent = action.agent
+
+    # Create new document
+    document = Document.objects.create(name=f"New document: {action.name}")
+    document.save()
+
+    # Create new project
+    project = Project.objects.create(name=f"New project: {action.name}", action=action, agent=agent, document=document) # TODO: Name could be related to action
+    project.save()
+
+    # Create new instruction with the selected action
+    instruction = Instruction.objects.create(type=action.first_instruction_type, project=project)
+    instruction.save()
+
+    return redirect("projects:read", project_id=project.pk)
+
+def read(request, project_id: int):
     """Read project, that is, show the main view of a project
 
     Args:
@@ -431,9 +450,9 @@ def read(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     document = project.document
     agent = project.agent
-    actions = Action.objects.all()
+    action = project.action
     instructions = Instruction.objects.filter(project=project_id)
-    print(instructions)
+    instructions_possible = Instruction.objects.filter(type__action=action, preview=True).exclude(type__in=instructions.values_list("type", flat=True))
 
     # Create mimesis Agent to store in session
     mms_agent = Agent(name=agent.name, definition=agent.definition)
@@ -443,38 +462,17 @@ def read(request, project_id):
         "project": project,
         "document": document,
         "instructions": instructions,
+        "instructions_possible": instructions_possible,
         "agent": agent,
-        "actions": actions
+        "action": action
     }
     return render(request, "projects/project.html", context)
 
-def new(request, action_id:int):
-    action = get_object_or_404(Action, pk=action_id)
-    agent = action.agent
-
-    # Create new document
-    document = Document.objects.create(name="New document")
-    document.save()
-
-    # Create new project
-    project = Project.objects.create(name="New project", agent=agent, document=document) # TODO: Name could be related to action
+def update_name(request, project_id:int):
+    project = get_object_or_404(Project, pk=project_id)
+    project.name = request.POST.get("name")
     project.save()
-
-    # Create new instruction with the selected action
-    instruction = Instruction.objects.create(project=project, action=action)
-    instruction.save()
-
-    instructions = Instruction.objects.filter(project=project.pk)
-
-    context = {
-        "project": project,
-        "document": document,
-        "instructions": instructions,
-        "agent": agent,
-        "actions": actions
-    }
-    return redirect("projects:project", project_id=project.pk)
-    #return render(request, "projects/project.html", context)
+    return JsonResponse({"name": project.name})
 
 def delete(request, project_id:int):
     project = get_object_or_404(Project, pk=project_id)
@@ -508,8 +506,6 @@ def feedback(request, project_id, document_id, instruction_id):
     document.text = reply
     document.create_element_from_reply(markdown=True)
     document.save()
-
-    time.sleep(2)
 
     # Return updated document
     context = {

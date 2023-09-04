@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path("", include("explorer.urls")),
     path("action_element/", include("action_element.urls")),
     path("actions/", include("actions.urls")),
@@ -28,6 +29,7 @@ urlpatterns = [
     path("projects/", include("projects.urls")),
     path("document/", include("document.urls")),
     path("instruction/", include("instruction.urls")),
+    path("chat/", include("chat.urls")),
     path('admin/', admin.site.urls),
     #path("__reload__/", include("django_browser_reload.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

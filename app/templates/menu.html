@@ -24,10 +24,14 @@
             <i class="bi bi-rocket-takeoff-fill"></i> Actions
         </a>
     </li>
+    <!--
     <li class="nav-item">
-        <a class="nav-link disabled" href="#">...</a>
+        <a class="nav-link disabled" href="#">Talks</a>
     </li>
+    {% for agent in agents %}
     <li class="nav-item">
-        <a class="nav-link disabled" href="#">...</a>
+        <a class="nav-link" href="{% url 'chat:read' agent.pk %}" style="color:#000;">{% include 'agents/message_profile_picture.html' with size=0 padding_left=1 padding_right=0.5 %}{{agent.name}}</a>
     </li>
+    {% endfor %}
+    -->
 </ul>

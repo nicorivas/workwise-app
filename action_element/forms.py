@@ -15,4 +15,4 @@ class ActionElementUpdateForm(forms.ModelForm):
 class AgentCallUpdateForm(forms.ModelForm):
     class Meta:
         model = ActionElementAgentCall
-        fields = ["name","button_label","index","mimesis_action"]
+        fields = ["name","button_label","index","mimesis_action","document_input"]

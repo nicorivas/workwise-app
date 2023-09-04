@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class TraitDB(models.Model):
 
     name = models.CharField(max_length=256)
@@ -29,10 +27,19 @@ class AgentDB(models.Model):
     object = models.JSONField()
     personality = models.ForeignKey(PersonalityDB, null=True, blank=True, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to="agents", null=True, blank=True)
+    show_in_explorer = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.pk}. {self.name}"
+        return f"{self.pk}. {self.name} - {self.short_title}"
     
     def greeting_message(self):
         return "Hi! How can I help you?"
+
+    def check_project(self, project):
+
+        if project.action.name == "Feedback Advice":
+
+            project.add_instruction("Feedback follow up")
+
+            return True
     

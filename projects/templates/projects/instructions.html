@@ -1,8 +1,0 @@
-<!-- Agent first message -->
-{# include "agents/message.html" with message=agent.greeting_message #}
-
-<!-- List of instructions -->
-{% for instruction in instructions %}
-<div id="instruction_{{instruction.pk}}" class="instruction" hx-trigger="load" hx-target="this" hx-get="{% url 'instruction:read' instruction.pk %}">
-</div>
-{% endfor %}

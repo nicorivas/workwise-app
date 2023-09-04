@@ -1,0 +1,77 @@
+# This is a TOML document
+
+name = "Feedback Guidelines Alignment to Values"
+description = ""
+definition = ""
+memory = "I aligned some Feedback Guidelines to the corporate values"
+
+[reply]
+name = "feedback_guidelines_values"
+type = "document"
+
+[prompt]
+text = """Consider the following guideline to give criticism:
+
+{{feedback}}
+        
+Now, please update the guidelines and recommendations considering the culture the company wants to develop. The new and recommendation should serve to also communicate the company values and reinforce expected conducts. Here are the company values:
+
+“1.	Creatividad (Creativity):
+
+Description: Creemos en el poder transformador de la creatividad. Ella nos lleva más allá de lo ordinario, hacia soluciones innovadoras y emocionantes. La creatividad es nuestra herramienta para enfrentar desafíos y explorar nuevas posibilidades.
+
+Expected behaviors:
+
+	•	Propone soluciones innovadoras para desafíos complejos.
+	•	Abierto a nuevas ideas y perspectivas.
+	•	Busca constantemente aprender y explorar más allá de su propia zona de confort.
+	•	Se permite tomar riesgos y aprender de los errores.
+
+	2.	Método (Method):
+
+Description: Comprendemos que la creatividad florece en un marco de rigurosidad y estructura. Nos enfocamos en la excelencia de nuestro método, estableciendo procesos claros y estructurados que permiten el flujo efectivo de ideas.
+
+Expected behaviors:
+
+	•	Cumple con las políticas, procedimientos y estándares establecidos.
+	•	Constantemente busca mejorar y optimizar procesos.
+	•	Valora y se adapta a los cambios en las estrategias y metodologías de trabajo.
+	•	Emplea un enfoque sistemático para resolver problemas.
+
+	3.	Excelencia (Excellence):
+
+Description: Nos esforzamos por la excelencia en todo lo que hacemos, buscando siempre superar nuestras propias expectativas. La excelencia para nosotros significa ir un paso más allá, sin dejar de disfrutar el viaje.
+
+Expected behaviors:
+
+	•	Produce trabajo de alta calidad.
+	•	Busca constantemente maneras de mejorar.
+	•	Acepta y se nutre de la retroalimentación.
+	•	Toma la iniciativa y asume la responsabilidad de sus acciones.
+
+	4.	Respeto (Respect):
+
+Description: Valoramos y respetamos a cada individuo, reconociendo la diversidad como fuente de fortaleza. Entendemos que cada persona tiene su propia perspectiva única, que contribuye a la riqueza de nuestras ideas y al crecimiento de nuestra organización.
+
+Expected behaviors:
+
+	•	Escucha y valora las opiniones y puntos de vista de los demás.
+	•	Se comporta de manera ética y trata a los demás con dignidad y consideración.
+	•	Promueve un ambiente inclusivo y libre de discriminación.
+	•	Resuelve los conflictos de manera constructiva y profesional.
+
+	5.	Transparencia (Transparency):
+
+Description: Creemos en la transparencia como pilar de la confianza y el trabajo en equipo. La comunicación abierta y honesta nos permite trabajar de manera efectiva y construir relaciones sólidas.
+
+Expected behaviors:
+
+	•	Comparte información de manera clara y oportuna.
+	•	Es honesto y directo, manteniendo la sensibilidad hacia los demás.
+	•	Asume la responsabilidad de sus acciones y decisiones.
+	•	Fomenta un ambiente de confianza al actuar con integridad y consistencia.”
+
+Please underline the company values in the proposed feedback. Do not give me the old advise on feedback, just the new updated one.
+
+This is very important: please provide your answer in Markdown format. 
+"""

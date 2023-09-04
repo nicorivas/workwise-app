@@ -9,7 +9,7 @@ def action_select(request, action_id:int):
     return redirect("projects:project",1)
 
 def index(request):
-    agents = AgentDB.objects.all()
+    agents = AgentDB.objects.filter(show_in_explorer=True)
     actions = Action.objects.all()
     context = {
         "actions": actions,

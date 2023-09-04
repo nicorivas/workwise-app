@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'grappelli',
     "explorer.apps.ExplorerConfig",
     "agents.apps.AgentsConfig",
     "projects.apps.ProjectsConfig",
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "document.apps.DocumentConfig",
     "company.apps.CompanyConfig",
     "instruction.apps.InstructionConfig",
+    "chat.apps.ChatConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },

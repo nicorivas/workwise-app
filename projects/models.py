@@ -24,7 +24,13 @@ class Project(models.Model):
     name = models.CharField(max_length=256)
     description = models.CharField(max_length=512)
     agent = models.ForeignKey(AgentDB, on_delete=models.CASCADE, null=True, blank=True)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, null=True, blank=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
+    
+    def add_instruction(self, instruction_type_name):
+        from instruction.models import Instruction, InstructionType
+        instruction = Instruction.objects.create(type=InstructionType.objects.get(name=instruction_type_name), project=self)
+        instruction.save()

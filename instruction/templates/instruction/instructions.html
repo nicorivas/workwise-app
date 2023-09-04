@@ -1,0 +1,14 @@
+<!-- List of instructions -->
+{% for instruction in instructions %}
+<div id="instruction_{{instruction.pk}}" class="instruction" hx-trigger="load" hx-target="this" hx-get="{% url 'instruction:read' instruction.pk %}">
+</div>
+{% endfor %}
+
+<!-- List of possible instructions -->
+<div style="text-align: center;">
+{% for instruction in instructions_possible %}
+<div id="instruction_{{instruction.pk}}" class="instruction-preview" hx-trigger="load" hx-target="this" hx-get="{% url 'instruction:read_preview' instruction.pk %}"
+onclick="location.href='#';" style="cursor: pointer;">
+</div>
+{% endfor %}
+</div>

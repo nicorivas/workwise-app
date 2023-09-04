@@ -1,0 +1,11 @@
+<!-- Instruction preview -->
+<div class="row g-0 p-3 instruction-preview-body" id="collapseExample" 
+    hx-target="#instructions"
+    hx-post="{% url 'instruction:create_from_preview' instruction.pk %}"
+    hx-trigger="click"
+    hx-include="[id='project_id']">
+    <div class="col p-0 m-0">
+        <h1 class="mb-1">{{instruction.type.name}}</h1>
+        <p>{{instruction.type.description}}</p>
+    </div>
+</div>

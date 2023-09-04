@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from action_element.models import ActionElement, ActionElementAgentCall, ActionElementMessage, ActionElementTextInput
 from action_element.forms import ActionElementCreateForm
 from instruction.forms import InstructionTypeCreateForm
-from instruction.views import InstructionCreateView
+from instruction.models import Instruction
 
 class ActionsView(View):
 
@@ -31,7 +31,9 @@ class ActionReadView(View):
         agent = get_object_or_404(AgentDB, id=1)
         action = get_object_or_404(Action, id=action_id)
         action_element_create_form = ActionElementCreateForm()
-        elements = list(ActionElementAgentCall.objects.filter(action=action)) + list(ActionElementMessage.objects.filter(action=action)) + list(ActionElementTextInput.objects.filter(action=action))
+        elements = list(ActionElementAgentCall.objects.filter(instruction_type__action=action)) \
+            + list(ActionElementMessage.objects.filter(instruction_type__action=action)) \
+            + list(ActionElementTextInput.objects.filter(instruction_type__action=action))
         elements.sort(key=lambda x: x.index)
         context = {
             "action": action
@@ -48,10 +50,13 @@ class ActionReadInstructionTypesView(View):
         agent = get_object_or_404(AgentDB, id=1)
         action = get_object_or_404(Action, id=action_id)
         form = InstructionTypeCreateForm()
+        instructions = Instruction.objects.filter(type__action=action, preview=True)
+        print(instructions)
         context = {
             "action": action
             ,"agent": agent
             ,"form": form
+            ,"instructions": instructions
         }
         return render(request, "actions/instruction_types.html", context)
     
@@ -61,7 +66,6 @@ class ActionInstructionsCreateView(View):
         print("ActionInstructionsCreateView.get")
         agent = get_object_or_404(AgentDB, id=1)
         action = get_object_or_404(Action, id=action_id)
-        instruction = InstructionCreateView.as_view()(request)
         form = InstructionTypeCreateForm()
         context = {
             "action": action

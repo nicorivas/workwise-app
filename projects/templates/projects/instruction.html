@@ -200,11 +200,12 @@
   }
 
   // Show actions on click of dropdown
-  $(".actions-dropdown").on('click', function(event){
+  $(".actions-dropdown").on('click', function(event) {
     event.stopPropagation();
     event.stopImmediatePropagation();
     $(this).siblings(".actions-list").toggle();
   })
+
 </script>
 
 {% endblock %}

@@ -249,10 +249,55 @@
       background-color: #fff;
     }
 
-    .instruction-action {
+    .instruction {
+      margin-bottom: 0.5em;
+    }
+
+    .instruction-header {
       box-shadow: 2px 2px rgb(235, 231, 201);
       background-color:white;
       border: 1px solid #ddd;
+      transition: transform 0.4s ease-in-out;
+      cursor: pointer;
+    }
+
+    .instruction-header p {
+      padding: 0;
+      margin: 0;
+    }
+
+    .instruction-body {
+      box-shadow: 2px 2px rgb(235, 231, 201);
+      background-color:white;
+      border: 1px solid #ddd;
+    }
+
+    .instruction-preview {
+      box-shadow: 2px 2px rgb(235, 231, 201);
+      background-color:rgba(255, 255, 255, 0.8);
+      border: 1px solid #ddd;
+      width: 43%;
+      display: inline-block;
+    }
+
+    .instruction-preview:hover {
+      background-color:rgba(255, 255, 255, 2.0);
+    }
+
+    .instruction-preview-body h1 {
+      font-size: 0.9rem;
+      color: #353535;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+    }
+
+    .instruction-preview-body p {
+      font-size: 0.9rem;
+      color: #777;
+      padding: 0;
+      margin: 0;
+      text-align: left;
     }
 
     .message h1 {
@@ -282,8 +327,17 @@
 
     .header-nav {
         box-shadow: 2px 2px rgb(201, 233, 235);
-        border-radius:10px;
         background-color: #fff;
+    }
+
+    .slide-in {
+      transition: translateY(0%);
+    }
+
+    .slide-out {
+      max-height: 0px;
+      overflow: hidden;
+      transition: max-height 0.25s ease-in;
     }
 
   </style>
@@ -315,6 +369,21 @@
 
   {% block javascript %}
   {% endblock %}
+
+  <script>
+    // Collapse body when header is clicked
+    function clickInstructionHeader(event) {
+      clickedElement = $(event.target)
+      if (!clickedElement.hasClass('trash')) {
+        targetElement = clickedElement.closest('.instruction-header');
+        // Hide all elements except the one we clicked
+        $(".instruction-body").not(targetElement.siblings(".instruction-body")).hide();
+        // Now toggle the element we clicked
+        targetElement.siblings(".instruction-body").toggle();
+        // We do it this way so that only one is open, but also the one open can be closed so that all are closed.
+      }
+    }
+  </script>
 
   <div id="forward">
     {% block forward %}

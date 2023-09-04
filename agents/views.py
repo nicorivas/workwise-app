@@ -3,6 +3,7 @@ from django.http import HttpResponse, Http404
 from django.template import loader
 
 from .models import AgentDB
+from projects.models import Project
 
 def index(request):
     agents = AgentDB.objects.order_by("name")
@@ -13,6 +14,18 @@ def index(request):
         "agents": agents,
     }
     return render(request, "agents/index.html", context)
+
+def check_project(request, agent_id, project_id):
+
+        print("check_project")
+
+        agent = get_object_or_404(AgentDB, pk=agent_id)
+        project = get_object_or_404(Project, pk=project_id)
+
+        if agent.check_project(project):
+            return HttpResponse("Project checked!")
+        else:
+            return HttpResponse("Project not checked!")
 
 def detail(request, agent_id):
 

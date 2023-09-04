@@ -1,6 +1,6 @@
 {% load static %}
 <div class="row ms-0 mb-2 me-0 mt-2 rounded agent-message">
-    {% include "agents/message_profile_picture.html" %}
+    {% include "agents/message_profile_picture.html" with size=1 %}
     <div class="col mt-1 text-left ps-0">
         <p>
         {{message}}

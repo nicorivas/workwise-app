@@ -25,6 +25,17 @@
     font-size: 1em;
     margin: 0;
   }
+
+  .title-input {
+    border: 2px solid #fff;
+    border-radius: 3px;
+    padding: 0.2em;
+  }
+
+  .title-input:hover {
+    border: 2px solid #ccc;
+    border-radius: 5px; 
+  }
 </style>
 {% endblock %}
 
@@ -36,8 +47,11 @@
     <!-- Project header -->
     <div id="project_header">
       <div class="row g-0">
-        <div class="col">
-          <h4>{{project.name}}</h4>
+        <div class="col-11">
+          <input type="text" name="name" value="{{project.name}}" class="title-input" style="width:{{project.name|length}}ch;" hx-trigger="change" hx-post="{% url 'projects:update_name' project.pk %}" hx-include="this">
+        </div>
+        <div class="col-1">
+          <button class="btn btn-light" style="color: #ddd;" hx-trigger="click" hx-post="{% url 'agents:check_project' agent.pk project.pk %}"><i class="bi bi-robot"></i></button>
         </div>
       </div>
     </div>
@@ -54,8 +68,8 @@
 
       <!-- Instructions -->
       <div class="col-6">
-        <div id="instructions">
-          {% include 'projects/instructions.html' %}
+        <input hidden id="project_id" name="project_id" value="{{project.pk}}">
+        <div id="instructions" hx-trigger="load" hx-get="{% url 'instruction:index' project.pk %}" hx-target="#instructions">
         </div>
       </div>
 

@@ -1,23 +1,51 @@
 <!-- Instruction -->
-<div class="instruction">
-    
-    <form>
-        {% for element in elements %}
-        {% if instruction %}
-        {% include element.template with action=instruction.type.action agent=agent element=element %}
+<div class="row g-0 instruction-header" id="instruction-header-{{instruction.pk}}">
+    <div class="col-auto ps-3 py-3">
+        {% if instruction.finished %}
+        <i class="bi bi-check-circle"></i>
         {% else %}
-        {% include element.template with action=action agent=agent element=element %}
+        <i class="bi bi-circle"></i>
         {% endif %}
-        {% endfor %}
-    </form>
+    </div>
+    <div class="col ps-3 py-3 pe-3">
+        <p>{{instruction.type.name}}</p>
+    </div>
+    <!-- Show only if it is not the first element -->
+    {% if forloop.counter != 1 %}
+    <div class="col-auto ps-3 py-3 pe-3 trash" hx-delete="{% url 'instruction:delete' instruction.pk %}" hx-include="[id='project_id']">
+        <i class="bi bi-trash text-muted"></i>
+    </div>
+    {% endif %}
+</div>
+<div class="row g-0 p-3 instruction-body">
+    <div class="col p-0 m-0">
 
-    <!-- Comments -->
-    <div class="row mt-0 mb-0">
-        <div class="col p-0">
-            <div id="messages">
-                {% include 'instruction/messages.html' %}
+        {% if instruction.preview %}
+        <p class="m-0 p-0 text-muted" style="font-style: italic;font-size: 0.8em;">{{instruction.type}}</p>
+        {% endif %}
+
+        {% if not elements %}
+        <p class="m-0 p-0 text-muted" style="font-style: italic;">Instruction has no elements; it probably hasn't been defined yet.</p>
+        {% endif %}
+
+        <form>
+            {% for element in elements %}
+            {% include element.template with data=instruction.data action=instruction.type.action agent=agent element=element %}
+            {% endfor %}
+        </form>
+
+        <!-- Comments -->
+        <div class="row mt-0 mb-0">
+            <div class="col p-0">
+                <div id="messages">
+                    {% include 'instruction/messages.html' %}
+                </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
+
+<script>
+    $("#instruction-header-{{instruction.pk}}").click(function(event){clickInstructionHeader(event)})
+</script>

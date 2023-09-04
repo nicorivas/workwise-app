@@ -24,7 +24,7 @@
     style="width:30%;display:inline-block;vertical-align:top;box-shadow:2px 2px rgb(201, 233, 235);{% if show_actions %}height:300px;{%else%}height:400px;{%endif%}">
 
     <div class="row p-3 pt-4">
-        {% include 'agents/message_profile_picture.html' with large=1 padding_left=1 padding_right=0.5 %}
+        {% include 'agents/message_profile_picture.html' with size=2 padding_left=1 padding_right=0.5 %}
         <div class="col my-auto">
             <!-- Agent title -->
             <div class="row p-0 m-0">
@@ -59,7 +59,7 @@
         <div class="col-10">
             <div class="agent_card_action d-flex align-items-center"
                 style="border-bottom: 1px solid #f3f3f3;height:2rem;">
-                <a href="{% url 'projects:new' action.pk%}">{{action.name}}</a>
+                <a href="{% url 'projects:create' action.pk%}">{{action.name}}</a>
             </div>
         </div>
         <div class="col-2 d-flex align-items-center align-items-right">
