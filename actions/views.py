@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 
-from agents.models import AgentDB
+from agents.models import Agent
 from .models import Action
 #from mimesis.agent.agent import Agent
 from mimesis.actions.project import EvaluatePrompt, WriteProject, ReviseProject, ApplyRevision
@@ -28,7 +28,7 @@ class ActionReadView(View):
 
     def get(self, request, action_id):
         print("ActionReadView.get")
-        agent = get_object_or_404(AgentDB, id=1)
+        agent = get_object_or_404(Agent, id=1)
         action = get_object_or_404(Action, id=action_id)
         action_element_create_form = ActionElementCreateForm()
         elements = list(ActionElementAgentCall.objects.filter(instruction_type__action=action)) \
@@ -47,7 +47,7 @@ class ActionReadInstructionTypesView(View):
 
     def get(self, request, action_id):
         print("ActionReadInstructionTypesView.get")
-        agent = get_object_or_404(AgentDB, id=1)
+        agent = get_object_or_404(Agent, id=1)
         action = get_object_or_404(Action, id=action_id)
         form = InstructionTypeCreateForm()
         instructions = Instruction.objects.filter(type__action=action, preview=True)
@@ -64,7 +64,7 @@ class ActionInstructionsCreateView(View):
 
     def post(self, request, action_id):
         print("ActionInstructionsCreateView.get")
-        agent = get_object_or_404(AgentDB, id=1)
+        agent = get_object_or_404(Agent, id=1)
         action = get_object_or_404(Action, id=action_id)
         form = InstructionTypeCreateForm()
         context = {
@@ -78,7 +78,7 @@ class ActionCallView(View):
 
     def get(self, request, action_id):
         print("ActionView.get")
-        agent = get_object_or_404(AgentDB, id=1)
+        agent = get_object_or_404(Agent, id=1)
         action = get_object_or_404(Action, id=action_id)
         action.call_agent(request)
         return render(request, "actions/action.html", {})

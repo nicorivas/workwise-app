@@ -1,6 +1,6 @@
 from django.db import models
 
-from agents.models import AgentDB
+from agents.models import Agent
 
 class Chat(models.Model):
     """A chat is a conversation with an Agent.
@@ -11,7 +11,7 @@ class Chat(models.Model):
     """
 
     name = models.CharField(max_length=256)
-    agent = models.ForeignKey(AgentDB, on_delete=models.CASCADE)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

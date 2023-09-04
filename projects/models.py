@@ -1,5 +1,5 @@
 from django.db import models
-from agents.models import AgentDB
+from agents.models import Agent
 from actions.models import Action
 from document.models import Document, DocumentElement
 import json
@@ -23,7 +23,7 @@ class Project(models.Model):
 
     name = models.CharField(max_length=256)
     description = models.CharField(max_length=512)
-    agent = models.ForeignKey(AgentDB, on_delete=models.CASCADE, null=True, blank=True)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)
     action = models.ForeignKey(Action, on_delete=models.CASCADE, null=True, blank=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE, null=True, blank=True)
 

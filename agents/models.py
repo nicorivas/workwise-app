@@ -1,6 +1,17 @@
 from django.db import models
 
-class TraitDB(models.Model):
+class AgentType(models.Model):
+    
+    name = models.CharField(max_length=256)
+    definition = models.CharField(max_length=512)
+    description = models.TextField(null=True, blank=True)
+    short_title = models.CharField(max_length=512, null=True, blank=True)
+    profile_picture = models.ImageField(upload_to="agents", null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Trait(models.Model):
 
     name = models.CharField(max_length=256)
     category = models.CharField(max_length=256)
@@ -10,22 +21,23 @@ class TraitDB(models.Model):
     def __str__(self):
         return self.name
 
-class PersonalityDB(models.Model):
+class Personality(models.Model):
     
     name = models.CharField(max_length=256)
-    traits = models.ManyToManyField(TraitDB, null=True, blank=True)
+    traits = models.ManyToManyField(Trait, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
-class AgentDB(models.Model):
+class Agent(models.Model):
     
+    type = models.ForeignKey(AgentType, on_delete=models.CASCADE)
     name =  models.CharField(max_length=256)
     definition = models.CharField(max_length=512)
     description = models.TextField(null=True, blank=True)
     short_title = models.CharField(max_length=512, null=True, blank=True)
     object = models.JSONField()
-    personality = models.ForeignKey(PersonalityDB, null=True, blank=True, on_delete=models.CASCADE)
+    personality = models.ForeignKey(Personality, null=True, blank=True, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to="agents", null=True, blank=True)
     show_in_explorer = models.BooleanField(default=True)
 

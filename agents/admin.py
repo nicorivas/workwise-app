@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from .models import AgentDB
-from .models import PersonalityDB
-from .models import TraitDB
+from .models import Agent
+from .models import Personality
+from .models import Trait
 
-admin.site.register(AgentDB)
-admin.site.register(PersonalityDB)
-admin.site.register(TraitDB)
+admin.site.register(Agent)
+admin.site.register(Personality)
+admin.site.register(Trait)

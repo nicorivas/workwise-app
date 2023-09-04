@@ -12,7 +12,7 @@ class Action(models.Model):
         description (str): The description of the action.
         first_instruction_type (InstructionType): The first instruction type in the sequence.
     """
-    agent = models.ForeignKey('agents.AgentDB', related_name='actions', on_delete=models.CASCADE, null=True, blank=True)
+    agent = models.ForeignKey('agents.Agent', related_name='actions', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=256)
     identifier = models.CharField(max_length=256, default="Not set")
     description = models.CharField(max_length=512)

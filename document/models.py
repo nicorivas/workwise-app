@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.apps import apps
 
-from agents.models import AgentDB
+from agents.models import Agent
 
 import commonmark
 
@@ -23,7 +23,7 @@ class Comment(models.Model):
     """Comment done by an agent to a document
     """
     document_element = models.ForeignKey(DocumentElement, on_delete=models.CASCADE, null=True, blank=True)
-    agent = models.ForeignKey(AgentDB, on_delete=models.CASCADE)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
     text = models.TextField()
     consider = models.BooleanField(default=False)
 
