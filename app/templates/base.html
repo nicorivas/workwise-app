@@ -66,15 +66,12 @@
     }
 
     .header {
-      background-color: #171129;
+      display: flex;
+      align-items: center;
+      background-color: #160f2a;
       text-align: right;
       padding: 0.5em 0 0.5em 0;
-    }
-
-    .header .icon {
-      color: #fff;
-      padding: 0 0.5em 0 0.5em;
-      font-size: 1.2em;
+      line-height: normal;
     }
 
     .header p {
@@ -83,7 +80,88 @@
     }
 
     .header .logo {
+      display: inline-block;
       font-size: 1em;
+      vertical-align: middle;
+    }
+
+    .profile-dropdown {
+      background: #fff;
+      padding: 0.5em;
+    }
+
+    .profile-dropdown h2 {
+      color: #444;
+      font-size: 1.2em;
+      font-weight: normal;
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: normal;
+    }
+
+    .profile-dropdown hr {
+      width: 90%;
+      margin: auto;
+      margin-top: 1em;
+      margin-bottom: 1em;
+      color: #ccc;
+    }
+
+    .profile-dropdown-wrap {
+      position: absolute;
+      top: 115%;
+      right: 0%;
+      width: 320px;
+      overflow: hidden;
+      max-height: 0px;
+      transition: max-height 0.2s ease-in;
+      box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, 0.1)
+    }
+
+    .profile-dropdown-wrap.show {
+      max-height: 400px;
+    }
+
+    .profile-dropdown-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      margin-left: 1em;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+
+    .profile-dropdown-link p {
+      color: #444;
+      margin-left: 1em;
+    }
+
+    .profile-dropdown-link:hover p {
+      color: #888;
+      margin-left: 1em;
+    }
+
+    .profile-dropdown-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%; /* This makes the container circular */
+      width: 30px; /* Adjust as needed */
+      height: 30px; /* Adjust as needed */
+      position: relative;
+    }
+
+    .icon .bi {
+      position: absolute;
+      color: #444;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     .section-header {
@@ -359,6 +437,22 @@
       max-height: 0px;
       overflow: hidden;
       transition: max-height 0.25s ease-in;
+    }
+
+    .img-profile {
+      border-radius:50%;
+      width:30px;
+      height:30px;
+      background: #fff;
+      border: 2px solid #b4b4b4;
+    }
+    
+    .img-profile-dropdown {
+      border-radius:50%;
+      width:50px;
+      height:50px;
+      background: #fff;
+      margin-left: 0.5em;
     }
 
   </style>

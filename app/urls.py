@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path("", include("explorer.urls")),
+    path("logout", views.logout_view, name="logout"),
     path("action_element/", include("action_element.urls")),
     path("actions/", include("actions.urls")),
     path("company/", include("company.urls")),
@@ -31,5 +33,6 @@ urlpatterns = [
     path("instruction/", include("instruction.urls")),
     path("chat/", include("chat.urls")),
     path('admin/', admin.site.urls),
-    #path("__reload__/", include("django_browser_reload.urls")),
+    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.socialaccount.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

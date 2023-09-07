@@ -1,0 +1,67 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+<div class="form">
+
+    <h2>Welcome back</h2>
+
+    <form class="login" method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            {# No label for username #}
+            {{ form.login.errors }}
+            {{ form.login }}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.errors }}
+            {{ form.password }}
+        </div>
+
+        <div class="form-group remember">
+            {{ form.remember.errors }}
+            <div class="form-inline">
+                {{ form.remember }}
+                {{ form.remember.label }}
+            </div>
+        </div>
+
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
+    </form>
+
+    {% get_providers as socialaccount_providers %}
+
+    {% if socialaccount_providers %}
+    <a class="social" href="/accounts/google/login/?process=login&amp;next=%2F">
+        <div class="logo"><img src="{% static 'google_logo.svg' %}"></div>
+        <div class="text">
+            <p>Continue with Google</p>
+        </div>
+    </a>
+    {% include "socialaccount/snippets/login_extra.html" %}
+    {% else %}
+    <p>{% blocktrans %}If you have not created an account yet, then please
+        <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
+    </p>
+    {% endif %}
+
+    <p class="no_account">Don't have an account? <a href="{{ signup_url }}">Sign up</a></p>
+
+    <p class="forgot_password">
+        <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+    </p>
+
+</div>
+
+{% endblock %}
