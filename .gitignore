@@ -13,6 +13,5 @@ fingpt.egg-info/
 *.DS_Store
 .env
 /prompts*
-staticfiles
 /db.sqlite3*
-.github
+.github/
