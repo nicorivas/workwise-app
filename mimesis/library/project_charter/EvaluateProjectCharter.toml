@@ -1,0 +1,76 @@
+name = "Evaluate Project Charter"
+description = "Considers a prompt and checks if information is enough to create a project"
+definition = ""
+memory = "I evaluated a problem to see if it had enough information to make a project charter"
+
+[reply]
+name = "project_charter_evaluation"
+type = "message"
+
+[prompt]
+text = """
+Consider the following audio transcription of a person describing a project:
+
+=== project description
+{{project_description}}
+=== end project description
+
+I want you to asses if there is enough information in the audio transcription to generate an excellent project charter. The project charter should contain the following elements:
+    
+1. Project title.
+
+2. Main objectives. Two to four objectives. Please use the SMART framework to write each objetive. Each objective should be specific, measurable, achievable, relevant and time bound.
+
+3. Project background. This should summarize briefly why the project is necessary and how it will benefit the organization or users.
+
+4. Project timeline. This should include the expected beginning and end dates. If those dates are not found in the context, please identify an estimated lenght in weeks or months.
+
+5. Project stakeholders. Describe briefly how each is one is affected or should be involved in the project.
+
+6. Risks and assumptions. Describe each briefly, list a maximum of 5 risks and assumptions.
+
+I do not want you to provide me the project charter, just assess if there is enough information to generate one.
+
+If there is enough information, then let me know, with a brief assessment.
+
+If there is not enough information to generate an excellent project charter, please write what information is missing in order to generate an excellent project charter. BE VERY STRICT. If there is missing information in any of the points, then say that there is not enough information to generate an excellent project charter. If there are any areas that could be further clarified or expanded upon to improve the quality of the project charter, then say there is not enough information. Is there enough information to generate at least two main objectives? If not, then say there is not enough information. If there is no information provided regarding the risks and assumptions for the project, then say that there is not enough information.
+
+Please provide your reply in the following JSON format:
+{{
+    "enough_information": true,
+    "comments":"comments on how to improve the project description"
+}}
+
+Here is an example:
+input:
+=== project description
+Este proyecto se trata de trabajar con una universidad y los alumnos de esa universidad para hacer de manera colaborativa, utilizando la metodología design thinking, un rediseño de las sillas donde ellos se sientan durante sus clases. En la primera etapa del proyecto, que va a durar aproximadamte un mes, vamos a hacer entrevistas a estudiantes, tres focus groups. En base a eso vamos a diseñar una convocatoria. El proceso de convocatoria para que distintos grupos de estudiantes se inscriban para poder participar en el diseño de la silla. Durante los meses siguientes vamos a seleccionar equipos de todas las personas que postularon, los vamos a capacitar en design thinking, vamos a estar acompañando al desarrollo de esos prototipos, y luego vamos a evaluar los diseños que ellos generen para identificar cuáles son los mejores y esos pilotearlos. Finalmente en el mes 6 del proyecto vamos a diseñar el plan de implementación del proyecto finalista.
+=== end project description
+output:
+{{
+    "enough_information": true,
+    "comments":"Based on the provided audio transcription, there is enough information to generate a project charter."
+}}
+
+Here is another example:
+input:
+=== project description
+Quiero crear un videojuego.
+== end project description
+output:
+{{
+    "enough_information": false,
+    "comments":"Based on the provided audio transcription, there is not enough information to generate a complete project charter. The transcription only includes a single sentence stating the desire to create a video game. To create a comprehensive project charter, additional information is necessary, such as the project scope, deliverables, project team, budget, and any constraints or dependencies.\\To improve the description and gather more information for the project charter, consider asking the person the following questions:\\What is the purpose or objective of the video game? Is it for entertainment or educational purposes?\\Who is the target audience for the video game?\\What are the specific features or functionalities that the video game should have?\\Are there any specific platforms or technologies that should be used?\\Is there a specific timeline or deadline for the project?\\What resources (including budget and personnel) are available for the project?\\By gathering more detailed information through these questions, you will be able to create a more effective and informative project charter."
+}}
+
+Here is another example:
+input:
+=== project description
+Este proyecto se tata de implementar OKR's en una empresa de Freight Forwarding tradicional. Lo que queremos es lograr más alineamiento en la empresa, que todos vayan para el mismo lado.
+=== end project description
+output:
+{{
+    "enough_information": false,
+    "comments":"Based on the provided audio transcription, there is not enough information to generate a project charter. The description of the project is very brief and lacks essential details. To create a comprehensive project charter, additional information is necessary.\\The missing information includes:\\Project title: The audio transcription does not provide a specific project title.\\Main objectives: While the audio mentions the implementation of OKRs to achieve alignment in the company, it does not provide specific SMART objectives.\\Project background: The audio briefly mentions the aim of achieving alignment but fails to provide a detailed explanation of why the project is necessary and how it will benefit the organization or users.\\Project timeline: The audio does not mention the expected beginning and end dates or provide an estimated length in weeks or months.\\Project stakeholders: The audio does not provide any information about the stakeholders or how they will be affected or involved in the project.\\Risks and assumptions: The audio does not mention any risks or assumptions related to the project."
+}}
+"""

@@ -1,0 +1,57 @@
+name = "Write Project Charter"
+description = "Write a project charter"
+definition = ""
+memory = "I wrote a project charter"
+
+[reply]
+name = "project_charter"
+type = "document"
+
+[prompt]
+text = """Act as a senior project manager, with more than 20 years of experience in managing all kinds of projects.
+        
+Consider the following audio transcription describing a project:
+
+=== project description
+
+{{project_description}}
+
+=== end of project description
+
+From this project description, I want you to write a project charter. Clarity is Key: Be clear and concise. Avoid jargon and ensure that someone without domain knowledge can understand the project's basics. The project charter should include the following elements:
+
+1. Title and Project Name: This might seem basic, but a clear and concise name can help all stakeholders immediately understand the project's main focus.
+
+2. Project Purpose: Define why the project exists. What gap or need is it addressing? How does it align with broader organizational strategies or goals?
+
+3. Project Description:
+* Background: Give a brief history of what led to the project initiation.
+* Objectives: Clearly outline what the project aims to achieve. Objectives should be SMART (Specific, Measurable, (Achievable, Relevant, and Time-bound).
+* Scope: Describe the boundaries. What's in-scope and out-of-scope? This will prevent scope creep later on.
+
+4. Key Stakeholders: Identify who will be involved, who will be affected, and what their roles will be. This can include:
+
+* Project sponsor
+* Project manager
+* Team members
+* End-users
+* Any other relevant parties
+
+5. Milestones and Major Deliverables: Break down the major steps, milestones, and deliverables that will mark progress towards the project's completion.
+
+6. Assumptions and Constraints: List the conditions you're assuming to be true for the project to move forward and any constraints (like time, budget, or resources) that might restrict the project.
+
+7. Risks and Issues: Identify potential pitfalls, challenges, or obstacles and outline strategies or contingencies for managing them.
+
+8. Budget: Highlight the financial resources allocated to the project. Break it down to show where the money is going.
+
+9. Timeline: Establish a high-level timeline for the project, identifying start and end dates, and any critical path items.
+
+10. Success Criteria: Define what will be considered a successful completion of the project. This will be critical for the project's closeout and post-mortem.
+
+11. Communication Plan: State how information will be shared among stakeholders, including frequency, method (meetings, emails, reports), and key contact information.
+
+This is very important, when you don't find specific information in the project description given, use placeholders. For example, if you don't find the project title, write '<Project title>'.
+
+Very important: please provide your answer using Markdown.
+"""

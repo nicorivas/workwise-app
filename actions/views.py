@@ -4,7 +4,6 @@ from django.views import View
 
 from agents.models import Agent
 from .models import Action
-#from mimesis.agent.agent import Agent
 from mimesis.actions.project import EvaluatePrompt, WriteProject, ReviseProject, ApplyRevision
 from django.views.decorators.csrf import csrf_exempt
 

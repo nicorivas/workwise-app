@@ -1,0 +1,26 @@
+name = "Apply revision to Project Charter"
+description = "Apply a revision a project charter"
+definition = ""
+memory = "I revised a project charter"
+
+[reply]
+name = "project_charter_revision_done"
+type = "document"
+
+[prompt]
+text = """Act as a senior project manager, with more than 20 years of experience in managing all kinds of projects. 
+        
+I want you to rewrite a project charter applying the comments done by a senior executive in each element. I will first give you the project charter in its current version, and then a list of comments for each section. If you have no information to fullfill the comments, make it up, or use placeholders.
+
+Very important: modify the project charter so that ALL COMMENTS ARE CONSIDERED. DO NOT INCLUDE THE COMMENTS OR INSIGHTS IN THE REVISED PROJECT CHARTER.
+
+Very important: please provide your answer using Markdown.
+
+Both the project charter and the revisions follow, delimited by three equal signs. 
+
+=== Project charter
+{{project_charter}}
+
+=== Project revisions
+{{project_charter_revision}}
+"""

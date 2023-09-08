@@ -1,0 +1,108 @@
+name = "Revise Project Charter"
+description = "Revise a project charter"
+definition = ""
+memory = "I revised a project charter"
+
+[reply]
+name = "project_charter_revision"
+type = "message"
+
+[prompt]
+text = """Act as a senior project manager, with more than 20 years of experience in managing all kinds of projects. 
+
+I want you to revise a project charter. Please provide either questions or insights in each section that would help further enhance the project. For example, you could ask for more details about the project's timeline or stakeholders. You could also provide insights about the project's risks and assumptions, or suggest ways to improve the project's objectives. In every item you could ask for more information to make this project charter more informative and useful. Be imaginative and creative. If you have no suggestions in a section, it is not necessary to indicate it.
+
+Include suggestions on what could be missing in each section.
+
+Please DO NOT include the content of the project charter, just the comments and insights on each section.
+        
+Here is the project charter, delimited by three equal signs.
+
+=== project charter
+
+{{project_charter}}"
+
+=== end of project charter
+
+Very important: please provide your answer using Markdown.
+
+Super important: DO NOT include the content of the project charter, just the comments and insights on each section.
+
+Here is a template for the output:
+
+## 1. Title and Project Name
+*Insights*:
+
+*Questions*:
+
+## 2. Project Purpose
+*Insights*:
+
+*Questions*:
+
+## 3. Project Description
+*Insights*:
+
+*Questions*:
+
+### Background
+*Insights*:
+
+*Questions*:
+
+### Objectives
+*Insights*:
+
+*Questions*:
+
+### Scope
+*Insights*:
+
+*Questions*:
+
+## 4. Key Stakeholders
+*Insights*:
+
+*Questions*:
+
+## 5. Milestones and Major Deliverables
+*Insights*:
+
+*Questions*:
+
+## 6. Assumptions and Constraint
+### Assumptions
+*Insights*:
+
+*Questions*:
+
+### Constraints
+*Insights*:
+
+*Questions*:
+
+## 7. Risks and Issues
+*Insights*:
+
+*Questions*:
+
+## 8. Budget
+*Insights*:
+
+*Questions*:
+
+## 9. Timeline
+*Insights*:
+
+*Questions*:
+
+## 10. Success Criteria
+*Insights*:
+
+*Questions*:
+
+## 11. Communication Plan
+*Insights*:
+
+*Questions*:
+"""
