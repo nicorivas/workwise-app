@@ -14,4 +14,3 @@ fingpt.egg-info/
 .env
 /prompts*
 /db.sqlite3*
-.github/
