@@ -18,21 +18,13 @@ import allauth
 
 OPENAI_API_KEY = config('OPENAI_API_KEY')
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = '5d46cd6a8a6e1416024ed063d36edf3de7c18fecfa03137cb650202c490d5183'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+DEBUG = False
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b#g0jhpdrgrcbu54nt71nxrj1tr$a#ng()u^n6i(evokrhlwac'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['workwise-dev.eba-grvwac9s.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['workwise-test.azurewebsites.net']
 
 # Application definition
 
@@ -99,16 +91,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': BASE_DIR / 'db.sqlite3',
-    #},
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "workwise_dev",
-        "USER": "postgres",
+        "NAME": "workwise-test-database",
+        "USER": "wssfdyqznn",
         "PASSWORD": "iCga1kmX",
-        "HOST": "127.0.0.1",
+        "HOST": "workwise-test-server.postgres.database.azure.com",
         "PORT": "5432",
     }
 }
