@@ -15,9 +15,3 @@ fingpt.egg-info/
 /prompts*
 staticfiles
 /db.sqlite3*
-.ebextensions
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-folder.zip

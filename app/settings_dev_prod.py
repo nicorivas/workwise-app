@@ -16,11 +16,11 @@ import os
 from decouple import config
 import allauth
 
-OPENAI_API_KEY = config('OPENAI_API_KEY')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = '5d46cd6a8a6e1416024ed063d36edf3de7c18fecfa03137cb650202c490d5183'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = False
 
