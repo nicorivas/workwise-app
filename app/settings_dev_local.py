@@ -27,8 +27,8 @@ SECRET_KEY = '5d46cd6a8a6e1416024ed063d36edf3de7c18fecfa03137cb650202c490d5183'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['workwise-dev.eba-grvwac9s.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['workwise-dev.eba-grvwac9s.us-west-2.elasticbeanstalk.com']
 
 # Application definition
 
@@ -154,7 +154,22 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
-
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "azure_container":"app",
+            "connection_string":"DefaultEndpointsProtocol=https;AccountName=workwisestorage;AccountKey=FMq36FZKDLkLNtBSRPiXU9hO6IDNx4s7lHa0KJpHzsjbUd6vdBvAfqRhu9G7s3DmrrEU/263CvJg+AStV+3fDg==;EndpointSuffix=core.windows.net"
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "azure_container":"app",
+            "connection_string":"DefaultEndpointsProtocol=https;AccountName=workwisestorage;AccountKey=FMq36FZKDLkLNtBSRPiXU9hO6IDNx4s7lHa0KJpHzsjbUd6vdBvAfqRhu9G7s3DmrrEU/263CvJg+AStV+3fDg==;EndpointSuffix=core.windows.net"
+        },
+    },
+}
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

@@ -185,7 +185,18 @@ LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
 STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "azure_container":"app",
+            "connection_string":"DefaultEndpointsProtocol=https;AccountName=workwisestorage;AccountKey=FMq36FZKDLkLNtBSRPiXU9hO6IDNx4s7lHa0KJpHzsjbUd6vdBvAfqRhu9G7s3DmrrEU/263CvJg+AStV+3fDg==;EndpointSuffix=core.windows.net"
+        },
+    },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "azure_container":"app",
+            "connection_string":"DefaultEndpointsProtocol=https;AccountName=workwisestorage;AccountKey=FMq36FZKDLkLNtBSRPiXU9hO6IDNx4s7lHa0KJpHzsjbUd6vdBvAfqRhu9G7s3DmrrEU/263CvJg+AStV+3fDg==;EndpointSuffix=core.windows.net"
+        },
     },
 }
