@@ -15,3 +15,4 @@ fingpt.egg-info/
 /prompts*
 staticfiles
 /db.sqlite3*
+.github
