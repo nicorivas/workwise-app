@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     "agents.apps.AgentsConfig",
     "projects.apps.ProjectsConfig",
     "actions.apps.ActionsConfig",
-    "action_element.apps.ActionElementConfig",
     "document.apps.DocumentConfig",
     "company.apps.CompanyConfig",
     "instruction.apps.InstructionConfig",

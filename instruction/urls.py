@@ -32,5 +32,5 @@ urlpatterns = [
     #path("<int:instruction_type_id>/action_element/<int:action_element_id>/read", InstructionElementReadView.as_view(), name="element_read"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/update", instruction_element_update_view, name="element_update"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/delete", instruction_element_delete_view, name="element_delete"),
-    #path("<int:instruction_id>/action_element/<int:action_element_id>/call", InstructionElementCallView.as_view(), name="call"),
+    path("<int:instruction_id>/element/<int:instruction_element_id>/call", InstructionElementCallView.as_view(), name="element_call"),
 ]

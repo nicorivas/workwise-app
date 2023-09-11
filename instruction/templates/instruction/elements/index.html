@@ -43,6 +43,12 @@
         hx-swap="outerHTML">
         {% include 'icon.html' with iconname="bi-trash" %}
     </div>
+    <div class="col-auto my-auto"
+        hx-post="{% url 'instruction:element_delete' instruction.pk element.pk %}"
+        hx-target="#element-{{element.pk}}"
+        hx-swap="outerHTML">
+        {% include 'icon.html' with iconname="bi-info-circle" %}
+    </div>
 </div>
 </form>
 {% endfor %}
