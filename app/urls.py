@@ -24,7 +24,6 @@ urlpatterns = [
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path("", include("explorer.urls")),
     path("logout", views.logout_view, name="logout"),
-    path("action_element/", include("action_element.urls")),
     path("actions/", include("actions.urls")),
     path("company/", include("company.urls")),
     path("agents/", include("agents.urls")),

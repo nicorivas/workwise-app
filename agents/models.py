@@ -1,4 +1,5 @@
 from django.db import models
+from django.templatetags.static import static
 
 class AgentType(models.Model):
     
@@ -43,7 +44,7 @@ class Agent(models.Model):
     show_in_explorer = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.pk}. {self.name} - {self.short_title}"
+        return f"{self.pk}. {self.get_name} - {self.get_short_title}"
     
     def greeting_message(self):
         return "Hi! How can I help you?"
@@ -55,4 +56,33 @@ class Agent(models.Model):
             project.add_instruction("Feedback follow up")
 
             return True
+
+    @property
+    def get_definition(self):
+        if self.definition:
+            return self.definition
+        elif self.type.definition:
+            return self.type.definition
+
+    @property
+    def get_profile_picture_url(self):
+        if self.profile_picture:
+            return self.profile_picture.url
+        elif self.type.profile_picture:
+            return self.type.profile_picture.url
+        else:
+            return static('assets/images/profile.png')
     
+    @property
+    def get_short_title(self):
+        if self.short_title:
+            return self.short_title
+        else:
+            return self.type.short_title
+        
+    @property
+    def get_name(self):
+        if self.name:
+            return self.name
+        else:
+            return self.type.name

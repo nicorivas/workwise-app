@@ -1,13 +1,26 @@
+{% if not head %}
+    {% include 'head.html' %}
+{% endif %}
+
 <!-- List of instructions -->
+<!-- Loading of this div triggers instruction:read for each instruction -->
+{% if instructions %}
 {% for instruction in instructions %}
-<div id="instruction_{{instruction.pk}}" class="instruction" hx-trigger="load" hx-target="this" hx-get="{% url 'instruction:read' instruction.pk %}">
+<div id="instruction_{{instruction.pk}}" class="instruction" 
+    hx-trigger="load"
+    hx-get="{% url 'instruction:read' instruction.pk %}"
+    hx-target="this">
+    <div id="instruction_{{instruction.pk}}_loading" class="htmx-indicator">Hola</div>
 </div>
 {% endfor %}
+{% else %}
+<p class="warning-text">There are no instructions for this action</p>
+{% endif %}
 
 <!-- List of possible instructions -->
 <div style="text-align: center;">
 {% for instruction in instructions_possible %}
-<div id="instruction_{{instruction.pk}}" class="instruction-preview" hx-trigger="load" hx-target="this" hx-get="{% url 'instruction:read_preview' instruction.pk %}"
+<div id="instruction_{{instruction.pk}}" class="instruction-template" hx-trigger="load" hx-target="this" hx-get="{% url 'instruction:read_template' instruction.pk %}"
 onclick="location.href='#';" style="cursor: pointer;">
 </div>
 {% endfor %}

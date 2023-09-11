@@ -2,26 +2,10 @@
 
 {% block content %}
 
-<div class="section-header">
-    <h3>Actions</h3>
-    <p>Possible actions</p>
-</div>
+<div id="actions" class="row g-0">
 
-<div class="row ms-4">
-    {% if actions %}
-    {% for action in actions %}
-    <ul>
-        <li><a href="{% url 'actions:read' action.pk %}">{{action.name}}</a></li>
-        {% for instruction in action.instruction_set.all %}
-        <ul>
-            <li><a href="{% url 'instruction:read' instruction.pk %}">{{instruction.name}}</a></li>
-        </ul>
-        {% endfor %}
-    </ul>
-    {% endfor %}
-    {% else %}
-    <p>No actions are available.</p>
-    {% endif %}
+{% include 'actions/actions.html' with actions=actions action=action %}
+
 </div>
 
 {% endblock %}

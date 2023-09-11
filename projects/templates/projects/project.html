@@ -86,9 +86,9 @@
   let mediaRecorder;
   let chunks = [];
 
-  $(document).click(function (event) {
-    if (!$(event.target).closest('.actions-dropdown').length) {
-      $(".actions-list").hide();
+  jQuery(document).click(function (event) {
+    if (!jQuery(event.target).closest('.actions-dropdown').length) {
+      jQuery(".actions-list").hide();
     }
   });
 
@@ -101,14 +101,14 @@
     // Check if the clicked element is outside the dropdown and the toggle button
     if (!dropdownContent.contains(event.target) && event.target !== toggleButton) {
       // Send a request to hide the dropdown
-      $("#actions-list").hide();
+      jQuery("#actions-list").hide();
     }
     */
 
-    $(".comment").each(function () {
+    jQuery(".comment").each(function () {
       // if the target of the click isn't the container nor a descendant of the container
-      if (!$(this).is(event.target) && !event.target.closest(".lightbulb") && $(this).has(event.target).length === 0) {
-        $(this).hide();
+      if (!jQuery(this).is(event.target) && !event.target.closest(".lightbulb") && jQuery(this).has(event.target).length === 0) {
+        jQuery(this).hide();
       }
     });
   });

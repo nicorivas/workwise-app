@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 class LLM(BaseModel):
 
-    API_KEY: str = "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"
+    API_KEY: str = "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"
     model: str = "gpt-3.5-turbo"
     #model: str = "gpt-4"
     log: bool = True

@@ -13,7 +13,7 @@ import openai
 from .models import Project, Record
 from document.models import Document
 from actions.models import Action
-from instruction.models import Instruction
+from instruction.models.instruction import Instruction
 
 from mimesis.agent.agent import Agent
 from mimesis.actions.project import EvaluatePrompt, WriteProjectCharter, ReviseProjectCharter, ApplyRevisionCharter
@@ -452,10 +452,10 @@ def read(request, project_id: int):
     agent = project.agent
     action = project.action
     instructions = Instruction.objects.filter(project=project_id)
-    instructions_possible = Instruction.objects.filter(type__action=action, preview=True).exclude(type__in=instructions.values_list("type", flat=True))
+    instructions_possible = Instruction.objects.filter(type__action=action, template=True).exclude(type__in=instructions.values_list("type", flat=True))
 
     # Create mimesis Agent to store in session
-    mms_agent = Agent(name=agent.name, definition=agent.definition)
+    mms_agent = Agent(name=agent.get_name, definition=agent.get_definition)
     request.session['agent'] = mms_agent.json()
     
     context = {

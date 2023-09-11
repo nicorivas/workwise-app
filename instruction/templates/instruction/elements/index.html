@@ -1,0 +1,57 @@
+<!-- Identifier -->
+{% if instruction.template %}
+<div class="row g-0">
+    <div class="col">
+        <p class="m-0 p-0 text-muted" style="font-style: italic;font-size: 0.8em;">
+            {{instruction.type}}
+        </p>
+    </div>
+</div>
+{% endif %}
+
+<!-- No elements -->
+{% if not elements %}
+<div class="row g-0">
+    <div class="col">
+        <p class="m-0 p-0 text-muted" style="font-style: italic;">
+            Instruction has no elements; it probably hasn't been defined yet.
+        </p>
+    </div>
+</div>
+{% endif %}
+
+<!-- Elements -->
+{% for element in elements %}
+<form class="instruction-element-container" id="element-{{element.pk}}"
+    hx-post="{% url 'instruction:element_update' instruction.pk element.pk %}"
+    hx-trigger="stop"
+    hx-swap="none">
+<input type="hidden" name="name" value="{{element.name}}">
+<input type="hidden" name="index" value="{{element.index}}">
+<div class="row g-0 instruction-element {% if instruction.template %}template{% endif %}">
+    <div class="col-auto my-auto">
+        {% include 'icon.html' with iconname="bi-three-dots-vertical" %}
+    </div>
+    <div class="col">
+        <form>
+            {% include element.template with data=instruction.data action=instruction.type.action agent=agent element=element edit=instruction.template %}
+        </form>
+    </div>
+    <div class="col-auto my-auto"
+        hx-post="{% url 'instruction:element_delete' instruction.pk element.pk %}"
+        hx-target="#element-{{element.pk}}"
+        hx-swap="outerHTML">
+        {% include 'icon.html' with iconname="bi-trash" %}
+    </div>
+</div>
+</form>
+{% endfor %}
+
+<!-- Comments -->
+<div class="row mt-0 mb-0">
+    <div class="col p-0">
+        <div id="messages">
+            {% include 'instruction/messages.html' %}
+        </div>
+    </div>
+</div>

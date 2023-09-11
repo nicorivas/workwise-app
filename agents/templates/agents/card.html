@@ -29,13 +29,13 @@
             <!-- Agent title -->
             <div class="row p-0 m-0">
                 <div class="agent_short_title col p-0 m-0">
-                    <p class="p-0 m-0">{{agent.short_title}}</p>
+                    <p class="p-0 m-0">{{agent.get_short_title}}</p>
                 </div>
             </div>
             <!-- Agent name -->
             <div class="row p-0 m-0">
                 <div class="agent_card_name col p-0 m-0">
-                    {{agent.name}}
+                    {{agent.get_name}}
                 </div>
             </div>
         </div>
@@ -55,15 +55,18 @@
     <!-- Actions -->
     {% if show_actions %}
     {% for action in agent.actions.all %}
-    <div class="row ps-3 pb-0">
-        <div class="col-10">
-            <div class="agent_card_action d-flex align-items-center"
-                style="border-bottom: 1px solid #f3f3f3;height:2rem;">
+    <div class="row ps-3 pe-3 g-0">
+        <div class="col">
+            <div class="agent_card_action d-flex align-items-center ps-1"
+                style="border-bottom: 1px solid #f3f3f3;height:2rem;color:#666;">
                 <a href="{% url 'projects:create' action.pk%}">{{action.name}}</a>
             </div>
         </div>
-        <div class="col-2 d-flex align-items-center align-items-right">
-            <i class="bi bi-pass"></i>
+        <div class="col-auto ps-1 pe-1">
+            {% include 'icon.html' with iconname="bi-pass" background="#fff" color="#ddd" %}
+        </div>
+        <div class="col-auto ps-1 pe-1">
+            {% include 'icon.html' with iconname="bi-three-dots" background="#fff" color="#ddd" %}
         </div>
     </div>
     {% endfor %}

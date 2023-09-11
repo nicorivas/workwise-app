@@ -1,0 +1,40 @@
+<div class="row action-edit ms-3 mt-3 g-0">
+    <div class="col">
+        
+        <!-- Toolbar -->
+        <div class="row g-0 action-edit-toolbar mb-3 p-3" id="instruction-header-{{instruction.pk}}">
+            <div class="col-auto">
+                {% include 'icon.html' with iconname="bi-plus-circle" %}
+            </div>
+            <div class="col-auto">
+                <form>
+                <input type="hidden" name="action" value="{{action.pk}}">
+                <input type="hidden" name="name" value="Test">
+                <div hx-trigger="click" hx-post="{% url 'instruction:type_create' %}" hx-target="#instructions">
+                    {% include 'icon.html' with iconname="bi-plus-circle" %}
+                </div>
+                </form>
+            </div>
+            <div class="col-auto">
+                {% include 'icon.html' with iconname="bi-three-dots" %}
+            </div>
+            <!-- Show only if it is not the first element -->
+            {% if forloop.counter != 1 %}
+            <div class="col-auto">
+                {% include 'icon.html' with iconname="bi-trash" %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- List of instructions -->
+        <!-- Only template instructions are loaded, through :index url params -->
+        <div class="row g-0">
+            <div id="instructions" class="col-5"
+                hx-trigger="load"
+                hx-get="{% url 'instruction:index' %}?template=1&action={{action.pk}}"
+                hx-target="this">
+            </div>
+        </div>
+
+    </div>
+</div>

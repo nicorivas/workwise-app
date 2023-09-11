@@ -31,6 +31,6 @@ class Project(models.Model):
         return self.name
     
     def add_instruction(self, instruction_type_name):
-        from instruction.models import Instruction, InstructionType
+        from instruction.models.instruction import Instruction, InstructionType
         instruction = Instruction.objects.create(type=InstructionType.objects.get(name=instruction_type_name), project=self)
         instruction.save()

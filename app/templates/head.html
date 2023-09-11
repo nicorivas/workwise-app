@@ -1,0 +1,584 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}My amazing siteo{% endblock %}</title>
+    <!-- Bootstrap Icons Font -->
+    <!-- TODO: This is inefficient, we should download .svg's of used ones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  
+    <!-- jQuery baby -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+      $.noConflict();
+      // Code that uses other library's $ can follow here.
+      </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+      integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+      crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.3"
+      integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
+      crossorigin="anonymous"></script>
+  
+    <!-- Custom CSS for sidebar -->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+  
+      * {
+        box-sizing: border-box;
+      }
+  
+      #sidebar {
+        width: 200px;
+        background-color: #fff;
+        position: sticky;
+        top: 0;
+        overflow-y: auto;
+        margin: 0;
+        padding-left: 1em;
+        padding-right: 1em;
+        overflow-x: hidden;
+        border-right: #ccc 1px solid;
+      }
+  
+      #sidebar .nav-item {
+        padding-top: 0.2em;
+      }
+  
+      #main {
+        background-color: rgb(233, 246, 247);
+        min-height: 100vh;
+      }
+  
+      .header {
+        display: flex;
+        align-items: center;
+        background-color: #160f2a;
+        text-align: right;
+        padding: 0.5em 0 0.5em 0;
+        line-height: normal;
+      }
+  
+      .header p {
+        color: #e0e1eb;
+        margin: 0px;
+      }
+  
+      .header .logo {
+        display: inline-block;
+        font-size: 1em;
+        vertical-align: middle;
+      }
+  
+      .profile-dropdown {
+        background: #fff;
+        padding: 0.5em;
+      }
+  
+      .profile-dropdown h2 {
+        color: #444;
+        font-size: 1.2em;
+        font-weight: normal;
+        margin-top: 0;
+        margin-bottom: 0;
+        line-height: normal;
+      }
+  
+      .profile-dropdown hr {
+        width: 90%;
+        margin: auto;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        color: #ccc;
+      }
+  
+      .profile-dropdown-wrap {
+        position: absolute;
+        top: 115%;
+        right: 0%;
+        width: 320px;
+        overflow: hidden;
+        max-height: 0px;
+        transition: max-height 0.2s ease-in;
+        box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, 0.1)
+      }
+  
+      .profile-dropdown-wrap.show {
+        max-height: 400px;
+      }
+  
+      .profile-dropdown-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        margin-left: 1em;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+      }
+  
+      .profile-dropdown-link p {
+        color: #444;
+        margin-left: 1em;
+      }
+  
+      .profile-dropdown-link:hover p {
+        color: #888;
+        margin-left: 1em;
+      }
+  
+      .profile-dropdown-info {
+        display: flex;
+        align-items: center;
+      }
+  
+      .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%; /* This makes the container circular */
+        width: 30px; /* Adjust as needed */
+        height: 30px; /* Adjust as needed */
+        position: relative;
+      }
+
+      .icon:hover {
+        background-color: #f4f4f4;
+      }
+  
+      .icon .bi {
+        position: absolute;
+        color: #444;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+  
+      .section-header {
+        padding: 1em;
+        border-bottom: 1px solid #ccc;
+        background-color: #fff;
+      }
+  
+      .section-header h1 {
+        padding: 0;
+        margin: 0;
+        font-size: 1.0em;
+      }
+  
+      .section-header p {
+        font-size: 0.85em;
+        color: #777;
+        margin: 0;
+        padding: 0;
+      }
+  
+      .actions {
+        width: 200px;
+        background-color: #fff;
+        border-right: 1px solid #ccc;
+        font-size: 0.9em;
+        padding: 0;
+      }
+  
+      .actions .fill {
+        height: 100vh;
+      }
+  
+      .actions .action-list-item {
+        text-decoration: none;
+        padding: 0.5em;
+        font-size: 0.9em;
+        display: block;
+        padding-left: 1em;
+        padding-right: 1em;
+      }
+  
+      .actions .action-list-item p {
+        text-decoration: none;
+        color: #444;
+        margin: 0;
+      }
+  
+      .actions .action-list-item:hover {
+        color: #000;
+        background-color: #eee;
+      }
+  
+      .actions .action-list-item.selected {
+        background-color: #ddd;
+      }
+    
+      .actions input {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 90%;
+        margin: 0.5em;
+      }
+  
+      .actions input::placeholder {
+        font-size: 0.9em;
+        padding-left: 0.25em;
+        color: #888;
+      }
+  
+      .action h1 {
+        font-size: 1.3em;
+        padding-left: 20px;
+        padding-top: 1em;
+      }
+  
+      #action-nav ul {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        margin-left: 20px;
+      }
+  
+      #action-nav li {
+        margin-right: 20px;
+      }
+  
+      #action-nav .nav-link {
+        background-color: #fff;
+        color: #888;
+        border-radius: 0;
+        border-bottom: 2px solid #fff;
+        padding: 0;
+      }
+  
+      #action-nav .nav-link:hover {
+        color: #222;
+        border-bottom: 2px solid #707070;
+      }
+  
+      .container {
+        height: 100vh;
+        border: 3px;
+        box-sizing: border-box;
+      }
+  
+      .loader {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #555;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+      }
+  
+      .my-indicator {
+        display: inline;
+        opacity: 0;
+      }
+  
+      .htmx-request .my-indicator {
+        display: inline;
+        opacity: 100;
+      }
+  
+      .htmx-request.my-indicator {
+        display: inline;
+      }
+  
+      .lightbulb-green {
+        background-color: #8ebd93;
+        color: #ffffff;
+      }
+  
+      .lightbulb-green:hover {
+        color: #ffffff;
+      }
+  
+      .lightbulb-yellow {
+        background-color: #ecdb73;
+        color: #ffffff;
+      }
+  
+      .lightbulb-yellow:hover {
+        color: #ffffff;
+        border: 2px solid #aaa;
+      }
+  
+      .agent-message p {
+        font-weight: 400;
+        font-size: 1.0em;
+      }
+      
+      .agent-message-input {
+        border: 2px solid #fff;
+        border-radius: 5px;
+        padding: 0.2em;
+      }
+
+      .agent-message-input:hover {
+        border: 2px solid #ccc;
+        border-radius: 5px; 
+        padding: 0.2em;
+      }
+  
+  
+      .message-body h1 {
+        font-size: 1.0rem;
+        font-weight: 600;
+      }
+  
+      .message-body h2 {
+        font-size: 1.0rem;
+        font-weight: 400;
+        font-style: italic;
+      }
+  
+      .htmx-indicator {
+        display: none;
+        opacity: 0;
+        transition: opacity 300ms ease-in;
+      }
+  
+      .htmx-request {
+        display: block;
+      }
+  
+      .actions-dropdown {
+        cursor: pointer;
+        background-color: #f5f5f5;
+        box-shadow: 0px 5px 5px rgb(225, 225, 225);
+      }
+  
+      .actions-list .action {
+        font-size: 0.9rem;
+        text-decoration: none;
+        color: #000000;
+      }
+  
+      .actions-list .action:hover {
+        font-size: 0.9rem;
+        text-decoration: none;
+        color: #000000;
+        background-color: #e6e6e6;
+        cursor: pointer;
+      }
+  
+      .agent_description {
+        font-size: 0.85rem;
+        color: #777
+      }
+  
+      .nav-link {
+        font-size: 0.9rem;
+      }
+  
+      h3 {
+        font-size: 1.2rem;
+      }
+  
+      .agent_card {
+        background-color: #fff;
+      }
+  
+      .agent_card_action {
+        font-size: 0.9rem;
+      }
+  
+      .agent_card_action:hover {
+        font-size: 0.9rem;
+        background-color: #f6f6f6;
+        cursor: pointer;
+      }
+  
+      @keyframes rotation {
+        0% {
+          transform: rotate(0deg);
+        }
+  
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+  
+      .document {
+        padding: 1em;
+      }
+  
+      .document h1 {
+        font-size: 1.2rem;
+      }
+  
+      .document h2 {
+        padding-top: 1em;
+        font-size: 1.1rem;
+      }
+  
+      .document h3 {
+        font-size: 1.0rem;
+      }
+  
+      .document .comment {
+        box-shadow: 0px 0px 5px;
+      }
+  
+      .document ul {
+        margin-bottom: 0.5em;
+      }
+  
+      .document-header {
+        border-bottom: #eee 1px solid;
+        background-color: white;
+        box-shadow:2px 2px rgb(201, 233, 235);
+      }
+  
+      .document-body {
+        background-color: white;
+        box-shadow:2px 2px rgb(201, 233, 235);
+      }
+  
+      .form-button {
+        background-color: #fff;
+      }
+  
+      .instruction {
+        margin-bottom: 0.5em;
+      }
+  
+      .instruction-header {
+        box-shadow: 2px 2px rgb(235, 231, 201);
+        background-color:white;
+        border: 1px solid #ddd;
+        transition: transform 0.4s ease-in-out;
+        padding: 1em;
+        /*cursor: pointer;*/
+      }
+
+      .instruction-header .instruction-header-name {
+        border: 2px solid #fff;
+        border-radius: 3px;
+        padding: 0.2em;
+      }
+
+      .instruction-header .instruction-header-name:hover {
+        border: 2px solid #ccc;
+        border-radius: 5px; 
+      }
+  
+      .instruction-header p {
+        padding: 0;
+        margin: 0;
+      }
+  
+      .instruction-body {
+        box-shadow: 2px 2px rgb(235, 231, 201);
+        background-color:white;
+        border: 1px solid #ddd;
+      }
+  
+      .instruction-template {
+        box-shadow: 2px 2px rgb(235, 231, 201);
+        background-color:rgba(255, 255, 255, 0.8);
+        border: 1px solid #ddd;
+        width: 43%;
+        display: inline-block;
+      }
+  
+      .instruction-template:hover {
+        background-color:rgba(255, 255, 255, 2.0);
+      }
+  
+      .instruction-template-body h1 {
+        font-size: 0.9rem;
+        color: #353535;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+      }
+  
+      .instruction-template-body p {
+        font-size: 0.9rem;
+        color: #777;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+      }
+
+      .instruction-element.template {
+        border: 1px solid #eee;
+        margin-bottom: 4px;
+      }
+  
+      .message h1 {
+        font-size: 1.0rem;
+      }
+  
+      .message h2 {
+        font-size: 1.0rem;
+      }
+  
+      .message h3 {
+        font-size: 1.0rem;
+      }
+  
+      .message h4 {
+        font-size: 1.0rem;
+      }
+  
+      .message-block:hover {
+        background-color: #f6f6f6;
+        cursor: pointer;
+      }
+  
+      .message-block-unselected {
+        color: #ccc;
+      }
+  
+      .header-nav {
+          box-shadow: 2px 2px rgb(201, 233, 235);
+          background-color: #fff;
+      }
+  
+      .slide-in {
+        transition: translateY(0%);
+      }
+  
+      .slide-out {
+        max-height: 0px;
+        overflow: hidden;
+        transition: max-height 0.25s ease-in;
+      }
+  
+      .img-profile {
+        border-radius:50%;
+        width:30px;
+        height:30px;
+        background: #fff;
+        border: 2px solid #b4b4b4;
+      }
+      
+      .img-profile-dropdown {
+        border-radius:50%;
+        width:50px;
+        height:50px;
+        background: #fff;
+        margin-left: 0.5em;
+      }
+      
+      .action-edit-toolbar {
+        box-shadow: 2px 2px rgb(235, 231, 201);
+        background-color:white;
+        border: 1px solid #ddd;
+      }
+
+    </style>
+  
+    {% block css %}
+    {% endblock %}
+  
+  </head>
+
+  {% block head_loaded %}
+  {% endblock %}

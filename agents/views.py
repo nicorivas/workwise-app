@@ -7,7 +7,7 @@ from projects.models import Project
 
 def index(request):
     agents = Agent.objects.order_by("name")
-    output = ", ".join([q.name for q in agents])
+    output = ", ".join([q.get_name for q in agents])
 
     template = loader.get_template("agents/index.html")
     context = {
