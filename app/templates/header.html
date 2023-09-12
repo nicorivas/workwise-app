@@ -43,7 +43,7 @@
                     {% if user.is_authenticated %}
                     <div class="profile-dropdown-info">
                         <img src="{{user.profile.picture.url}}" class="img-profile-dropdown">
-                        <h2>{{user.first_name}} {{user.last_name}}</h2>
+                        <h2>{{user.profile.get_name}}</h2>
                     </div>
                     <hr>
                     <a href="#" class="profile-dropdown-link">

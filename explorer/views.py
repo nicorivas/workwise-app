@@ -15,8 +15,9 @@ def index(request):
     else:
         if request.user.is_authenticated:
             company = request.user.profile.companies.first()
-            agents = agents.filter(company=company)
-            request.session["company_id"] = company.pk
+            if company:
+                agents = agents.filter(company=company)
+                request.session["company_id"] = company.pk
     actions = Action.objects.all()
     context = {
         "actions": actions,
