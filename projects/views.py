@@ -235,7 +235,8 @@ def delete_message(request, message_id):
 
 def index(request):
     projects = Project.objects.order_by("name")
-    projects = projects.filter(company=request.session.get("company_id"))
+    if request.user.is_authenticated:
+        projects = projects.filter(company=request.session.get("company_id"))
     records = Record.objects.all()
     context = {
         "projects": projects,

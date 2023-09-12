@@ -6,9 +6,17 @@ from actions.models import Action
 from company.models import Company
 
 def index(request):
+    agents = Agent.objects.filter(show_in_explorer=True)
+    # If we are part of a company, then filter by company
     company_id = request.session.get("company_id")
-    company = get_object_or_404(Company, pk=company_id)
-    agents = Agent.objects.filter(show_in_explorer=True, company=company)
+    if company_id:
+        company = get_object_or_404(Company, pk=company_id)
+        agents = agents.filter(company=company)
+    else:
+        if request.user.is_authenticated:
+            company = request.user.profile.companies.first()
+            agents = agents.filter(company=company)
+            request.session["company_id"] = company.pk
     actions = Action.objects.all()
     context = {
         "actions": actions,
