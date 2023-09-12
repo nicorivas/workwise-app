@@ -12,13 +12,14 @@
         <form>
             <input name="action" value="{{action.pk}}" type="hidden">
             <input name="name" value="{{instruction.type.name}}" type="text" class="instruction-header-name ms-3"
-                style="width:{{instruction.type.name|length}}ch;"
+                style="width:90%"
                 hx-trigger="change"
                 hx-post="{% url 'instruction:type_update' instruction.type.pk %}"
-                hx-swap="none">
+                hx-swap="none" {% if not instruction.template %}disabled{% endif %}>
         </form>
     </div>
-    <!-- Add Instruction Element -->
+    {% if instruction.template %}
+    <!-- Add Instruction Elements -->
     <div class="col-auto my-auto">
         <form>
             <input name="type" value="3" type="hidden">
@@ -55,6 +56,7 @@
             </div>
         </form>
     </div>
+    {% endif %}
     <!-- Delete Instruction Type -->
     <!-- Show only if it is not the first element -->
     {% if forloop.counter != 1 %}

@@ -1,0 +1,13 @@
+<div class="instruction-element-detail" class="row g-0">
+    <div class="col">
+        <form hx-post="{% url 'instruction:element_update' instruction.pk element.pk %}" hx-target="#instruction-element-{{element.pk}}" hx-swap="innerHTML">
+        <div class="row instruction-element-detail-type">
+            <p>{{element.type}}</p>
+        </div>
+        <div class="row instruction-element-detail-form">
+            {{ form.as_div }}
+        </div>
+        <button>Save</button>
+        </form>
+    </div>
+</div>

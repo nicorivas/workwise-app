@@ -4,11 +4,37 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 
-from ..forms import InstructionElementCreateForm, InstructionElementUpdateForm, InstructionElementMessageUpdateForm, InstructionElementAgentCallUpdateForm
+from ..forms import InstructionElementCreateForm, InstructionElementUpdateForm, InstructionElementMessageUpdateForm, InstructionElementTextInputUpdateForm, InstructionElementAgentCallUpdateForm
 from instruction.models import Instruction, InstructionType, InstructionElement, InstructionElementAgentCall, InstructionElementMessage, InstructionElementTextInput
 # Forwards
 from document.views import DocumentRefreshView
 from instruction.views.instruction import InstructionReadView
+
+def get_element_and_form(element, instance=False, request=None):
+
+    if element.type.name == element.type.InstructionElementTypes.MESSAGE:
+        element = get_object_or_404(InstructionElementMessage, id=element.pk)
+    elif element.type.name == element.type.InstructionElementTypes.TEXT_INPUT:
+        element = get_object_or_404(InstructionElementTextInput, id=element.pk)    
+    elif element.type.name == element.type.InstructionElementTypes.AGENT_CALL:
+        element = get_object_or_404(InstructionElementAgentCall, id=element.pk)
+
+    form_args = []
+    if request:
+        form_args += [request.POST]
+    
+    form_kwargs = {}
+    if instance:
+        form_kwargs = {"instance": element}
+
+    if element.type.name == element.type.InstructionElementTypes.MESSAGE:
+        form = InstructionElementMessageUpdateForm(*form_args, **form_kwargs)
+    elif element.type.name == element.type.InstructionElementTypes.TEXT_INPUT:
+        form = InstructionElementTextInputUpdateForm(*form_args, **form_kwargs)
+    elif element.type.name == element.type.InstructionElementTypes.AGENT_CALL:
+        form = InstructionElementAgentCallUpdateForm(*form_args, **form_kwargs)
+    
+    return element, form
 
 class InstructionElementIndexView(View):
     def get(self, request, instruction_id:int):
@@ -49,34 +75,31 @@ instruction_element_create_view = InstructionElementCreateView.as_view()
 
 class InstructionElementReadView(View):
 
-    def get(self, request, instruction_type_id:int, action_element_id:int):
-        instruction_type = get_object_or_404(InstructionType, id=instruction_type_id)
-        instruction_element = get_object_or_404(InstructionElement, id=action_element_id)
-        if action_element.type.name == action_element.type.InstructionElementTypes.AGENT_CALL:
-            action_element = get_object_or_404(InstructionElementAgentCall, id=action_element_id)
-            form = InstructionElementAgentCallUpdateForm(instance=action_element)
-        else:
-            form = InstructionElementUpdateForm(instance=action_element)
-        return render(request, "action_element/update_form.html", {"instruction_type": instruction_type, "element":action_element, "form": form})
+    def get(self, request, instruction_id:int, instruction_element_id:int):
+        instruction = get_object_or_404(Instruction, id=instruction_id)
+        instruction_element = get_object_or_404(InstructionElement, id=instruction_element_id)
+
+        instruction_element, form = get_element_and_form(instruction_element, instance=False)
+
+        return render(request, "instruction/elements/element.html", {"instruction": instruction, "element":instruction_element})
+
+instruction_element_read_view = InstructionElementReadView.as_view()
 
 class InstructionElementUpdateView(View):
 
     def post(self, request, instruction_id:int, instruction_element_id:int):
         print("InstructionElementUpdateView.post")
-        print(request.POST)
         instruction = get_object_or_404(Instruction, id=instruction_id)
         instruction_element = get_object_or_404(InstructionElement, id=instruction_element_id)
         instruction_element_form = InstructionElementUpdateForm(request.POST, instance=instruction_element)
         if instruction_element_form.is_valid():
             instruction_element_form.save()
 
-        if instruction_element.type.name == instruction_element.type.InstructionElementTypes.MESSAGE:
-            message = get_object_or_404(InstructionElementMessage, id=instruction_element_id)
-            message_form = InstructionElementMessageUpdateForm(request.POST, instance=message)
-            if message_form.is_valid():
-                message_form.save()
-                instruction_element.save()
-                return HttpResponse('')
+
+        instruction_element, form = get_element_and_form(instruction_element, instance=True, request=request)
+        if form.is_valid():
+            form.save()
+            return redirect("instruction:element_read", instruction_id=instruction.pk, instruction_element_id=instruction_element.pk)
 
         return HttpResponse('')
         #return redirect("actions:read", action_id=instruction_type.action.pk)
@@ -93,9 +116,21 @@ class InstructionElementDeleteView(View):
 
 instruction_element_delete_view = InstructionElementDeleteView.as_view()
 
+class InstructionElementDetailsView(View):
+
+    def get(self, request, instruction_id:int, instruction_element_id: int):
+        print("InstructionElementDetailsView.get")
+        instruction = get_object_or_404(Instruction, id=instruction_id)
+        instruction_element = get_object_or_404(InstructionElement, id=instruction_element_id)
+        instruction_element, form = get_element_and_form(instruction_element, instance=True)
+        context = {"instruction": instruction, "element": instruction_element, "form": form}
+        return render(request, 'instruction/elements/details.html', context)
+
+instruction_element_details_view = InstructionElementDetailsView.as_view()
+
 class InstructionElementCallView(View):
 
-    def post(self, request, instruction_id:int, action_element_id:int):
+    def post(self, request, instruction_id:int, instruction_element_id:int):
         """Triggered by call elements on push of button.
 
         Main idea here is to call the agent and update what is necessary after the agent call.
@@ -107,12 +142,12 @@ class InstructionElementCallView(View):
             action_element_id (int): Action element id
         """
 
-        print("ElementCallView.post")
+        print("InstructionElementCallView.post")
 
         response = HttpResponse()
 
         instruction = get_object_or_404(Instruction, id=instruction_id)
-        agent_call = get_object_or_404(InstructionElementAgentCall, id=action_element_id)
+        agent_call = get_object_or_404(InstructionElementAgentCall, id=instruction_element_id)
         replies = agent_call.call_agent(request, instruction)
         if instruction.project:
             for reply in replies:
@@ -132,3 +167,5 @@ class InstructionElementCallView(View):
             response = InstructionReadView.forward(response, instruction) # Refresh the instruction
 
         return response
+
+instruction_element_call_view = InstructionElementCallView.as_view()

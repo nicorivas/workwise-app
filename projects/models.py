@@ -2,6 +2,7 @@ from django.db import models
 from agents.models import Agent
 from actions.models import Action
 from document.models import Document, DocumentElement
+from company.models import Company
 import json
 import commonmark
 
@@ -21,6 +22,7 @@ class Record(models.Model):
 
 class Project(models.Model):
 
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     description = models.CharField(max_length=512)
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)

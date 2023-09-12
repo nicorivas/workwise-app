@@ -1,4 +1,7 @@
 from django import forms
+from django.forms import ChoiceField
+
+from mimesis.library.library import Library
 
 from .models.instruction import InstructionType
 
@@ -19,7 +22,7 @@ class InstructionUpdateForm(forms.ModelForm):
         model = Instruction
         fields = ["type"]
 
-from .models.instruction_element import InstructionElement, InstructionElementMessage, InstructionElementAgentCall
+from .models.instruction_element import InstructionElement, InstructionElementMessage, InstructionElementTextInput, InstructionElementAgentCall
 
 class InstructionElementCreateForm(forms.ModelForm):
     class Meta:
@@ -36,7 +39,22 @@ class InstructionElementMessageUpdateForm(forms.ModelForm):
         model = InstructionElementMessage
         fields = ["message"]
 
+class InstructionElementTextInputUpdateForm(forms.ModelForm):
+    class Meta:
+        model = InstructionElementTextInput
+        fields = ["message", "audio"]
+
 class InstructionElementAgentCallUpdateForm(forms.ModelForm):
+
+    mimesis_action = ChoiceField(choices=Library.get_all())
+
     class Meta:
         model = InstructionElementAgentCall
         fields = ["name","button_label","index","mimesis_action","document_input"]
+
+    def __init__(self, *args, **kwargs):
+            """
+            We do this to reload the choices everytime the form is loaded.
+            """
+            super(InstructionElementAgentCallUpdateForm, self).__init__(*args, **kwargs)     
+            self.fields['mimesis_action'] = ChoiceField(choices=Library.get_all())

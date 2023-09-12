@@ -13,6 +13,7 @@ import openai
 from .models import Project, Record
 from document.models import Document
 from actions.models import Action
+from company.models import Company
 from instruction.models.instruction import Instruction
 
 from mimesis.agent.agent import Agent
@@ -20,186 +21,6 @@ from mimesis.actions.project import EvaluatePrompt, WriteProjectCharter, ReviseP
 from mimesis.actions.feedback import FeedbackGuidelines, FeedbackValues
 
 from langchain.text_splitter import MarkdownHeaderTextSplitter
-
-openai.api_key = settings.OPENAI_API_KEY
-
-@csrf_exempt
-def actions(request, project_id):
-    actions = Action.objects.all()
-    context = {
-        "actions": actions,
-    }
-    return render(request, "projects/actions.html", context)
-
-@csrf_exempt
-def select_action(request, project_id, instruction_id, action_id):
-    project = get_object_or_404(Project, pk=project_id)
-    instruction = get_object_or_404(Instruction, id=instruction_id)
-    action = get_object_or_404(Action, id=action_id)
-    instruction.action = action
-    instruction.save()
-    actions = Action.objects.all()
-    context = {
-        "project": project,
-        "instruction": instruction,
-        "actions": actions
-    }
-    return render(request, "projects/instruction.html", context)
-
-@csrf_exempt
-def instruction_update(request, project_id, instruction_id):
-    print("instruction_update",request)
-    project = get_object_or_404(Project, pk=project_id)
-    
-    # Update instruction
-    instruction = get_object_or_404(Instruction, id=instruction_id)
-    instruction.prompt = request.POST.get("prompt")
-    instruction.finished = False
-    instruction.save()
-
-    # Delete all instructions that depend on this one
-    Instruction.objects.filter(previous_instruction=instruction).delete()
-
-    # Delete all messages that are related to this instruction
-    Message.objects.filter(instruction=instruction).delete()
-
-    # Return all instructions, so that the depencies are cleared
-    instructions = Instruction.objects.filter(project=project_id)
-
-    context = {
-        "project": project,
-        "document": project.document,
-        "agent": project.agent,    
-        "instructions": instructions,
-    }
-    context = forward(request, context, instruction_id)
-    return render(request, "projects/instructions.html", context)
-
-def forward(request, context, instruction_id):
-    print("forward",request,context)
-    forward_url = request.POST.get('forward_url')
-    if forward_url:
-        context["forward"] = {}
-        context["forward"]["url"] = forward_url
-        context["forward"]["instruction_id"] = instruction_id
-        context["forward"]["target"] = request.POST.get('forward_target')
-        context["forward"]["indicator"] = request.POST.get('forward_indicator')
-        context["forward"]["forward"] = request.POST.get('forward_forward')
-        print(context["forward"])
-    return context
-
-@csrf_exempt
-def call_action(request, project_id, instruction_id, action_id):
-    if request.method == 'POST':
-        print("call_action", request, project_id, action_id, instruction_id)
-        instruction = get_object_or_404(Instruction, id=instruction_id)
-        agent = Agent(**json.loads(request.session['agent']))
-        action = EvaluatePrompt(project_description=instruction.prompt)
-        reply = agent.do(action)
-        project = get_object_or_404(Project, pk=project_id)
-        agent = get_object_or_404(Project, pk=project_id)
-
-        enough_information = json.loads(reply)["enough_information"]
-        comments = json.loads(reply)["comments"]
-
-        if enough_information:
-            message_type = "status"
-        else:
-            message_type = "error"
-
-        message = Message.objects.create(
-            project=project,
-            message=comments,
-            agent=project.agent,
-            instruction=instruction,
-            user="Agent",
-            type=message_type
-            )
-        message.save()
-        context = {
-            "instruction": instruction,
-            "reply": reply,
-        }
-        context = forward(request,context,instruction_id)
-        return render(request, "projects/instruction.html", context)
-
-def end_action(request, project_id, instruction_id):
-    print("end_action")
-    if request.method == 'POST':
-        project = get_object_or_404(Project, id=project_id)
-        instruction = get_object_or_404(Instruction, id=instruction_id)
-
-        # Check if there are any follow-up actions possible
-        actions = Action.objects.filter(previous_action=instruction.action)
-        if actions:
-            # If there are, create new empty instruction
-            new_instruction = Instruction.objects.create(
-                project=project,
-                action=None,
-                prompt=None,
-                previous_instruction=instruction,
-                )
-            new_instruction.save()
-
-        instruction.finished = True
-        instruction.save()
-
-        instructions = Instruction.objects.filter(project=project_id)
-
-        context = {
-            "project": project,
-            "document": project.document,
-            "agent": project.agent,    
-            "instructions": instructions,
-        }
-
-        return render(request, "projects/instructions.html", context)
-
-@csrf_exempt
-def comment_consider(request, project_id, document_id, comment_id):
-    # Get comment
-    #comment = get_object_or_404(Comment, id=comment_id)
-    # Set consider to True
-    #comment.consider = not comment.consider
-    #comment.save()
-    # Return updated comment
-    #context = {
-    #    "comment": comment,
-    #}
-    context = {}
-    return render(request, "projects/document_element_comment.html", context)
-
-def parse_markdown(reply):
-    reply = json.loads(reply)
-    text = f"""# {reply["title"]}
-"""
-
-    text += """## Main objectives
-"""
-    for objective in reply["main_objectives"]:
-        text += f"""- {objective["description"]}
-"""
-
-    text += f"""## Background
-{reply["background"]}
-"""
-
-    text += f"""## Timeline
-{reply["timeline"]}
-"""
-    text += """## Stakeholders
-"""
-    for stakeholder in reply["stakeholders"]:
-        text += f"""- *{stakeholder["name"]}*: {stakeholder["role"]}
-"""
-
-    text += f"""## Risks & Assumptions
-"""
-    for rna in reply["risks_and_assumptions"]:
-        text += f"""- *{rna["type"]}*: {rna["description"]}
-"""
-
-    return text
 
 @csrf_exempt
 def write_document(request, project_id, document_id, instruction_id):
@@ -414,6 +235,7 @@ def delete_message(request, message_id):
 
 def index(request):
     projects = Project.objects.order_by("name")
+    projects = projects.filter(company=request.session.get("company_id"))
     records = Record.objects.all()
     context = {
         "projects": projects,
@@ -429,12 +251,20 @@ def create(request, action_id:int):
     document = Document.objects.create(name=f"New document: {action.name}")
     document.save()
 
+    company = get_object_or_404(Company, pk=request.session.get("company_id"))
+
     # Create new project
-    project = Project.objects.create(name=f"New project: {action.name}", action=action, agent=agent, document=document) # TODO: Name could be related to action
+    # TODO: Name could be related to action
+    project = Project.objects.create(
+        name=f"New project: {action.name}",
+        action=action,
+        agent=agent,
+        document=document,
+        company=company)
     project.save()
 
     # Create new instruction with the selected action
-    instruction = Instruction.objects.create(type=action.first_instruction_type, project=project)
+    instruction = Instruction.objects.create(type=action.first_instruction_type, project=project, template=False)
     instruction.save()
 
     return redirect("projects:read", project_id=project.pk)

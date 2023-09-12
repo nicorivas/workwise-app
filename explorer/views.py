@@ -1,14 +1,14 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 
 from agents.models import Agent
 from actions.models import Action
-from django.shortcuts import redirect
-
-def action_select(request, action_id:int):
-    return redirect("projects:project",1)
+from company.models import Company
 
 def index(request):
-    agents = Agent.objects.filter(show_in_explorer=True)
+    company_id = request.session.get("company_id")
+    company = get_object_or_404(Company, pk=company_id)
+    agents = Agent.objects.filter(show_in_explorer=True, company=company)
     actions = Action.objects.all()
     context = {
         "actions": actions,

@@ -94,9 +94,13 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "workwise_dev",
+        "USER": "nicorivas@workwise-dev",
+        "PASSWORD": "iCga1kmX",
+        "HOST": "workwise-dev.postgres.database.azure.com",
+        "PORT": "5432",
     }
 }
 

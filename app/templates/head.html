@@ -76,6 +76,22 @@
         font-size: 1em;
         vertical-align: middle;
       }
+
+      .header-company .btn {
+        border: 1px solid #636363;
+        border-radius: 5px;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        color: #fff;
+        font-size: 0.9em;
+      }
+
+      .dropdown-menu .dropdown-item {
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+      }
   
       .profile-dropdown {
         background: #fff;
@@ -310,6 +326,8 @@
       .agent-message p {
         font-weight: 400;
         font-size: 1.0em;
+        margin:0;
+        padding:0;
       }
       
       .agent-message-input {
@@ -456,13 +474,14 @@
         /*cursor: pointer;*/
       }
 
-      .instruction-header .instruction-header-name {
+      .instruction-header .instruction-header-name, .instruction-header-name:disabled {
+        background-color:white;
         border: 2px solid #fff;
         border-radius: 3px;
         padding: 0.2em;
       }
 
-      .instruction-header .instruction-header-name:hover {
+      .instruction-header .instruction-header-name:hover:enabled {
         border: 2px solid #ccc;
         border-radius: 5px; 
       }
@@ -505,10 +524,25 @@
         margin: 0;
         text-align: left;
       }
+      
+      .instruction-element-wrapper {
+        margin-bottom: 0.5em;
+      }
 
       .instruction-element.template {
         border: 1px solid #eee;
         margin-bottom: 4px;
+      }
+
+      #instruction-element-details {
+        padding-left: 1em;
+      }
+
+      .instruction-element-detail {
+        padding: 1em;
+        box-shadow: 2px 2px rgb(235, 231, 201);
+        background-color:white;
+        border: 1px solid #ddd;
       }
   
       .message h1 {
@@ -571,6 +605,39 @@
         box-shadow: 2px 2px rgb(235, 231, 201);
         background-color:white;
         border: 1px solid #ddd;
+      }
+
+      #instructions {
+        background-color: rgb(253, 255, 249);
+        max-height: 100vh;
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        border-left: 1px solid #ccc;
+        padding: 1em;
+        padding-bottom: 10em;
+      }
+
+      #project_header {
+        background-color: #fff;
+        border-bottom: #ccc 1px solid;
+        padding: 1em;
+      }
+
+      #project_header h4 {
+        font-size: 1em;
+        margin: 0;
+      }
+
+      #project_header .title-input {
+        border: 2px solid #fff;
+        border-radius: 3px;
+        padding: 0.2em;
+      }
+
+      #project_header .title-input:hover {
+        border: 2px solid #ccc;
+        border-radius: 5px; 
       }
 
     </style>

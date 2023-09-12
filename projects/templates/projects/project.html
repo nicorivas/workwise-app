@@ -2,43 +2,6 @@
 
 {% load static %}
 
-{% block css %}
-<style>
-  #instructions {
-    background-color: rgb(253, 255, 249);
-    max-height: 100vh;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    border-left: 1px solid #ccc;
-    padding: 1em;
-    padding-bottom: 10em;
-  }
-
-  #project_header {
-    background-color: #fff;
-    border-bottom: #ccc 1px solid;
-    padding: 1em;
-  }
-
-  #project_header h4 {
-    font-size: 1em;
-    margin: 0;
-  }
-
-  .title-input {
-    border: 2px solid #fff;
-    border-radius: 3px;
-    padding: 0.2em;
-  }
-
-  .title-input:hover {
-    border: 2px solid #ccc;
-    border-radius: 5px; 
-  }
-</style>
-{% endblock %}
-
 {% block content %}
 
 <div class="row g-0 vh-100" style="background-color:rgb(233, 246, 247); overflow-y:hidden;">
@@ -69,7 +32,7 @@
       <!-- Instructions -->
       <div class="col-6">
         <input hidden id="project_id" name="project_id" value="{{project.pk}}">
-        <div id="instructions" hx-trigger="load" hx-get="{% url 'instruction:index' project.pk %}" hx-target="#instructions">
+        <div id="instructions" hx-trigger="load" hx-get="{% url 'instruction:index' %}?project={{project.pk}}" hx-target="#instructions">
         </div>
       </div>
 

@@ -115,7 +115,7 @@ class InstructionElementAgentCall(InstructionElement):
         # Here is where we initialize the action with the parameters from the form
         #actionClass = ActionClass(**action_parameters)
 
-        action = actions.Action.load_from_file(f"./library/{self.mimesis_action}")
+        action = actions.Action.load_from_file(f"{self.mimesis_action}")
         action.prompt.parameters = action_parameters
 
         if self.document_input:

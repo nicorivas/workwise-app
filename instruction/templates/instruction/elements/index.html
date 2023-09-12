@@ -22,35 +22,9 @@
 
 <!-- Elements -->
 {% for element in elements %}
-<form class="instruction-element-container" id="element-{{element.pk}}"
-    hx-post="{% url 'instruction:element_update' instruction.pk element.pk %}"
-    hx-trigger="stop"
-    hx-swap="none">
-<input type="hidden" name="name" value="{{element.name}}">
-<input type="hidden" name="index" value="{{element.index}}">
-<div class="row g-0 instruction-element {% if instruction.template %}template{% endif %}">
-    <div class="col-auto my-auto">
-        {% include 'icon.html' with iconname="bi-three-dots-vertical" %}
-    </div>
-    <div class="col">
-        <form>
-            {% include element.template with data=instruction.data action=instruction.type.action agent=agent element=element edit=instruction.template %}
-        </form>
-    </div>
-    <div class="col-auto my-auto"
-        hx-post="{% url 'instruction:element_delete' instruction.pk element.pk %}"
-        hx-target="#element-{{element.pk}}"
-        hx-swap="outerHTML">
-        {% include 'icon.html' with iconname="bi-trash" %}
-    </div>
-    <div class="col-auto my-auto"
-        hx-post="{% url 'instruction:element_delete' instruction.pk element.pk %}"
-        hx-target="#element-{{element.pk}}"
-        hx-swap="outerHTML">
-        {% include 'icon.html' with iconname="bi-info-circle" %}
-    </div>
+<div class="instruction-element-wrapper" id="instruction-element-{{element.pk}}">
+{% include 'instruction/elements/element.html' %}
 </div>
-</form>
 {% endfor %}
 
 <!-- Comments -->

@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.views import View
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse
 
 from .models import Company
 
@@ -13,7 +14,15 @@ class CompanyView(View):
             "company": company,
         }
         return render(request, "company/index.html", context)
+
+class CompanySetView(View):
     
+    def post(self, request, company_id):
+        request.session["company_id"] = company_id
+        response = HttpResponse()
+        response["HX-Redirect"] = reverse("explorer:index")
+        return response
+
 class CompanyStrategyView(View):
     
     def get(self, request, company_id):

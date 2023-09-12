@@ -95,10 +95,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "workwise-test-database",
-        "USER": "wssfdyqznn",
+        "NAME": "workwise-dev",
+        "USER": "nicorivas@workwise-dev",
         "PASSWORD": "iCga1kmX",
-        "HOST": "workwise-test-server.postgres.database.azure.com",
+        "HOST": "workwise-dev.postgres.database.azure.com",
         "PORT": "5432",
     }
 }

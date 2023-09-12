@@ -18,6 +18,7 @@ class ActionsView(View):
         print("ActionsView.get")
         # Get all actions
         actions = Action.objects.all()
+        actions = actions.filter(agent__company=request.session.get("company_id"))
         if action_id:
             action = get_object_or_404(Action, id=action_id)
         else:

@@ -15,17 +15,7 @@
         <textarea class="form-control border-0 p-3 instruction-input" name="{{element.name}}" id="instruction-text" rows="7"
             style="font-size: 0.9em;">{{data|keyvalue:element.name}}</textarea>
     </div>
-
-    <!-- Show prompt -->
-    <!--
-    <div class="col-1 p-0 my-auto">
-        <button type="button" class="btn btn-light btn-block" style="font-size:small" data-bs-toggle="modal"
-            data-bs-target="#exampleModal" hx-post="{% url 'projects:get_prompt' project_id=1 %}"
-            hx-target="#prompt_modal" hx-vals='{"prompt": "{{instruction.prompt}}"}'>
-            P
-        </button>
-    </div>
-    -->
+    
 </div>
 
 <div id="prompt_modal">

@@ -13,23 +13,18 @@ from projects.models import Project
 
 class InstructionIndexView(View):
 
-    def get(self, request, project_id=None):
+    def get(self, request):
         """Get all the instructions. If project is given limit to that project.
         """
-        print("InstructionIndexView.get")
-        if project_id:
-            project = get_object_or_404(Project, id=project_id)
-            action = project.action
-            instructions = Instruction.objects.filter(project=project_id)
-            instructions_possible = Instruction.objects.filter(type__action=action, template=True, show_as_possible=True).exclude(type__in=instructions.values_list("type", flat=True))
-        else:
-            instructions = Instruction.objects.all()
-            if request.GET.get("template"):
-                instructions = instructions.filter(template=True)
-            if request.GET.get("action"):
-                instructions = instructions.filter(type__action=request.GET.get("action"))
-                
-            instructions_possible = None
+        instructions = Instruction.objects.all()
+        
+        instructions = instructions.filter(template="template" in request.GET)
+        if request.GET.get("action"):
+            instructions = instructions.filter(type__action=request.GET.get("action"))
+        if request.GET.get("project"):
+            instructions = instructions.filter(project=request.GET.get("project"))
+            
+        instructions_possible = None
 
         context = {
             "instructions": instructions,
@@ -75,12 +70,10 @@ class InstructionReadView(View):
         instruction_type = instruction.type
         action = instruction_type.action
         agent = action.agent
-
         elements = list(InstructionElementAgentCall.objects.filter(instruction_type=instruction_type)) \
                 + list(InstructionElementMessage.objects.filter(instruction_type=instruction_type)) \
                 + list(InstructionElementTextInput.objects.filter(instruction_type=instruction_type))
         elements.sort(key=lambda x: x.index)
-        print(elements)
         context = {
             "action": action
             ,"instruction": instruction

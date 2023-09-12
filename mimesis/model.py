@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 from typing import TYPE_CHECKING, Union
 if TYPE_CHECKING:  # Only imports the below statements during type checking
     from mimesis.agent.agent import Agent
@@ -9,14 +10,13 @@ from pydantic import BaseModel
 
 class LLM(BaseModel):
 
-    API_KEY: str = "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"
     model: str = "gpt-3.5-turbo"
     #model: str = "gpt-4"
     log: bool = True
 
     def chat(self, agent: Agent, prompt: str, system: Union[str, None]) -> str:
 
-        openai.api_key = self.API_KEY
+        openai.api_key = os.environ["OPENAI_API_KEY"]
 
         messages: list[dict[str,str]] = []
         if system:

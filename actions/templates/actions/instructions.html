@@ -31,12 +31,11 @@
             <!-- Only template instructions are loaded, through :index url params -->
             <div id="instructions" class="col-5"
                 hx-trigger="load"
-                hx-get="{% url 'instruction:index' %}?template=1&action={{action.pk}}"
+                hx-get="{% url 'instruction:index' %}?template&action={{action.pk}}"
                 hx-target="this">
             </div>
             <!-- Selected instruction details -->
-            <div id="instruction-details" class="col-5">
-                a
+            <div id="instruction-element-details" class="col-5">
             </div>
         </div>
 

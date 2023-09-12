@@ -9,6 +9,10 @@
     </div>
     <div class="col">
     </div>
+    <div class="col-auto">
+        <div class="header-company me-3" hx-trigger="load" hx-get="{% url 'header_company' %}" hx-target="this">
+        </div>
+    </div>
     <div class="col-auto p-0">
         {% if user.is_authenticated %}
         <div class="icon my-auto me-3">

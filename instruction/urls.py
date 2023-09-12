@@ -10,7 +10,6 @@ urlpatterns = [
     # Instruction index
     path("", instruction_index_view, name="index"),
     path("index/", instruction_index_view, name="index"),
-    path("index/project/<int:project_id>/", instruction_index_view, name="index"),
     # Instruction CRUD
     path("create/", InstructionCreateView.as_view(), name="create"),
     path("<int:instruction_id>/", instruction_read_view, name="read"),
@@ -29,8 +28,9 @@ urlpatterns = [
     # Instruction elements
     path("<int:instruction_id>/element/", instruction_element_index_view, name="element_index"),
     path("<int:instruction_id>/element/create", instruction_element_create_view, name="element_create"),
-    #path("<int:instruction_type_id>/action_element/<int:action_element_id>/read", InstructionElementReadView.as_view(), name="element_read"),
+    path("<int:instruction_id>/element/<int:instruction_element_id>/read", instruction_element_read_view, name="element_read"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/update", instruction_element_update_view, name="element_update"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/delete", instruction_element_delete_view, name="element_delete"),
-    path("<int:instruction_id>/element/<int:instruction_element_id>/call", InstructionElementCallView.as_view(), name="element_call"),
+    path("<int:instruction_id>/element/<int:instruction_element_id>/call", instruction_element_call_view, name="element_call"),
+    path("<int:instruction_id>/element/<int:instruction_element_id>/details", instruction_element_details_view, name="element_details"),
 ]

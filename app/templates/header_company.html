@@ -1,0 +1,8 @@
+<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    {{company.name}}
+</button>
+<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    {% for company in user.profile.companies.all %}
+    <li><a class="dropdown-item" href="#" hx-trigger="click" hx-post="{% url 'company:set' company.pk %}" hx-swap="none">{{company.name}}</a></li>
+    {% endfor %}
+</ul>
