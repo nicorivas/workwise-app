@@ -14,3 +14,6 @@ fingpt.egg-info/
 .env
 /prompts*
 /db.sqlite3*
+secrets
+service_account.json
+db copy.sqlite3
