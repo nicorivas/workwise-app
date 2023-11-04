@@ -11,7 +11,11 @@ class Profile(models.Model):
     companies = models.ManyToManyField(Company, blank=True)
     # Agents that the user has access to
     agents = models.ManyToManyField(Agent, blank=True)
-
+    # If the user is part of beta features
+    beta = models.BooleanField(default=False)
+    # If the user can see alpha features
+    alpha = models.BooleanField(default=False)
+    
     @property
     def get_name(self):
         if self.user.first_name:

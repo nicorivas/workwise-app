@@ -1,0 +1,72 @@
+<div class="modal fade" id="create-task-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <!-- Title -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Form -->
+            <div class="modal-body">
+                <form id="create-task-form">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Task name</label>
+                        {{form.name}}
+                    </div>
+                    <div class="mb-3">
+                        <label for="action" class="form-label">Action</label>
+                        {{form.action}}
+                    </div>
+                    {% if project %}
+                    <input hidden name="project" value="{{project.pk}}">
+                    {% else %}
+                    <div class="mb-3">
+                        <label for="project" class="form-label">Project</label>
+                        {{form.project}}
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+
+            <!-- Buttons -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="create-task-button">Create</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    // Handle the creation of a new task.
+    // Creates a task though a POST request to the server.
+    // Then closes the modal.
+
+    // Get csrfToken from Cookies and set it in the header of the AJAX request
+    jQuery.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+        }
+    });
+
+    // Handle the click event of the create button
+    jQuery("#create-task-button").on('click', function (e) {
+        e.preventDefault();
+        jQuery.ajax({
+            type: 'POST',
+            url: "{% url 'task:create' %}",
+            data: jQuery("#create-task-form").serialize(),
+            success: function (data) {
+                jQuery("#create-task-modal").modal('hide');
+                jQuery("#project-tasks-container").html(data);
+                htmx.process(document.getElementById("project-tasks-container"));
+            },
+            error: function (xhr, status, error) {
+                // Handle AJAX errors
+            }
+        })
+    })
+</script>

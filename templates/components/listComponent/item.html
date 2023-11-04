@@ -1,0 +1,13 @@
+<!--
+    Menu item showing the name of a project
+    Interactivity is handled by list.js
+    HTMX handles the AJAX calls, list.js calls the custom event.
+-->
+<div id="{{name}}" class="project-menu-item list-item {% if template %}list-item--template{% endif %}" data-id="{{project.pk}}">
+    <div class="row g-0">
+        <div class="col project-menu-item-text-container">
+            {% if project.icon %}<div style="padding-right:4px;">{% include 'components/iconComponent/icon.html' with icon=project.icon size=-2 %}</div>{% endif %}
+            <p class="project-menu-item-text">{{project.name}}</p>
+        </div>
+    </div>
+</div>

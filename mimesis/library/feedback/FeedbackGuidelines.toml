@@ -29,5 +29,25 @@ Now, consider the following situation as context:
 
 First identify if the above context describes a positive situation that should be reinforced and scaled, or a negative situation that should be avoided or mitigated.
 
-Then elaborate and provide guidelines to hold a feedback meeting using the SBI framework. Please provide specific recommendations (including how to behave and what to say) and suggested topics of conversation, always considering specific elements of the situation given as context. Please provide the answer in the markdown format.
+Then elaborate and provide guidelines to hold a feedback meeting using the SBI framework. Please provide specific recommendations (including how to behave and what to say) and suggested topics of conversation, always considering specific elements of the situation given as context.
+
+Please provide the answer in the markdown format, following the following format:
+
+# Feedback Meeting Guidelines
+
+## Prepare for the meeting
+
+## Start the meeting
+
+## Situation
+
+## Behavior
+
+## Impact
+
+## Open Dialogue
+
+## Collaborative Problem-Solving
+
+## End on a Positive Note
 """

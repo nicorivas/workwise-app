@@ -1,0 +1,60 @@
+/*
+Button component
+*/
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-container--template {
+    display: none !important;
+}
+
+.button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--wrapper-padding-normal);
+    border-radius: var(--border-radius);
+    background-color: var(--background-button);
+    color: #fff;
+    border: none;
+}
+
+.button:hover {
+    background-color: var(--background-button-hover);
+}
+
+.button--radio {
+    background-color: var(--background-button-radio);
+    color: #555;
+}
+
+.button--radio:hover {
+    background-color: var(--background-button-hover);
+    color: #fff;
+}
+
+.button--running {
+    background-color: var(--background-button-active);
+}
+
+.button--selected {
+    background-color: var(--background-button-active);
+    color: #fff;
+}
+
+.button__text {
+    margin: 0;
+    padding-left: var(--wrapper-padding-small);
+}
+
+.button__loader {
+    display: none;
+}
+
+.button__loader--running {
+    display: inline-flex;
+}

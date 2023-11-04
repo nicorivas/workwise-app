@@ -1,0 +1,12 @@
+{% load static %}
+
+<ul class="nav nav-pills flex-column pt-2">
+    {% include 'body_sidebar_item.html' with icon="bi-rocket-takeoff-fill" text="Explorer" url="explorer" %}
+    {% include 'body_sidebar_item.html' with icon="bi-journal-text" text="Projects" url="projects" %}
+    {% include 'body_sidebar_item.html' with icon="bi-people-fill" text="Agents" url="agents" %}
+    {% include 'body_sidebar_item.html' with icon="bi-files" text="Documents" url="document" %}
+    {% include 'body_sidebar_item.html' with icon="bi-grid-fill" text="Company" url="company" %}
+    {% include 'body_sidebar_item.html' with icon="bi-collection-fill" text="Actions" url="actions" %}
+</ul>
+
+<script src="{% static 'js/sidebar.js' %}"></script>

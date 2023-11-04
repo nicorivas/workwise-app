@@ -1,9 +1,12 @@
 import json
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 
 from agents.models import Agent
 from .models import Action
+from projects.models import Project
+from task.models import Task
+from document.models import Document
 from mimesis.actions.project import EvaluatePrompt, WriteProject, ReviseProject, ApplyRevision
 from django.views.decorators.csrf import csrf_exempt
 
@@ -29,6 +32,22 @@ class ActionsView(View):
             "action": action
         }
         return render(request, "actions/index.html", context)
+
+    def post(self, request, action_id=None):
+        print("ActionsView.post")
+        # Get all actions
+        actions = Action.objects.all()
+        if request.session.get("company_id"):
+            actions = actions.filter(agent__company=request.session.get("company_id"))
+        if action_id:
+            action = get_object_or_404(Action, id=action_id)
+        else:
+            action = actions.first()
+        context = {
+            "actions": actions,
+            "action": action
+        }
+        return render(request, "actions/main.html", context)
 
 class ActionReadView(View):
 

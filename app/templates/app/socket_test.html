@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Socket Test</title>
+</head>
+<body>
+    <input type="text" id="connection" />
+    <button id="button">test</button>
+    <script>
+        // Click 0of button
+        document.getElementById("button").addEventListener("click", function(){
+            console.log("button clicked")
+            //const socket = new WebSocket('ws://localhost:8000/ws/openai_stream/');
+            //const socket = new WebSocket('ws://redis:8000/ws/openai_stream/');
+            let connection_string = document.getElementById("connection").value;
+            const socket = new WebSocket(connection_string);
+            socket.onopen = function (event) {
+                console.log("socket.onopen")
+            };
+
+            socket.onmessage = function (event) {
+                console.log("socket.onmessage")
+            };
+
+            socket.onerror = function (error) {
+                console.log(`[error] socket.onerror: ${error.message}`);
+            };
+
+            socket.onclose = function(event) {
+                console.log("socket.onclose")
+            };
+        });
+    </script>
+</body>
+</html>

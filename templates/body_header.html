@@ -1,0 +1,76 @@
+{% load socialaccount %}
+{% load static %}
+
+<div class="row g-0 header">
+    <div class="col-auto ps-4">
+        <div class="logo">
+            <p>WorkWise</p>
+        </div>
+    </div>
+    <div class="col">
+    </div>
+    <div class="col-auto">
+        <div class="header-company me-3" hx-trigger="load" hx-get="{% url 'header_company' %}" hx-target="this">
+        </div>
+    </div>
+    <div class="col-auto p-0">
+        {% if user.is_authenticated %}
+        <div class="icon my-auto me-3">
+            {% include "components/iconButtonComponent/iconButton.html" with backgroundcolor="#554a76" color="#fff" icon="bi-patch-question-fill" %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-auto p-0">
+        {% if user.is_authenticated %}
+        <div class="icon me-2">
+            {% include "components/iconButtonComponent/iconButton.html" with backgroundcolor="#554a76" color="#fff" icon="bi-bell-fill" %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-auto" style="padding: 0em 1.5em 0em 0.5em;">
+        <div class="profile-image-wrap" style="position: relative;">
+            <a href="#">
+                {% if user.is_authenticated %}
+                <img src="{{user.profile.picture.url}}" class="img-profile" onclick="toggleProfileDropdown()">
+                {% else %}
+                <div onclick="toggleProfileDropdown()">
+                {% include "components/iconButtonComponent/iconButton.html" with background="#554a76" color="#fff" iconname="bi-person-fill" %}
+                </div>
+                {% endif %}
+            </a>
+            <div class="profile-dropdown-wrap" id="profile-dropdown">
+                <div class="profile-dropdown">
+                    {% if user.is_authenticated %}
+                    <div class="profile-dropdown-info">
+                        <img src="{{user.profile.picture.url}}" class="img-profile-dropdown">
+                        <h2>{{user.profile.get_name}}</h2>
+                    </div>
+                    <hr>
+                    <a href="#" class="profile-dropdown-link">
+                        {% include "components/iconButtonComponent/iconButton.html" with icon="bi-gear-fill" %}
+                        <p>Settings & Privacy</p>
+                    </a>
+                    <a href="{% url 'logout' %}" class="profile-dropdown-link">
+                        {% include "components/iconButtonComponent/iconButton.html" with icon="bi-door-open-fill" %}
+                        <p>Logout</p>
+                    </a>
+                    <!-- Not Authenticated -->
+                    {% else %}
+                    <!--<a href="{% provider_login_url 'google' %}?next=/" class="profile-dropdown-link">-->
+                    <a href="{% url 'account_login' %}?next=/" class="profile-dropdown-link">
+                        {% include "components/iconButtonComponent/iconButton.html" with icon="bi-door-open-fill" %}
+                        <p>Login</p>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function toggleProfileDropdown() {
+        jQuery("#profile-dropdown").toggleClass("show")
+    }
+</script>

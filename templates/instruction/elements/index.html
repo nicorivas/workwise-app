@@ -1,0 +1,17 @@
+<!-- No elements -->
+{% if not elements %}
+<div class="row g-0">
+    <div class="col">
+        <p class="m-0 p-0 text-muted" style="font-style: italic;">
+            Instruction has no elements; it probably hasn't been defined yet.
+        </p>
+    </div>
+</div>
+{% endif %}
+
+<!-- Elements -->
+{% for element in elements|dictsort:"index" %}
+<div class="instruction-element instruction-element-wrapper" id="instruction-element-{{element.pk}}" data-id="{{element.pk}}">
+{% include 'instruction/elements/element.html' %}
+</div>
+{% endfor %}

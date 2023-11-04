@@ -1,0 +1,14 @@
+{% load markdown_extras %}
+{% load static %}
+<div class="row g-0 message">
+    <div class="col">
+        <!-- Body -->
+        <div class="row g-0 message-body">
+            <div class="col">
+                <div id="message-blocks-{{message.pk}}">
+                    {% include 'instruction/message_blocks.html' with message=message %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

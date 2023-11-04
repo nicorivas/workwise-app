@@ -1,0 +1,54 @@
+/* Chips */
+/* Little selectable pills */
+
+.chips {
+    /**/
+    padding-bottom: var(--wrapper-padding-normal);
+}
+
+.chips__label {
+    font-weight: 500;
+    color: var(--text-color-dark);
+    margin-right: var(--wrapper-padding-small);
+    margin-bottom: var(--wrapper-padding-small);
+}
+
+.chips__chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    cursor: pointer;
+    position: relative;
+    gap: 5px;
+    padding-left: var(--wrapper-padding-small);
+}
+
+.chips__chip {
+    display: inline-flex;
+    background-color: var(--background-chip);
+    padding-top: var(--wrapper-padding-small);
+    padding-bottom: var(--wrapper-padding-small);
+    border: 1px solid var(--background-chip);
+    border-radius: 20px;
+}
+
+.chips__chip:hover {
+    background-color: var(--background-chip-hover);
+}
+
+.chips__chip--selected {
+    background-color: var(--background-highlight-hover);
+    border: 1px solid var(--border-highlight);
+}
+
+.chips__chip--selected:hover {
+    background-color: var(--background-highlight-hover);
+    border: 1px solid var(--border-highlight);
+}
+
+.chips__chip-prefix {
+    margin-left: var(--wrapper-padding-normal);
+}
+
+.chips__chip-suffix {
+    margin-right: var(--wrapper-padding-normal);
+}

@@ -1,0 +1,33 @@
+<div class="modal fade" id="create-project-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <!-- Title -->
+            <div class="modal-header">
+                <h5 class="modal-title">Create project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Form -->
+            <div class="modal-body">
+                <form id="create-project-form">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Project name</label>
+                        {{form.name}}
+                    </div>
+                    <input hidden name="csrfmiddlewaretoken" value="{{csrf_token}}">
+                    <input hidden name="created_by" value="{{user.pk}}">
+                    <input hidden name="created_by_id" value="{{user.pk}}">
+                    <input hidden name="company" value="{{request.session.company_id}}">
+                </form>
+            </div>
+
+            <!-- Buttons -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary modal__action-button" id="create-project-button">Create</button>
+            </div>
+            
+        </div>
+    </div>
+</div>

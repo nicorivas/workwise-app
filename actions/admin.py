@@ -4,5 +4,5 @@ from .models import Action
 
 @admin.register(Action)
 class ActionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'agent', 'description')
+    list_display = ('name', 'agent', 'short_description', 'description')
     pass

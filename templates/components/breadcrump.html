@@ -1,0 +1,29 @@
+<div class="breadcrump">
+    <div class="row g-0">
+        
+        {% if projects %}
+        {% include 'components/breadcrump_element.html' with text="Home" icon="bi-house-fill" %}
+        {% include 'components/breadcrump_separator.html' %}
+        {% include 'components/breadcrump_element.html' with text="Projects" icon="bi-journal-text" active=1 %}
+        {% endif %}
+        
+        {% if project %}
+        {% include 'components/breadcrump_element.html' with text="Home" icon="bi-house-fill" %}
+        {% include 'components/breadcrump_separator.html' %}
+        {% include 'components/breadcrump_element.html' with text="Projects" icon="bi-journal-text" %}
+        {% include 'components/breadcrump_separator.html' %}
+        {% include 'components/breadcrump_element.html' with text=project.name active=1 %}
+        {% endif %}
+
+        {% if task %}
+        {% include 'components/breadcrump_element.html' with text="Home" icon="bi-house-fill" %}
+        {% include 'components/breadcrump_separator.html' %}
+        {% include 'components/breadcrump_element.html' with text="Projects" icon="bi-journal-text" url="projects:index" %}
+        {% include 'components/breadcrump_separator.html' %}
+        {% include 'components/breadcrump_element.html' with text=task.project.name icon=task.project.icon italic=1 url="projects:read" urlparam=task.project.pk %}
+        {% include 'components/breadcrump_separator.html' %}
+        {% include 'components/breadcrump_element.html' with text=task.name_and_type active=1 dropdown=1 italic=1 %}
+        {% endif %}
+
+    </div>
+</div>

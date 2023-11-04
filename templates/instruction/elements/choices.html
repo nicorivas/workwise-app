@@ -1,0 +1,12 @@
+{% if element.instructionelementchoices.style == 'chips' %}
+{% include 'components/chipsComponent/chips.html' with name="test" items=element.instructionelementchoices.choices label=element.instructionelementchoices.guide %}
+{% else %}
+{% for choice in element.instructionelementchoices.choices %}
+<div class="form-check">
+    <input class="form-check-input instruction-input" type="radio" name="choices-{{element.name_for_html}}" id="choice-{{forloop.counter}}" value="{{choice.value}}">
+    <label class="form-check-label" for="choices-{{element.name_for_html}}">
+        {{choice.label}}
+    </label>
+</div>
+{% endfor %}
+{% endif %}

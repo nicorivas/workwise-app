@@ -1,0 +1,49 @@
+{% load static %}
+
+<!-- Header -->
+{% if project %}
+<div class="project" data-id="{{project.pk}}">
+    <div class="row g-0">
+        <div class="col">
+            <div id="project-title-container">
+
+                <!-- Title (Editable) -->
+                <input type="text" name="name" value="{{project.name}}" class="title-input" style="width:300px;"
+                    data-id="{{project.pk}}" hx-trigger="change" hx-post="{% url 'projects:update_name' project.pk %}"
+                    hx-include="this">
+
+                <!-- Kebab -->
+                {% include 'components/kebabComponent/kebab.html' with name="project-kebab" items=items right=1 %}
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endif %}
+
+<!-- Context -->
+<div class="row g-0">
+    <div class="col">
+        <div id="project-context-container">
+
+            {% include 'projects/details_context.html' %}
+
+        </div>
+    </div>
+</div>
+
+<!-- Tasks -->
+<div class="row g-0">
+    <div class="col">
+        <div id="project-tasks-container">
+
+            {% include 'projects/details_tasks.html' with tasks=project.task_set.all %}
+
+        </div>
+    </div>
+</div>
+
+{% include 'document/create_document_modal.html' with form=task_create_document project=project %}
+
+{% include 'task/create_task_modal.html' with form=task_create_form project=project %}

@@ -1,0 +1,70 @@
+<div class="modal" tabindex="-1" id="add-document-modal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form id="add-document-modal__form">
+
+                    <p>Create a blank document, or import it:</p>
+
+                    <div class="document-sources">
+                        <!-- Blank document not really a source, so separated -->
+                        <!-- If it was created in the context of a task, add to post -->
+                        {% if task %}
+                        <input hidden id="input-task" name="task" value="{{task.pk}}">
+                        {% endif %}
+                        <input hidden id="input-project" name="project" value="{{project.pk}}">
+
+                        {% include 'components/radioButtonsComponent/radioButtons.html' with name="document-type" items=document_sources %}
+
+                        <!-- Buttons of sources -->
+                        {% for document_source in document_sources %}
+                        <div class="document-source" href="#"
+                            hx-trigger="click"
+                            hx-get="{% url 'document:loader_google_docs_read' %}"
+                            hx-target="#loader-form">
+                            {% if document_source.icon %}
+                            <div class="document-source-icon">
+                                <img src="{{document_source.icon.url}}"/>
+                            </div>
+                            {% endif %}
+                            <p>
+                                {{document_source.name}}
+                            </p>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="add-document-modal__form__create" id="add-document-modal__form__create__blank-document">
+                        <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control">
+                        <!--<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-document-modal__footer__save-button">Add document</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Close modal after htmx request
+    /*
+    document.addEventListener("htmx:afterRequest", function(evt) {
+        if (evt.detail.xhr.responseURL.includes("document/create")) {
+            jQuery("#create-document-modal").modal("hide");
+        }
+    });
+    */
+</script>

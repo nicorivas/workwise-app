@@ -1,0 +1,48 @@
+.document-revision-wrapper.htmx-request {
+    /* While a request is being sent, hide the main content. */
+    display: none;
+}
+
+.instruction-element-revision {
+    border: 1px solid var(--border-color-normal);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.instruction-element-revision--selected {
+    border: 1px solid var(--border-highlight-strong);
+}
+
+.instruction-element-revision--hidden {
+    display: none;
+}
+
+.instruction-element-revision--revised {
+    border: 1px solid var(--border-highlight-strong);
+}
+
+.document-revision-element-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.document-revision-element-header:hover {
+    background-color: var(--background-highlight);
+}
+
+.document-revision-element.active .document-revision-element-header {
+    background-color: var(--background-highlight);
+}
+
+.document-revision-element-body {
+    overflow-y: hidden;
+    padding: 10px;
+    padding-top: 0px;
+}
+
+/* Animate the change in height of the document-revision-element-body */
+.document-revision-element-body {
+    transition: height 0.2s ease;
+}

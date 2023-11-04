@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ActionReadView, ActionsView, ActionCallView, ActionReadInstructionTypesView, ActionInstructionsCreateView
+from .views import *
 
 app_name = "actions"
 

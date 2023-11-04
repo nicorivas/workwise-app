@@ -1,0 +1,85 @@
+{% include 'index_header.html' with project=project %}
+
+<div class="row g-0">
+  <div class="col" id="project-wrapper">
+
+    <div class="row g-0">
+
+      <!-- Instructions -->
+      <!-- Hyperscript: trigger selection of first toolbar button (usually 'Write') -->
+      <div class="col-auto" id="project-instructions-wrapper" _="init send click to #instructions-sidebar-tools-button-0 end">
+        
+        <!-- Task selector -->
+        <div class="row g-0" id="project-task-selector-wrapper">
+          <div class="col">
+            {% include 'components/selector.html' with icon="bi-view-list" size=2 text="Task name" items=tasks %}
+          </div>
+        </div>
+        
+        <!-- Task instructions -->
+        <div class="row g-0">
+
+          <!-- Toolbar -->
+          <div class="col-auto" id="instructions-sidebar-tools-wrapper">
+            {% include 'projects/instructions_toolbar.html' %}
+          </div>
+
+          <!-- Instructions -->
+          <div class="col" id="instructions-sidebar-instructions-wrapper">
+            {% include 'projects/instructions.html' with project=project step=1 %}
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Documents -->
+      <div class="col" id="project-document-wrapper">
+
+        <!-- Document selector -->
+        <div class="row g-0">
+          <div class="col">
+            {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-view-list" size=2 %}
+          </div>
+        </div>
+        
+        {% include 'document/document.html' with document=document %}
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+
+  let mediaRecorder;
+  let chunks = [];
+
+  jQuery(document).click(function (event) {
+    if (!jQuery(event.target).closest('.actions-dropdown').length) {
+      jQuery(".actions-list").hide();
+    }
+  });
+
+  // Function to hide the dropdown when the user clicks outside of it
+  document.addEventListener('click', function (event) {
+    /*
+    const dropdownContent = document.getElementBy('actions-dropdown');
+    var toggleButton = document.querySelector('#actions-list');
+
+    // Check if the clicked element is outside the dropdown and the toggle button
+    if (!dropdownContent.contains(event.target) && event.target !== toggleButton) {
+      // Send a request to hide the dropdown
+      jQuery("#actions-list").hide();
+    }
+    */
+
+    jQuery(".comment").each(function () {
+      // if the target of the click isn't the container nor a descendant of the container
+      if (!jQuery(this).is(event.target) && !event.target.closest(".lightbulb") && jQuery(this).has(event.target).length === 0) {
+        jQuery(this).hide();
+      }
+    });
+  });
+</script>

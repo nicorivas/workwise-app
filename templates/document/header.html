@@ -1,0 +1,36 @@
+{% load static %}
+{% load markdown_extras %}
+
+<!-- Streaming -->
+<div class="document__header__streaming">
+    <p>Writing document</p>
+</div>
+
+<!-- Loading -->
+<div class="document__header__loading">
+    <p>Loading document</p>
+</div>
+
+{{formats}}
+
+<!-- Formats -->
+<div class="document__header__formats">
+    {% include 'components/kebabComponent/kebab.html' with name="document-formats-kebab" items=formats %}
+    {# include 'components/selectorComponent/selector.html' with highlight=1 name="formats" icon="bi-snow" size=1 text="" items=formats #}
+</div>
+
+<!-- Close format -->
+<div class="document__header__format-close">
+    <!-- Close -->
+    {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-x-circle" text="Back to document" %}
+</div>
+
+<!-- Toolbar -->
+<div class="document__header__toolbar">
+    <div id="document__header__toolbar__save">
+    {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-save" color="#aaa" %}
+    </div>
+    {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-lightbulb" color="#aaa" %}
+    {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-send" color="#aaa" %}
+    {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-three-dots" color="#aaa" %}
+</div>

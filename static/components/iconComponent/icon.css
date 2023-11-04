@@ -1,0 +1,42 @@
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 500px;
+}
+
+.icon .bi {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.icon--xl {
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.icon--l {
+    width: 35px !important;
+    height: 35px !important;
+}
+
+.icon--s {
+    width: 25px !important;
+    height: 25px !important;
+}
+
+.icon--xs {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.icon--thin {
+    width: 14px !important;
+    height: 20px !important;
+}

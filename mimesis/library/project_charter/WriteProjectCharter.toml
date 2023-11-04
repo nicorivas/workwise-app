@@ -6,6 +6,7 @@ memory = "I wrote a project charter"
 [reply]
 name = "project_charter"
 type = "document"
+revise = true
 
 [prompt]
 text = """Act as a senior project manager, with more than 20 years of experience in managing all kinds of projects.
@@ -18,38 +19,88 @@ Consider the following audio transcription describing a project:
 
 === end of project description
 
-From this project description, I want you to write a project charter. Clarity is Key: Be clear and concise. Avoid jargon and ensure that someone without domain knowledge can understand the project's basics. The project charter should include the following elements:
+From this project description, I want you to write a project charter.
+Clarity is key: be clear and concise.
+Avoid jargon and ensure that someone without domain knowledge can understand the project's basics.
+The project charter should include the following elements:
 
-1. Title and Project Name: This might seem basic, but a clear and concise name can help all stakeholders immediately understand the project's main focus.
+1. Introduction
 
-2. Project Purpose: Define why the project exists. What gap or need is it addressing? How does it align with broader organizational strategies or goals?
+Purpose: Explain the purpose of the document.
 
-3. Project Description:
-* Background: Give a brief history of what led to the project initiation.
-* Objectives: Clearly outline what the project aims to achieve. Objectives should be SMART (Specific, Measurable, (Achievable, Relevant, and Time-bound).
-* Scope: Describe the boundaries. What's in-scope and out-of-scope? This will prevent scope creep later on.
+Background: Contextualize why the project exists.
 
-4. Key Stakeholders: Identify who will be involved, who will be affected, and what their roles will be. This can include:
+2. Project Sponsor and Stakeholders
 
-* Project sponsor
-* Project manager
-* Team members
-* End-users
-* Any other relevant parties
+Project Sponsor: Identify the sponsor who champions the project.
 
-5. Milestones and Major Deliverables: Break down the major steps, milestones, and deliverables that will mark progress towards the project's completion.
+Stakeholders: List major stakeholders and their interests in the project. If no stakeholders where explicitly given, deduce and suggest possible stakeholders given the project context.
 
-6. Assumptions and Constraints: List the conditions you're assuming to be true for the project to move forward and any constraints (like time, budget, or resources) that might restrict the project.
+3. Project Objective
 
-7. Risks and Issues: Identify potential pitfalls, challenges, or obstacles and outline strategies or contingencies for managing them.
+SMART Objectives: List of the project objectives. Each objective should follow the SMART (Specific, Measurable, Achievable, Relevant, Time-bound) framework.
 
-8. Budget: Highlight the financial resources allocated to the project. Break it down to show where the money is going.
+4. Problem Statement or Business Case
 
-9. Timeline: Establish a high-level timeline for the project, identifying start and end dates, and any critical path items.
+Description: Clearly describe the problem or opportunity the project aims to address.
 
-10. Success Criteria: Define what will be considered a successful completion of the project. This will be critical for the project's closeout and post-mortem.
+Metrics: Establish metrics to measure the problem and track improvements. If no metrics where given in the description, deduce and suggest possible metrics to measure the problem.
 
-11. Communication Plan: State how information will be shared among stakeholders, including frequency, method (meetings, emails, reports), and key contact information.
+5. Project Scope
+
+In-Scope: List what is included in the project.
+
+Out-of-Scope: List what is explicitly not included in the project.
+
+6. Deliverables
+
+List: Provide a list of all deliverables.
+
+Completeness Criteria: Describe the criteria for what constitutes a 'complete' deliverable.
+
+{% if milestones %}
+7. Milestones
+
+Milestone List: Include significant project milestones and their expected dates.
+{% endif %}
+
+8. Constraints and Assumptions
+
+Constraints: Limitations like time, resources, budget, or dependencies.
+
+Assumptions: Things that are assumed to be in place but need verification.
+
+9. Budget
+
+Cost Estimates: Provide an initial estimate of costs.
+
+Funding Source: Identify where the budget is coming from.
+
+10. Governance and Approvals
+
+Project Team: List roles and responsibilities.
+
+Change Control: Describe the process for managing changes to the project.
+
+Approvals: Mention who has the authority to approve different elements like budget changes, scope alteration, etc.
+
+11. Risk Management
+
+Risk Assessment: Identify potential risks and their severity.
+
+Mitigation Plans: Describe risk management strategies.
+
+12. Communication Plan
+
+Communication Channels: Explain how and when communications will occur among stakeholders.
+
+Documentation: State where all project documents will be stored and how they can be accessed.
+
+13. Appendix
+
+Glossary: Define any terminology or acronyms used.
+
+=== end of project charter template
 
 This is very important, when you don't find specific information in the project description given, use placeholders. For example, if you don't find the project title, write '<Project title>'.
 

@@ -1,0 +1,3 @@
+{% for action in actions %}
+{% include 'explorer/search_result_card.html' with action=action agent=action.agent %}
+{% endfor %}

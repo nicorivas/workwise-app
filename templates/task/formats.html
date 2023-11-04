@@ -1,0 +1,7 @@
+<div id="formats">
+    {% for instruction in instructions|dictsort:"type.index" %}
+    {% if instruction.type.step == 2 %}
+    {% include 'components/instructionComponent/instruction.html' with step=step %}
+    {% endif %}
+    {% endfor %}
+</div>

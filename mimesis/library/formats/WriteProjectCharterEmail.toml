@@ -1,0 +1,22 @@
+name = "Write Project Charter"
+description = "Write a project charter"
+definition = ""
+memory = "I wrote a project charter"
+
+[reply]
+name = "project_charter"
+type = "document"
+revise = true
+
+[prompt]
+text = """Act as a senior project manager, with more than 20 years of experience in managing all kinds of projects.
+        
+Consider you just wrote a project charter. Now you want to share it with your boss. Your boss is already aware of the project. Could you write an email summarizing the project charter? This should be very brief, as your boss is already aware of the project and knows the context. Just mention what the boss might find most interesting about the document. Consider that the document will be attached to the email.
+
+=== project charter
+
+{{project_charter}}
+
+=== end of project charter
+
+"""

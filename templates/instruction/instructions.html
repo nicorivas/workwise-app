@@ -1,0 +1,33 @@
+{% load keyvalue %}
+<!-- List of instructions -->
+<!-- Loading of this div triggers instruction:read for each instruction -->
+{% if instructions %}
+{% for instruction in instructions %}
+<div id="instruction-wrapper"
+    hx-trigger="load"
+    hx-get="{% url 'instruction:read' instruction.pk %}?{%if edit %}edit{% endif %}"
+    hx-target="this"
+    hx-indicator="#instruction_{{instruction.pk}}_loading">
+    <div id="instruction_{{instruction.pk}}_loading" class="instruction-loading htmx-indicator">{% include 'components/loader.html' %}</div>
+</div>
+{% endfor %}
+{% else %}
+<p class="warning-text">There are no instructions for this action</p>
+{% endif %}
+
+<!-- List of possible instructions -->
+{% for instruction in instructions_possible %}
+<div id="instruction_{{instruction.pk}}" class="instruction instruction-possible"
+    hx-trigger="load"
+    hx-target="this"
+    hx-get="{% url 'instruction:read' instruction.pk %}?possible"
+    onclick="location.href='#';" style="cursor: pointer;">
+</div>
+{% endfor %}
+
+<script>
+    // Trigger click event on first element
+    jQuery(document).ready(function() {
+        jQuery(".instruction-header").first().trigger("click");
+    });
+</script>

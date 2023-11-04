@@ -1,0 +1,17 @@
+# This is a TOML document
+
+name = "Facebook Post"
+description = "Generate Facebook post from given document"
+definition = ""
+memory = "I generated a Facebook post"
+
+[reply]
+name = "format"
+type = "document"
+
+[prompt]
+text = """
+Generate a Facebook Post from the following document: 
+
+{{document}}
+"""

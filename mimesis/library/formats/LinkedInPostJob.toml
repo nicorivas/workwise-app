@@ -1,0 +1,29 @@
+# This is a TOML document
+
+name = "LinkedIn Post"
+description = "Generate LinkedIn post from given document"
+definition = ""
+memory = "I generated a LinkedIn post"
+
+[reply]
+name = "format"
+type = "format"
+
+[prompt]
+text = """Act a senior human resources expert, also with experience in Marketing.
+
+You have just written a job profile. Please generate a LinkedIn job post from the following document:
+
+=== Job profile
+{{document}}
+=== End job profile
+
+Make it catchy, original. Use emojis if you want.
+
+MAKE IT SHORT: it's a LinkedIn post meant to incite people to find more detailed information elsewhere.
+
+Don't worry about including all the information of the job profile, just use this as a guideline.
+
+PLEASE WRITE YOUR ANSWER IN MARKDOWN.
+
+"""

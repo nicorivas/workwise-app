@@ -9,31 +9,29 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from dotenv import load_dotenv
 from pathlib import Path
 import os
 
 from decouple import config
 import allauth
 
+load_dotenv()
+
 OPENAI_API_KEY = config('OPENAI_API_KEY')
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5d46cd6a8a6e1416024ed063d36edf3de7c18fecfa03137cb650202c490d5183'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['workwise-dev.eba-grvwac9s.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ["localhost","127.0.0.1"]
 
 # Application definition
 
 INSTALLED_APPS = [
-    'grappelli',
+    'daphne',
     "explorer.apps.ExplorerConfig",
     "agents.apps.AgentsConfig",
     "projects.apps.ProjectsConfig",
@@ -43,6 +41,7 @@ INSTALLED_APPS = [
     "instruction.apps.InstructionConfig",
     "chat.apps.ChatConfig",
     "user.apps.UserConfig",
+    "task.apps.TaskConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,6 +54,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'channels',
+    'channels_redis',
+    'rest_framework',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -65,7 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'allauth.account.middleware.AccountMiddleware',
+    #'allauth.account.middleware.AccountMiddleware', # allauth: can't use it do to pypandoc requiring older version of allauth
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -73,7 +76,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'app/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'app/templates'), os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,25 +90,30 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'app.wsgi.application'
+ASGI_APPLICATION = 'app.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    #"default": {
-    #    "ENGINE": "django.db.backends.postgresql",
-    #    "NAME": "workwise_dev",
-    #    "USER": "nicorivas@workwise-dev",
-    #    "PASSWORD": "iCga1kmX",
-    #    "HOST": "workwise-dev.postgres.database.azure.com",
-    #    "PORT": "5432",
-    #}
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.getenv("DB_HOST"),
+        "NAME": os.getenv('DB_NAME'),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASS"),
+        "PORT": os.getenv("DB_PORT"),
+    }
 }
 
 SITE_ID = 1
@@ -203,3 +211,13 @@ SOCIALACCOUNT_LOGIN_ON_GET=True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_EMAIL_VERIFICATION = "none"
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

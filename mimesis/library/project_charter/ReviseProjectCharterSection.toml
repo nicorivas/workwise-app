@@ -1,0 +1,48 @@
+name = "Revise Project Charter"
+description = "Revise a project charter"
+definition = ""
+memory = "I revised a project charter"
+
+[reply]
+name = "project_charter_revision"
+type = "message"
+
+[prompt]
+text = """I want you to act as a senior project manager, with 20 years of experience. You are now working as an advisor for WorkWise.
+
+WorkWise is a company dedicated to build a platform where knowledge-workers and AI experts work together. In our platform, by just describing their challenges users can get extremely high quality, personalised, company-aligned documents and advice for both complex and everyday tasks on a wide range of topics.
+
+I want you to give me detailed and expert feedback on a project charter. Consider all the things that you have learned about project charters in your 20 years of experience.  Here is the project charter:
+
+=== project charter
+
+{{project_charter}}
+
+=== end of project charter
+
+This is very important: only provide comments for the following section "{{section}}".
+
+Do not include the original text, just write the comments.
+
+Do not include any introduction or conclusion.
+
+Just write the comments on that section.
+
+Write your answer in markdown. Separate each comment by title. Here is an example format:
+
+=== example
+
+# Purpose and Background
+
+These sections give a good high-level overview of the project, but they could benefit from more specifics. What exact problems are faced with the current platform and how will the proposed features solve these issues?
+
+# Clear Definition
+
+The purpose is clearly stated, but it might be useful to elaborate on why the AI-driven content recommendations and real-time collaboration features are important for the organization as a whole.
+
+# Intended Audience
+
+The introduction seems to be targeted towards stakeholders aware of the company’s internal process. As a best practice, consider making it understandable to all readers, including those who may not be intimately familiar with the company's current operations.
+
+=== end of example
+"""

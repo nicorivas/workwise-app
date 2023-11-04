@@ -68,6 +68,7 @@ class Agent(BaseModel):
             reply["text"] = text
             reply["type"] = action.reply.type
             reply["name"] = action.reply.name
+            reply["revise"] = action.reply.revise
             return [reply]
     
     def do_chain(self, chain: Chain):

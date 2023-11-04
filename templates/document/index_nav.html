@@ -1,0 +1,20 @@
+<!-- Nav -->
+<div class="row g-0">
+    <div class="col">
+        <div id="document-nav" class="header-nav pt-3">
+            {% if not no_title %}
+            <h1 class="{% if no_nav == 1 %}pb-3{% endif %}">{{document.name}}</h1>
+            {% endif %}
+            {% if not no_nav %}
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Pages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contexts</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>

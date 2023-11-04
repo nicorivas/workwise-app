@@ -1,0 +1,159 @@
+{% extends 'body.html' %}
+{% load static %}
+{% block content %}
+<div class="component-wrapper">
+
+    {% if component == "selector" %}
+    <div style="width:300px">
+        <div id="highlight">Highlight</div>
+        <div id="small">Small</div>
+        {% include 'components/selectorComponent/selector.html' with name="test" icon="bi-view-list" %}
+        <script type="module">
+            import Selector from "{% static 'components/selectorComponent/selector.js' %}";
+            var selector = new Selector("#selector-test");
+            jQuery("#highlight").click((e) => {
+                selector.setState({"highlight":!selector.state.highlight});
+            });
+            jQuery("#small").click((e) => {
+                selector.setState({"small":!selector.state.small});
+            });
+        </script>
+    </div>
+    {% endif %}
+
+    {% if component == "chips" %}
+    <div style="width:500px">
+    {% include 'components/chipsComponent/chips.html' with name="test" label="This is a test of the chips component" %}
+    <script type="module">
+        import Selector from "{% static 'components/chipsComponent/chips.js' %}";
+        var selector = new Selector("#chips-test");
+    </script>
+    </div>
+    {% endif %}
+
+    {% if component == "button" %}
+    <div style="width:500px">
+    {% include 'components/buttonComponent/button.html' with name="button-test" label=label %}
+    <script type="module">
+        import Button from "{% static 'components/buttonComponent/button.js' %}";
+        var button = new Button("#button-test");
+        button.addFunction(() => new Promise(r => {
+            setTimeout(r, 2000);
+            console.log("Button clicked");
+        }));
+    </script>
+    </div>
+    {% endif %}
+
+    {% if component == "kebab" %}
+    <div class="row g-0">
+        <div class="col-auto">
+            {% include 'components/kebabComponent/kebab.html' with name="kebab-test" items=items %}
+            <script type="module">
+                import Kebab from "{% static 'components/kebabComponent/kebab.js' %}";
+                var kebab = new Kebab("#kebab-test");
+            </script>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if component == "instruction" %}
+    <div class="row g-0">
+        <div class="col-auto">
+            {% include 'components/instructionComponent/instruction.html' with name="instruction-test" %}
+            <div id="load">Load</div>
+            <div id="idle">Idle</div>
+            <script type="module">
+                import Instruction from "{% static 'components/instructionComponent/instruction.js' %}";
+                var instruction = new Instruction(".instruction");
+                instruction.show();
+                jQuery("#load").click(() => {
+                    console.log("load");
+                    instruction.setState({"status":"running"});
+                });
+                jQuery("#idle").click(() => {
+                    console.log("idle");
+                    instruction.setState({"status":"idle"});
+                });
+            </script>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if component == "document" %}
+    <div style="width:600px">
+        <div id="idle">Idle</div>
+        <div id="streaming">Streaming</div>
+        <div id="loading">Loading</div>
+        <div id="sections">Sections</div>
+        <div id="scroll">Scroll</div>
+        {% include 'document/document.html' with document=document %}
+        <script type="module">
+            import Document from "{% static 'components/documentComponent/document.js' %}";
+            var document = new Document(".document");
+            jQuery("#streaming").click(() => {
+                document.setState({"status":"streaming"});
+            });
+            jQuery("#loading").click(() => {
+                document.setState({"status":"loading"});
+            });
+            jQuery("#idle").click(() => {
+                document.setState({"status":"idle"});
+            });
+            jQuery("#sections").click((e) => {
+                document.selectSection(2);
+                /*
+                document.getSections().then(sections => {
+                    document.selectSection(2);
+                }).catch(error => {
+                    console.log("error", error);
+                });
+                */
+            });
+            jQuery("#scroll").click((e) => {
+                var selected = jQuery('.ce-block[data-id="22"]');
+                console.log(selected);
+                document.scrollToSection(20);
+                // Scroll container to offset of the selected div
+            });
+        </script>
+    </div>
+    {% endif %}
+
+    {% if component == "icon" %}
+    <div>
+        {% include 'components/iconComponent/icon.html' with icon="bi-alarm" %}
+        {% include 'components/iconComponent/icon.html' with icon="bi-alarm" size=-2 %}
+        {% include 'components/iconComponent/icon.html' with icon="bi-alarm" size=-1 %}
+        {% include 'components/iconComponent/icon.html' with icon="bi-alarm" size=0 %}
+        {% include 'components/iconComponent/icon.html' with icon="bi-alarm" size=1 %}
+        {% include 'components/iconComponent/icon.html' with icon="bi-alarm" size=2 %}
+    </div>
+    {% endif %}
+
+    {% if component == "iconButton" %}
+    <div>
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-alarm" %}
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-alarm" style="white" %}
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-alarm" style="white" disabled=1 %}
+    </div>
+    {% endif %}
+
+    {% if component == "radioButtons" %}
+    <div style="width:600px">
+        <div id="test">Test</div>
+        <form id="form">
+        {% include 'components/radioButtonsComponent/radioButtons.html' with name="radio-buttons" items=items %}
+        </form>
+        <script type="module">
+            import RadioButtonsComponent from "{% static 'components/radioButtonsComponent/radioButtons.js' %}";
+            var radioButtons = new RadioButtonsComponent("#radio-buttons");
+            jQuery("#test").click((e) => {
+                console.log(jQuery('input[name="selector"]:checked').val());
+            })
+        </script>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

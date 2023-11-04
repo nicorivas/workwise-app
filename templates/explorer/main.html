@@ -1,0 +1,69 @@
+{% load static %}
+
+<div id="explorer-wrapper">
+
+    <!-- Search -->
+    <div id="explorer-search-container">
+        <div id="explorer-search-field">
+            <div id="explorer-search-field-mic">
+                {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-mic-fill" size=2 highlight=1 %}
+            </div>
+            <div id="explorer-search-field-input">
+                <form style="width:100%"
+                    hx-post="{% url 'explorer:search' %}" 
+                    hx-trigger="keyup[keyCode==13]"
+                    hx-target="#explorer-search-results"
+                    hx-indicator="#explorer-search-results-indicator-wrapper,#explorer-search-results-wrapper">
+                    <textarea id="input-query" name="query" rows="1" placeholder="Tell us your issue, and we'll find a solution for you."
+                        hx-trigger="keyup[keyCode==13] from:body"></textarea>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search results -->
+    <div id="explorer-search-results-indicator-wrapper" class="htmx-indicator">
+        {% include 'components/loader.html' %}
+    </div>
+    <div id="explorer-search-results-wrapper">
+        <div id="explorer-search-results">
+        </div>
+    </div>
+
+    <!-- List of agents -->
+    <div class="row g-0">
+        <div class="col-12">
+            <h2>Agents & Tasks</h2>
+            {% if agents %}
+            <!-- Agents & Actions -->
+            <div style="width:100%;">
+                {% for agent in agents %}
+                {% include 'agents/card.html' with show_actions=1 %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="warning">
+                No agents found. This is probably due to a database connection problem.
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<script src="{% static 'js/llm_stream.js' %}"></script>
+<script>
+    const textarea = document.getElementById('input-query');
+    textarea.addEventListener('input', function () {
+        // Reset the height so the scrollHeight will decrease if lines are removed
+        this.style.height = 'auto';
+
+        // Adjust the height to the content (scrollHeight)
+        this.style.height = this.scrollHeight + 'px';
+    });
+    jQuery("#input-query").keydown(function(e) {
+        if (e.keyCode == 13 && !e.shiftKey) {
+            e.preventDefault();
+        }
+    })
+</script>

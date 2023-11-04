@@ -1,0 +1,52 @@
+<div class="row g-0 position-relative">
+    <div class="col">
+
+        <div class="project-card">
+
+            <div class="row g-0">
+                <div class="col my-auto">
+                    <!-- Project name -->
+                    <h1>{{project.name}}</h1>
+                </div>
+                <div class="col-auto text-end" style="z-index: 10;">
+                    <input id="input-source-{{project.pk}}" name="source" value="menu" hidden>
+                    <a href="#"
+                        hx-trigger="click"
+                        hx-target="#project-card-{{project.pk}}"
+                        hx-post="{% url 'projects:delete' project.pk %}">
+                        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-trash3-fill" %}
+                    </a>
+                </div>
+            </div>
+
+            <!-- Description -->
+            {% if show_description %}
+            <div class="agent_description">
+                <div class="row ps-4 pb-0 pe-4">
+                    <div class="col-12">
+                        {{project.description}}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="project-card-agent-profile">
+                {% include 'agents/message_profile.html' with size=2 padding_left=1 padding_right=0.5 agent=project.agent %}
+            </div>
+            
+            <input id="input-source-project-{{project.pk}}" name="source" value="menu" hidden>
+            <!--
+            We use hx-push-url because we don't want the parameters of get to be in the
+            url; this way the refresh on the browser works as expected
+            -->
+            <a class="stretched-link" href="#"
+                hx-get="{% url 'projects:read' project.id %}"
+                hx-indicator="#main-loader-wrapper,#main"
+                hx-include="#input-source-project-{{project.pk}}"
+                hx-target="#main"
+                hx-push-url="{% url 'projects:read' project.id %}"></a>
+
+        </div>
+
+    </div>
+</div>

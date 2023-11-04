@@ -1,0 +1,22 @@
+name = "Write Project Charter"
+description = "Write a project charter"
+definition = ""
+memory = "I wrote a project charter"
+
+[reply]
+name = "project_charter"
+type = "document"
+revise = true
+
+[prompt]
+text = """Act as a professional personal assistant.
+        
+Consider that you just wrote some important meeting minutes. Now you want to share it with the people that were present. They were all in the meeting. Could you write an email summarizing the minutes? This should be very brief, as others are already aware of the meeting and know the context. Just mention what they might find most interesting about the minutes. Consider that the minutes will be attached to the email.
+
+=== Meeting minutes
+
+{{meeting_minutes}}
+
+=== End of meeting minutes
+
+"""

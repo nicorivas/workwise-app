@@ -1,0 +1,21 @@
+<div {% if name %}id={{name}}{% endif %} class="icon-button
+{% if selected %}icon-button--selected {% endif %}
+{% if highlight %}icon-button--highlight {% endif %}
+{% if border %}icon-button--border{% endif %}
+{% if disabled %}icon-button--disabled{% endif %}
+{% if style == 'white' %}icon-button--white{% endif %}
+" 
+    {% if tooltip %}tooltip="{{tooltip}}"{% endif %}>
+    <div class="row g-0">
+        <div class="col-auto">
+            {% include 'components/iconComponent/icon.html' with size=size color=color icon=icon %}
+        </div>
+        {% if text %}
+        <div class="col my-auto">
+            <div class="icon-button__text">
+                {{text}}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>

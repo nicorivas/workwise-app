@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+
+<html lang="en">
+
+{% block head %}
+  {% include 'head.html' %}
+{% endblock %}
+
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+  <div class="container-fluid p-0">
+
+    {% include 'body_header.html' %}
+
+    <div class="row g-0">
+
+      <!-- Sidebar -->
+      <div id="sidebar" class="col-auto">
+        {% include 'body_sidebar.html' %}
+      </div>
+
+      <!-- Main -->
+      <div id="main" class="col">
+        {% block main-header %}
+        {% endblock %}
+        {% block content %}
+        {% endblock %}
+      </div>
+
+      <!-- Loading indicator -->
+      {% include 'components/loader_indicator.html' with id="main-loader-wrapper" col=1 %}
+
+    </div>
+
+  </div>
+
+  {% block javascript %}
+  {% endblock %}
+
+  <div id="forward">
+    {% block forward %}
+    {% endblock %}
+  </div>
+
+  {% include 'components/errorMessageComponent/errorMessage.html' %}
+  
+</body>
+
+</html>

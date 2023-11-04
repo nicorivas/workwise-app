@@ -1,0 +1,112 @@
+name = "Write Job Profile"
+description = "Write job profile"
+definition = ""
+memory = "I wrote a job profile"
+
+[reply]
+name = "job_profile"
+type = "document"
+revise = true
+
+[prompt]
+text = """Actúa como un encargado de recursos humanos de una empresa que debe construir el perfil de cargo de un empleado dentro de una compañía. 
+
+Para ello, debes considerar los siguientes aspectos:
+
+* Este perfil de cargo es para uso interno dentro del área de recursos humanos, y no es un aviso publicitario. Por ello es necesario que el perfil de cargo solicitado sea redactado en tercera persona.
+
+* Para esta tarea, es necesario que no existan sesgos discriminatorios en la redacción del perfil del cargo.
+
+* También es necesario que el perfil de cargo que escribas sea formal y detallado. 
+
+* El perfil del cargo debe contar exclusivamente con las siguientes categorías:
+
+# Título del puesto
+
+# Resumen del puesto
+
+# Objetivos y metas
+
+# Responsabilidades y tareas
+
+# Requisitos obligatorios
+
+# Reporte jerárquico
+
+# Evaluación del desempeño
+
+# Ubicación
+
+# Horario de trabajo
+
+# Tipo de contrato
+
+# Salario o rango salarial
+
+# Beneficios
+
+# Desarrollo profesional
+
+# Cultura organizacional
+
+# Fecha de inicio prevista
+
+# Duración del contrato
+
+# Requisitos legales y regulatorios
+
+# Otros requisitos específicos. 
+
+Para realizar la descripción de cargo, considera la siguiente transcripción de audio de las necesidades que tiene la empresa. Esta transcripción describe una necesidad de la empresa. Tu objetivo es determinar qué rol podría solucionar estos problemas, y completar la descripción antes descrita.
+
+{{job_role}}
+
+A fin de que este perfil de cargo sea acorde al funcionamiento de la empresa, se te proveerá de un documento delimitado por ///. Este documento entrega información relevante sobre el rubro y los objetivos de la empresa y debe ser considerado a la hora de construir el perfil de cargo. Necesito que uses la descripción de la empresa para escribir la descripción del cargo. Usa la descripción de la empresa para inferir información.
+
+Debes escribir [Completar] en caso de que en el texto delimitado por /// no exista información específica o literal para la redacción de las categorías de: Reporte jerárquico; Evaluación del desempeño; Ubicación, Horario de trabajo; Tipo de contrato; Salario o rango salarial; Beneficios; Fecha de inicio prevista; Duración del contrato; Requisitos legales y regulatorios; Otros requisitos específicos.
+
+/// Información de la empresa
+Misión
+
+Santander tiene la misión de ser el mejor banco, actuando de manera responsable y ganando la lealtad de nuestros clientes, accionistas, colaboradores y comunidades. Nuestro propósito es ayudar a las personas y empresas a progresar, con un estilo Simple, Personal y Fair.
+
+Simple es ofrecer a nuestros clientes productos fáciles de entender, siendo ágiles y resolutivos en las respuestas a sus necesidades. Para ello necesitamos que nuestros sistemas y procesos sean fáciles de operar, permitiendo a nuestros empleados entregar respuestas claras con la agilidad que nuestros clientes requieren.
+
+Personal es contar con modelos de atención diferenciados, ofreciendo a cada cliente un servicio a su medida y ajustado a sus necesidades individuales. Es también comprometernos con nuestros empleados para que desarrollen todo su potencial y consigan sus objetivos.
+
+Fair es jugar limpio, respetando y haciendo respetar las reglas. Es fairplay. Debemos ser transparentes en nuestras relaciones con los demás y cumplir nuestras promesas, siendo un aporte a la comunidad. En suma, debemos tratar a los demás como nos gustaría ser tratados.
+
+Valores
+
+Liderazgo
+
+Tenemos una vocación de liderazgo que nace de la valoración de nuestros clientes que están al centro de nuestro quehacer; de un país que nos ve como actores relevantes y comprometidos con su progreso, de nuestros equipos, quienes pueden desarrollarse plenamente y de nuestros accionistas a través de una institución sólida y estable en el tiempo.
+
+Excelencia en la gestión
+
+Nos gusta el trabajo bien hecho. Nos ponemos objetivos claros, desafiantes y compartidos que nos permiten desarrollar al máximo nuestras capacidades, con políticas de seguimiento y control, para ser el mejor banco para los clientes y para el país.
+
+Orientación al cliente
+
+Somos una empresa de servicio y el cliente es nuestra razón de ser. Trabajamos para generar soluciones que simplifiquen su vida y le permitan vivir la mejor experiencia de servicio con nosotros. Queremos cumplir sus sueños y hacer realidad sus ideas y proyectos en una relación duradera basada en la confianza y en la excelencia.
+
+Talento
+
+Promovemos la meritocracia, el trabajo en equipo y la autogestión, impulsando desempeños de excelencia. Reconocemos las potencialidades de cada persona y generamos oportunidades de desarrollo personal y profesional.
+
+Ética
+
+Desarrollamos nuestro trabajo, asumiendo tareas y responsabilidades con observancia y respeto a las leyes, tanto en su forma como en su espíritu. Evitamos que nuestras conductas individuales dentro o fuera de la institución, causen daño material o moral, comprometan o afecten la imagen, dignidad de las personas y del Grupo Santander.
+
+Compromiso con la sociedad
+
+Aportamos en la construcción de un mejor país a través de nuestra política de sostenibilidad y de la adhesión a los derechos fundamentales, la igualdad de oportunidades, la no discriminación, la protección del medio ambiente y el equilibrio entre la vida personal y laboral.
+/// Fin de información de la empresa
+
+Antes de imprimir el resultado, revisa la información y verifica que cumples cada una de las instrucciones solicitadas y que los términos están correctamente escritos.
+
+NO INCLUYAS UNA COPIA DE LA INFORMACIÓN DE LA EMPRESA EN TU RESPUESTA.
+
+Muy importante, por favor entrega tus resultados en formato Markdown.
+
+"""

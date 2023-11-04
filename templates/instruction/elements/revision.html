@@ -1,0 +1,40 @@
+<div class="
+instruction-element-revision
+document-revision-wrapper
+{% if hidden %}instruction-element-revision--hidden{% endif %}
+{% if element.instructionelementrevision.was_revised %}instruction-element-revision--revised{% endif %}
+" data-id="{{element.id}}"
+{% if name %}
+id="{{name}}"
+{% else %}
+id="instruction-element-revision-{{element.id}}"
+{% endif %}
+>
+    <div class="row g-0">
+        <div class="col p-0 m-0">
+            <div id="document-revision-element-{{element.pk}}" class="document-revision-element">
+                <div class="row g-0 document-revision-element-header">
+                    <div class="col document-revision-element-title">
+                        {{element.name}}
+                    </div>
+                    <div class="col-auto instruction-element-revision__header__revise-button">
+                        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-play-circle" text="Revise section" %}
+                    </div>
+                    <div class="col-auto instruction-element-revision__header__collapse">
+                        {% include 'components/iconComponent/icon.html' with icon="bi-chevron-down" color="#aaa" %}
+                    </div>
+                </div>
+                <div class="row g-0">
+                    <div class="col" id="test">
+                        <div class="document-revision-element-body">
+                            {% if element.instructionelementrevision.message %}
+                            {% include 'instruction/message.html' with message=element.instructionelementrevision.message %}
+                            {% endif %}
+                            <p>No message</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

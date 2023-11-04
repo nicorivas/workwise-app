@@ -1,0 +1,113 @@
+name = "Write Meeting Notes"
+description = "Write meeting notes"
+definition = ""
+memory = "I wrote a meeting note"
+
+[reply]
+name = "meeting_notes"
+type = "document"
+revise = true
+
+[prompt]
+text = """Act as an expert Strategic Management Consultant, with many years of experience.
+
+I want you to create a strategic plan for Banco Santander Chile. The plan should be for the next 3 years.
+I will give some information about the company, which you should consider thoroughly to construct the plan.
+Please include quantiative information that you could gather from these information in the plan. This could
+include quantiative goals or a quantiative summary of the current state of the company.
+
+Here is a summary of this company (in spanish):
+
+=== Company summary
+Banco Santander Chile es parte del Grupo Santander, su principal accionista con el 67,18% de la propiedad. Es una de las acciones más transadas del país, representa el 4,5% de los activos del Grupo y el 7,0% de la utilidad consolidada. Es una filial autónoma en financiamiento, capital y liquidez, y que responde a una gestión local, lo que la protege de los problemas generados por crisis externas. Se rige por un marco regulatorio robusto que fija estrictos límites a las operaciones con entidades relacionadas, y un sólido gobierno corporativo, con un directorio mayoritariamente externo y una activa participación en el negocio.
+
+Santander atiende las necesidades de todo tipo de clientes: personas con distintos niveles de ingreso, empresas de diferente tamaño, corporaciones privadas e instituciones públicas. Su cartera de préstamos está ampliamente diversificada en múltiples sectores de la economía, focalizándose en vivienda y consumo. Los créditos a personas constituyen el 61% de la cartera y el 39% corresponde a empresas y corporaciones. Además, cuenta con una gama extensa de productos para satisfacer las necesidades de sus clientes, así como una amplia red de distribución (sucursales, internet, call center, ATMs y mobile), con cobertura a lo largo de todo el país.
+
+Santander basa su actividad en Banca Comercial, que genera alrededor del 57% del resultado operacional neto. Es un banco con alta presencia en el segmento retail y que lidera el mercado en créditos de consumo e hipotecarios. Encabeza el ranking en número de cuentas corrientes, tarjetas bancarias y depósitos. Su amplia red de distribución permite atender a los más de 3,9 millones de clientes, lo que lo sitúa en el primer lugar.
+
+Banco Santander cuenta con 9.389 colaboradores que trabajan para alcanzar la misión de la institución, contribuir al progreso de las personas y de las empresas. Estos profesionales aseguran la sostenibilidad de la empresa a través de un clima interno con elevados niveles de satisfacción, una alta tasa de promoción y una amplia cobertura en formación. Santander impulsa una cultura centrada en el cliente, que integra criterios éticos y basa su actividad en tres conceptos fundamentales: Simple, Personal y Fair.
+
+Santander es el banco más eficiente de la plaza, constantemente buscando una asignación óptima de los recursos para satisfacer las necesidades de los clientes, a través de una organización simple.
+
+Banco Santander mantiene un perfil de riesgos medio-bajo y predecible de todos los riesgos que enfrenta. Se distingue por su diversificación de fondos, una sólida base de capital por encima del promedio del sistema, un balance comercial bien financiado y alta rentabilidad. Cuenta con un avanzado modelo de riesgos y principios de gestión prudentes, que se traducen en adecuados niveles de morosidad de la cartera y una buena cobertura de créditos dado el apetito de riesgo definido. La clasificación de riesgos del Banco, A1, es la misma que tiene el Gobierno de Chile.
+=== End of company summary
+
+Here are the corporate values of the company:
+
+=== Company values
+Valores
+
+Liderazgo
+
+Tenemos una vocación de liderazgo que nace de la valoración de nuestros clientes que están al centro de nuestro quehacer; de un país que nos ve como actores relevantes y comprometidos con su progreso, de nuestros equipos, quienes pueden desarrollarse plenamente y de nuestros accionistas a través de una institución sólida y estable en el tiempo.
+
+Excelencia en la gestión
+
+Nos gusta el trabajo bien hecho. Nos ponemos objetivos claros, desafiantes y compartidos que nos permiten desarrollar al máximo nuestras capacidades, con políticas de seguimiento y control, para ser el mejor banco para los clientes y para el país.
+
+Orientación al cliente
+
+Somos una empresa de servicio y el cliente es nuestra razón de ser. Trabajamos para generar soluciones que simplifiquen su vida y le permitan vivir la mejor experiencia de servicio con nosotros. Queremos cumplir sus sueños y hacer realidad sus ideas y proyectos en una relación duradera basada en la confianza y en la excelencia.
+
+Talento
+
+Promovemos la meritocracia, el trabajo en equipo y la autogestión, impulsando desempeños de excelencia. Reconocemos las potencialidades de cada persona y generamos oportunidades de desarrollo personal y profesional.
+
+Ética
+
+Desarrollamos nuestro trabajo, asumiendo tareas y responsabilidades con observancia y respeto a las leyes, tanto en su forma como en su espíritu. Evitamos que nuestras conductas individuales dentro o fuera de la institución, causen daño material o moral, comprometan o afecten la imagen, dignidad de las personas y del Grupo Santander.
+
+Compromiso con la sociedad
+
+Aportamos en la construcción de un mejor país a través de nuestra política de sostenibilidad y de la adhesión a los derechos fundamentales, la igualdad de oportunidades, la no discriminación, la protección del medio ambiente y el equilibrio entre la vida personal y laboral.
+=== End of company values
+
+Here is the mission of the company:
+
+=== Company pillars
+Misión
+
+Santander tiene la misión de ser el mejor banco, actuando de manera responsable y ganando la lealtad de nuestros clientes, accionistas, colaboradores y comunidades. Nuestro propósito es ayudar a las personas y empresas a progresar, con un estilo Simple, Personal y Fair.
+
+Simple es ofrecer a nuestros clientes productos fáciles de entender, siendo ágiles y resolutivos en las respuestas a sus necesidades. Para ello necesitamos que nuestros sistemas y procesos sean fáciles de operar, permitiendo a nuestros empleados entregar respuestas claras con la agilidad que nuestros clientes requieren.
+
+Personal es contar con modelos de atención diferenciados, ofreciendo a cada cliente un servicio a su medida y ajustado a sus necesidades individuales. Es también comprometernos con nuestros empleados para que desarrollen todo su potencial y consigan sus objetivos.
+
+Fair es jugar limpio, respetando y haciendo respetar las reglas. Es fairplay. Debemos ser transparentes en nuestras relaciones con los demás y cumplir nuestras promesas, siendo un aporte a la comunidad. En suma, debemos tratar a los demás como nos gustaría ser tratados.
+=== End of company pillarssumm
+
+This is very important: please provide your answer in Spanish.
+
+This is very important: please provide your answer in the following Markdown format:
+
+# Title
+
+## Resumen Ejecutivo
+
+## Análisis de la Situación Actual
+
+## Objetivos Estratégicos
+
+### Objetivo 1
+
+### Objetivo 2
+
+### Objetivo 3
+
+## Estrategias
+
+### Estrategia 1
+
+### Estrategia 2
+
+### Estrategia 3
+
+## Implementación y Control
+
+## Plan de Acción
+
+## Indicadores de Desempeño (KPIs)
+
+## Plan de Comunicación
+
+"""

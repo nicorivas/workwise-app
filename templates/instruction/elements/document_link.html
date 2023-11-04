@@ -1,0 +1,28 @@
+<div class="row g-0 mb-0">
+  <div class="col p-0">
+    <button type="button" class="instruction-element-dropdown" style="height:100%;width:100%;position:relative;">
+      <p class="instruction-input" id="selected-document-{{element.pk}}" name="{{element.name}}" value="{{element.instructionelementdocumentlink.document.pk}}">
+        {% if element.instructionelementdocumentlink.document %}
+        {{element.instructionelementdocumentlink.document.name}}
+        {% else %}
+        {{element.instructionelementdocumentlink.label}}
+        {% endif %}  
+      </p>
+      <div class="dropdown-menu-w" id="documents-dropdown-{{element.pk}}" style="display: none;">
+        <!-- Dropdown div, activated when button is clicked, containing list of documents -->
+        <form>
+          <!-- Instruction id hidden input -->
+          <input name="instruction_id" value="{{instruction.pk}}" type="hidden">
+          <!-- Element id hidden input -->
+          <input name="instruction_element_id" value="{{element.pk}}" type="hidden">
+          <div
+            hx-trigger="load"
+            hx-target="#documents-dropdown-{{element.pk}}"
+            hx-get="{% url 'instruction:element_document_link' instruction.pk element.pk %}"
+            hx-swap="innerHTML">
+          </div>
+        </form>
+      </div>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<!-- Tasks -->
+<div id="task-table-wrapper">
+    <div class="row g-0">
+        <div class="col">
+            <b>Name</b>
+        </div>
+        <div class="col">
+            <b>Project</b>
+        </div>
+        <div class="col">
+            <b>Action</b>
+        </div>
+    </div>
+    {% for task in tasks %}
+    <div class="row g-0 mt-1 mb-1">
+        <div class="col">
+            <a href="{% url 'task:read' task.pk %}">{{task.name}}</a>
+        </div>
+        <div class="col">
+            {{task.project.name}}
+        </div>
+        <div class="col">
+            {{task.action.name}}
+        </div>
+    </div>
+    {% endfor %}
+</div>

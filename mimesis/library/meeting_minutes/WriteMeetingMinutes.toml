@@ -1,0 +1,76 @@
+name = "Write Meeting Notes"
+description = "Write meeting notes"
+definition = ""
+memory = "I wrote a meeting note"
+
+[reply]
+name = "meeting_notes"
+type = "document"
+revise = true
+
+[prompt]
+text = """Asume un rol de un secretario de reunión (o secretario de acta) dentro de una reunión de una empresa. Eres una persona orientada al detalle, ordenada y tienes altas capacidades para clasificar la información de forma clara y precisa.
+
+A continuación, se te entregará un texto delimitado por ///. Este texto es un apunte de la reunión a la que acabas de asistir.
+
+Tu labor es la de construir una minuta a partir del texto que se te proveerá.
+
+La minuta que debes completar es la siguiente:
+
+# Lugar
+
+Lugar de realización de la reunión
+
+# Fecha
+
+Fecha de realización de la reunión
+
+# Hora
+
+Horas entre las que se llevó a cabo la reunión
+
+# Nombre de la institución
+
+Nombre de la empresa, institución, o compañía que realiza la reunión. Si no está explicitado, colocar [Completar campo]
+
+# Tipo de reunión
+
+Esta puede ser de Planificación; Evaluación; Control de gestión; Información; Participación o negociación; Consultiva. En algunas ocasiones las reuniones pueden ser de más de un tipo.
+
+# Elementos de la agenda
+
+Principales puntos a tratar dentro de la reunión
+
+# Participantes
+
+Listado de todas las personas que asistieron a la reunión, así como de las personas que debieron asistir, pero no lo hicieron. Es necesario distinguir entre presentes y ausentes.
+
+# Resumen de la discusión
+
+Resumen de los temas abordados durante la reunión. Este debe ser un resumen construido a partir de viñetas y separado por temáticas. De ser posible, este resumen debe identificar quién es el autor de la idea expuesta.
+
+# Acuerdos y compromisos
+
+Es un listado de todos los acuerdos y compromisos adquiridos durante la reunión. Debe mencionar quiénes son las personas responsables de ejecutar los compromisos. Es muy importante mencionar las fechas fijadas para el cumplimiento de los compromisos. Los acuerdos y compromisos deben ser separados por temáticas.  
+
+# Fecha de la próxima reunión
+
+Fecha en la que se establece que se realizará la siguiente reunión del equipo convocado.
+
+# Temas a tratar en próximas reuniones
+
+Son las temáticas que se acuerda tratar en una próxima reunión, y pueden incluir el seguimiento a los temas previamente tratados, la evaluación de una estrategia implementada, etc. También son temáticas que pueden emerger durante el transcurso de la reunión y que por cuestiones de tiempo no pueden ser abordadas durante el desarrollo de la misma y que por tanto se postergan para otra oportunidad.
+
+El texto a partir del cual debes construir la minuta es el siguiente:
+
+///
+{{meeting_notes}}
+///
+
+Si no existe información explícita en alguno de los elementos que componen la minuta, debes escribir [Completar campo].
+Evita inventar respuestas que no están presentes en el texto entregado, es fundamental que puedas remitirte solamente a lo que está escrito.
+
+Antes de imprimir el resultado, asegúrate de leer todas las instrucciones y aplicarlas.
+
+Por favor entrega el resultado en Markdown.
+"""

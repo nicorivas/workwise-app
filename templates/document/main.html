@@ -1,0 +1,64 @@
+<!-- Header -->
+{% include 'index_header.html' with a="Documents" b="Pages" %}
+
+<!-- Nav -->
+{% include 'document/index_nav.html' with no_title=1 %}
+
+<div class="p-3">
+
+    <!-- Toolbar -->
+
+    <div class="row g-0 mb-3 toolbar">
+        <!-- Upload document -->
+        <div class="col-auto">
+            <div class="row g-0">
+                <div class="toolbar_element" data-bs-toggle="modal" data-bs-target="#create_document_modal">
+                    <div class="col-auto my-auto">{% include 'components/iconButtonComponent/iconButton.html' with icon="bi-plus-circle" text="Upload document" %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'document/create_document_modal.html' %}
+
+    <div class="p-4" style="width:800px;background-color: #fff;font-size:0.9em;">
+        <table id="myTable" class="table table-striped display">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Agent</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% block javascript %}
+<script>
+    jQuery(document).ready(function () {
+        jQuery('#myTable').DataTable({
+            ajax: {
+                url: "{% url 'document:index_json' %}",
+                dataSrc: "data"
+            },
+            columns: [
+                {
+                    "data": "name",
+                    "render": function(data, type, row, meta) { return '<a href='+row.pk+'/view>'+row.name+'</a>'; }
+                },
+                { "data": "type" },
+                {
+                    "data": "author_agent__type__name",
+                    "render": function(data, type, row, meta) { return data; }
+                },
+            ],
+            "bLengthChange": false,
+            "bFilter": true,
+        });
+    });
+</script>
+{% endblock %}

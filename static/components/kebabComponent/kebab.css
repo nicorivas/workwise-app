@@ -1,0 +1,50 @@
+.kebab {
+    position: relative;
+    display: inline-block;
+}
+
+.kebab__menu {
+    position: absolute;
+    z-index: 1000;
+    min-width: 10rem;
+    margin: 0;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    width: 100%;
+    top: 25px;
+    text-align: left;
+    box-shadow: 0px 3px 10px 0px #ddd;
+}
+
+.kebab__menu--left {
+    left: 0;
+}
+
+.kebab__menu--right {
+    right: 10px;
+}
+
+.kebab__menu__item {
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    display: flex;
+    align-items: center;
+}
+
+.kebab__menu__item p {
+    margin: 0;
+    margin-left: 0.5em;
+}
+
+.kebab__menu__item:hover {
+    background-color: #f6f6f6;
+}
+
+.kebab__menu__item__template {
+    display: none;
+}

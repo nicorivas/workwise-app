@@ -1,0 +1,15 @@
+<div class="row shadow m-0 p-0" style="border: 1px solid #aaa;width:500px;">
+    <div class="col bg-light">
+{% for action in instruction.get_possible_actions %}
+        <div class="action row p-2"
+            hx-post="{% url 'projects:select_action' instruction.task.pk instruction.pk action.pk %}"
+            hx-target="#instruction_{{instruction.pk}}"
+            hx-trigger="click">
+            <div class="col">
+                <div style="font-size:0.9em;font-weight:600;">{{action.name}}</div>
+                <div style="font-size:0.9em;">{{action.description}}</div>
+            </div>
+        </div>
+{% endfor %} 
+    </div>    
+</div>

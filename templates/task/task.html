@@ -1,0 +1,76 @@
+{% load static %}
+{% include 'index_header.html' with task=task %}
+
+<div class="row g-0">
+  <div class="col" id="task-wrapper" data-id="{{task.pk}}">
+
+    <div class="row g-0">
+      
+      <!-- Task instructions -->
+      <div class="col-auto sidebar collapsed" id="task-instructions-wrapper">
+
+        <div class="row g-0">
+
+          <!-- Toolbar -->
+          <div class="col-auto vertical-toolbar" id="instructions-sidebar-tools-wrapper">
+            {% include 'task/instructions_toolbar.html' %}
+          </div>
+
+          <!-- Instructions -->
+          <div class="col">
+            <div class="row g-0">
+              <div class="col" id="instructions-sidebar-instructions-wrapper">
+                {% include 'task/instructions.html' with project=task.project step=1 %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Task documents -->
+      <div class="col" style="display: flex; justify-content: center;">
+        <div id="project-documents">
+          {% include 'task/documents.html' %}
+        </div>
+      </div>
+
+      <!-- Task formats -->
+      <div class="col-auto sidebar collapsed" id="task-formats-wrapper">
+
+        <div class="row g-0">
+
+          <!-- Toolbar -->
+          <div class="col-auto vertical-toolbar" id="formats-sidebar-tools-wrapper">
+            {% include 'task/formats_toolbar.html' %}
+          </div>
+
+          <!-- Formats -->
+          <div class="col">
+            <div class="row g-0">
+              <div class="col" id="instructions-sidebar-formats-wrapper">
+                {% include 'task/formats.html' with project=task.project step=1 %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% include 'document/create_document_modal.html' with task=task %}
+
+<script type="module">
+  import TaskView from "{% static 'components/task.js' %}";
+  let taskView = new TaskView("#task-wrapper");
+</script>
+
+<script>
+
+  let mediaRecorder;
+  let chunks = [];
+  
+</script>

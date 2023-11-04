@@ -1,0 +1,21 @@
+<div id="{{name}}" class="radio-buttons">
+
+    <!-- Template item, used to add item dynamically -->
+    <div class="radio-buttons__button radio-buttons__button--template">
+        <input type="radio" class="radio-buttons__button__input btn-check" name="{{name}}" value="{{forloop.counter}}" id="{{name}}-template">
+        <label class="radio-buttons__button__label" for="{{name}}-template">
+        {% include 'components/buttonComponent/button.html' with radio=1 name="template" %}
+        </label>
+    </div>
+
+    {% for item in items %}
+    <div class="radio-buttons__button">
+        <input type="radio" class="btn-check" name="{{name}}" value="{{forloop.counter}}" id="{{name}}-{{forloop.counter}}">
+        <label for="{{name}}-{{forloop.counter}}">
+        {% include 'components/buttonComponent/button.html' with radio=1 label=item.name %}
+        </label>
+    </div>
+    {% endfor %}
+
+
+</div>

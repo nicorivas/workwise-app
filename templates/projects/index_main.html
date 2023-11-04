@@ -1,0 +1,35 @@
+{% load static %}
+
+{# include 'index_header.html' with projects=1 project=null #}
+
+<div id="projects" class="projects" data-project="{{project.pk}}">
+
+    <div class="row g-0">
+        
+        <!-- List of projects -->
+        <div class="col-auto">
+            {% include 'components/listComponent/list.html' with name="projects-list" %}
+        </div>
+
+        <!-- Details of projects -->
+        <div class="col">
+            <div id="project" data-id="{{project.pk}}">
+                <!-- Loaded by js/AJAX, see project.js -->
+            </div>
+
+            <div id="project-indicator">
+                {% include 'components/loader_indicator.html' %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modal for creation of projects -->
+{% include 'projects/create_project_modal.html' with form=project_create_form %}
+
+<script type="module">
+    import ProjectsView from "{% static 'views/projectsView/projects.js' %}";
+    let projectView = new ProjectsView("#projects");
+</script>

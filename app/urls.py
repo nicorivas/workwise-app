@@ -19,11 +19,14 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from .api import *
+from .routing import router
 
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
-    path("", include("explorer.urls")),
     path("logout", views.logout_view, name="logout"),
+    path("", views.main, name="main"),
+    path("explorer/", include("explorer.urls")),
     path("actions/", include("actions.urls")),
     path("company/", include("company.urls")),
     path("agents/", include("agents.urls")),
@@ -31,8 +34,14 @@ urlpatterns = [
     path("document/", include("document.urls")),
     path("instruction/", include("instruction.urls")),
     path("chat/", include("chat.urls")),
+    path("task/", include("task.urls")),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('allauth.socialaccount.urls')),
     path('header-company/', views.header_company, name="header_company"),
+    path('test/', views.test, name="test"),
+    path('component/<str:component>/', views.component, name="component_selector"),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('socket-test/', views.socket_test, name="socket-test"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

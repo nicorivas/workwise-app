@@ -1,0 +1,42 @@
+<div id="selector-{{name}}" class="selector
+{% if size == 1 %}selector--small{% endif %}
+{% if highlight == 1 %}selector--highlight{% endif %} selector--active
+">
+
+    <div class="row g-0 selector__selected-item" id="selector__selected-item-{{name}}">
+
+        <div class="col-auto">
+            <div class="selector__selected-item-prefix">
+                <div class="row g-0">
+                    <div class="col-auto">
+                        {% include 'components/iconComponent/icon.html' with size=size color="#aaa" icon=icon backgroundcolor="#fff" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col my-auto selector__selected-item-text-container">
+            <p class="selector__selected-item-text">{{text}}</p>
+        </div>
+
+        <div class="col-auto my-auto selector__selected-item-suffix">
+            {% include 'components/iconComponent/icon.html' with icon="bi-chevron-down" size=-2 color="#aaa" %}
+        </div>
+
+    </div>
+
+    <div class="selector__items-container {% if size == 1 %}selector__items-container--small{% endif %}" id="selector-items-{{name}}">
+        {% for item in items %}
+        <div id="selector-item-{{item.pk}}" class="row g-0 selector__item {% if size == 1 %}selector__item--small{% endif %}" data-id="{{item.pk}}">
+
+            <div class="col-auto">
+                <div class="selector__item-prefix">
+                </div>
+            </div>
+
+            <div class="col selector__item-text">{{item.name}}</div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>

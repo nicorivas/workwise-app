@@ -1,0 +1,8 @@
+<div class="col me-2">
+    {% include 'components/selectorComponent/selector.html' with name="documents" icon="bi-view-list" size=2 text=task.active_document.name items=task.documents callback="documentRead" %}
+</div>
+<div class="col-auto">
+    <div id="create-document-button-open-modal" data-bs-toggle="modal" data-bs-target="#create-document-modal">
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-plus-circle" size=2 border=1 backgroundcolor="#fff" %}
+    </div>
+</div>

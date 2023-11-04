@@ -2,6 +2,6 @@
 
 python manage.py runserver
 
-Define the settings file to use:
+Running the docker:
 
-`conda env config vars set DJANGO_SETTINGS_MODULE=app.settings_dev_prod`
+docker run -dp 8000:8000 workwiseapp

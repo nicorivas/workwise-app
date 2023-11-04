@@ -1,0 +1,67 @@
+    <!-- Header Normal -->
+    <div class="row g-0 instruction__header" id="instruction-header-{{instruction.pk}}" style="{% if possible %}display:none;{% endif %}">
+
+        <!-- Name -->
+        <div class="col instruction__header__name">
+            {% if instruction.template %}
+                <input name="action" value="{{action.pk}}" type="hidden">
+                <input name="name" value="{{instruction.type.name}}" type="text" class="instruction__header__name__input"
+                    style="width:90%"
+                    hx-trigger="change"
+                    hx-post="{% url 'instruction:type_update' instruction.type.pk %}"
+                    hx-swap="none" {% if not edit %}disabled{% endif %}>
+            {% else %}
+                <h2>{{instruction.type.name}}</h2>
+            {% endif %}
+        </div>
+        {% if instruction.template and edit %}
+
+        <!-- Add Instruction Elements -->
+        <div class="col-auto my-auto" _="on click toggle the *display of #instruction-element-types-dropdown-{{instruction.pk}} end">
+            <form>
+                <input name="type" value="1" type="hidden">
+                <input name="instruction_type" value="{{instruction.type.pk}}" type="hidden">
+                <input name="name" value="Default" type="hidden">
+                <div class="my-auto">
+                    {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-plus-circle" %}
+                </div>
+            </form>
+
+            <!-- Div dropdown containing all the instruction element types that could be added -->
+            <div class="dropdown-menu-w" id="instruction-element-types-dropdown-{{instruction.pk}}" _="init hide me end on click elsewhere hide me end">
+                {% for element_type in element_types %}
+                <form>
+                    <input name="type" value="{{element_type.pk}}" type="hidden">
+                    <input name="instruction_type" value="{{instruction.type.pk}}" type="hidden">
+                    <input name="name" value="Default" type="hidden">
+                    <a class="dropdown-item" href="#"
+                        hx-trigger="click"
+                        hx-post="{% url 'instruction:element_create' instruction.pk %}"
+                        hx-target="#instruction-body-{{instruction.pk}}">
+                        {{element_type.label}}
+                    </a>
+                </form>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Options dropdown -->
+        <div class="col-auto my-auto">
+            {% include 'components/kebabComponent/kebab.html' with name="kebab" %}
+        </div>
+        <!--
+        <div class="col-auto trash my-auto"
+            hx-delete="{# url 'instruction:delete' instruction.pk #}"
+            hx-include="[id='project_id']"
+            hx-swap="none"
+            _="on click 
+                toggle .possible on the closest <div.instruction/> then 
+                toggle the *display of #instruction-body-{{instruction.pk}} then
+                toggle the *display of #instruction-header-{{instruction.pk}} then 
+                toggle the *display of #instruction-header-possible-{{instruction.pk}} end">
+            {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-three-dots" %}
+        </div>
+        -->
+        
+    </div>

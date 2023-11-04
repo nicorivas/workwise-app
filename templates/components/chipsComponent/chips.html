@@ -1,0 +1,31 @@
+<!--
+    @param name: string to be used as id suffix
+    @param label: text to describe options
+    @param items: array of objects with pk and name attributes
+-->
+
+<div id="chips-{{name}}" class="chips">
+    
+    <div class="chips__label">
+        <p>{{label}}</p>
+    </div>
+
+    <div class="chips__chip-container">
+        {% for item in items %}
+        <div id="chips--chip-{{item.id}}" class="chips__chip instruction-input" data-id="{{item.id}}" name="{{item.name}}" value="0">
+
+            <div class="chips__chip-prefix">
+            </div>
+
+            <div class="chips__chip-body">
+                {{item.name}}
+            </div>
+
+            <div class="chips__chip-suffix">
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>

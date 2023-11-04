@@ -22,7 +22,7 @@ class InstructionUpdateForm(forms.ModelForm):
         model = Instruction
         fields = ["type"]
 
-from .models.instruction_element import InstructionElement, InstructionElementMessage, InstructionElementTextInput, InstructionElementAgentCall
+from .models.instruction_element import InstructionElement, InstructionElementMessage, InstructionElementTextInput, InstructionElementAgentCall, InstructionElementDocumentLink, InstructionElementRevise, InstructionElementChoices
 
 class InstructionElementCreateForm(forms.ModelForm):
     class Meta:
@@ -32,17 +32,22 @@ class InstructionElementCreateForm(forms.ModelForm):
 class InstructionElementUpdateForm(forms.ModelForm):
     class Meta:
         model = InstructionElement
-        fields = ["name","guide","index"]
+        fields = ["name", "guide", "index"]
 
 class InstructionElementMessageUpdateForm(forms.ModelForm):
     class Meta:
         model = InstructionElementMessage
-        fields = ["message"]
+        fields = ["message", "index"]
 
 class InstructionElementTextInputUpdateForm(forms.ModelForm):
     class Meta:
         model = InstructionElementTextInput
-        fields = ["message", "audio"]
+        fields = ["name", "message", "audio", "index"]
+
+class InstructionElementReviseUpdateForm(forms.ModelForm):
+    class Meta:
+        model = InstructionElementRevise
+        fields = ["name", "button_label", "by_section"]
 
 class InstructionElementAgentCallUpdateForm(forms.ModelForm):
 
@@ -58,3 +63,15 @@ class InstructionElementAgentCallUpdateForm(forms.ModelForm):
             """
             super(InstructionElementAgentCallUpdateForm, self).__init__(*args, **kwargs)     
             self.fields['mimesis_action'] = ChoiceField(choices=Library.get_all())
+
+class InstructionElementDocumentLinkUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = InstructionElementDocumentLink
+        fields = ["name","index","label"]
+
+class InstructionElementChoicesUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = InstructionElementChoices
+        fields = ["name","index","choices"]

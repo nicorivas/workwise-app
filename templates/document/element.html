@@ -1,0 +1,28 @@
+{% load static %}
+{% load markdown_extras %}
+
+<div id="document-element-{{document_element.pk}}" class="document-element">
+    <div id="{{document_element.title_for_html}}" class="row g-0">
+        <div class="col-11 my-auto content">
+            {% if document_element.html %}
+                {{ document_element.html | safe }}
+            {% elif document_element.markdown %}
+                {{ document_element.markdown | markdown | safe }}
+            {% else %}
+                {{ document_element.text}}
+            {% endif %}
+        </div>
+        <div class="col-1 my-auto revision">
+            <div class="comment-container" style="position:relative;">
+                {% for comment in document_element.comment_set.all %}
+                    <button type="button" class="btn p-0 m-0 rounded-circle lightbulb {{comment.consider|yesno:'lightbulb-green,lightbulb-yellow'}}" style="line-height: 1;min-height:30px; min-width:30px;" onClick="show_comment('{{comment.pk}}')" data-arg1="a">
+                        <div class="align-middle" style="margin-top:0.1em;">
+                                <i class="bi bi-lightbulb-fill"></i>
+                        </div>
+                    </button>
+                {% include 'document/element_comment.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

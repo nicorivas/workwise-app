@@ -4,7 +4,7 @@ from django.views import View
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 
-from ..models import Instruction, InstructionType, InstructionElementAgentCall, InstructionElementMessage, InstructionElementTextInput
+from ..models import Instruction, InstructionType, InstructionElementAgentCall, InstructionElementMessage, InstructionElementTextInput, InstructionElementDocumentLink, InstructionElementRevise
 from ..forms import InstructionTypeCreateForm, InstructionTypeUpdateForm, InstructionElementCreateForm
 from ..views import InstructionIndexView
 
@@ -17,7 +17,7 @@ class InstructionTypeCreateView(View):
         JsonResponse: The id of the new InstructionType.
     """
     def post(self, request):
-        print(request.POST)
+        print("InstructionTypeCreateView.post", request.POST)
         response = HttpResponse()
         form = InstructionTypeCreateForm(request.POST)
         if form.is_valid():
@@ -26,7 +26,7 @@ class InstructionTypeCreateView(View):
             instruction = Instruction(type=instruction_type, template=True)
             instruction.save()
             url = reverse("instruction:index")
-            querystring = urllib.parse.urlencode({"action":instruction_type.action.pk,"template":"1"})
+            querystring = urllib.parse.urlencode({"action":instruction_type.action.pk,"template":"1","edit":"1"})
             return HttpResponseRedirect(f"{url}?{querystring}")
         
         return JsonResponse({"error": "Form is not valid"})
@@ -41,7 +41,9 @@ class InstructionTypeReadView(View):
         instruction_element_create_form = InstructionElementCreateForm()
         instruction_elements = list(InstructionElementAgentCall.objects.filter(instruction_type=instruction_type)) \
             + list(InstructionElementMessage.objects.filter(instruction_type=instruction_type)) \
-            + list(InstructionElementTextInput.objects.filter(instruction_type=instruction_type))
+            + list(InstructionElementTextInput.objects.filter(instruction_type=instruction_type)) \
+            + list(InstructionElementDocumentLink.objects.filter(instruction_type=instruction_type)) \
+            + list(InstructionElementRevise.objects.filter(instruction_type=instruction_type))
         instruction_elements.sort(key=lambda x: x.index)
         context = {
             "action": action

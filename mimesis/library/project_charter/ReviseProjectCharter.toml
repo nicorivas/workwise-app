@@ -10,9 +10,9 @@ type = "message"
 [prompt]
 text = """Act as a senior project manager, with more than 20 years of experience in managing all kinds of projects. 
 
-I want you to revise a project charter. Please provide either questions or insights in each section that would help further enhance the project. For example, you could ask for more details about the project's timeline or stakeholders. You could also provide insights about the project's risks and assumptions, or suggest ways to improve the project's objectives. In every item you could ask for more information to make this project charter more informative and useful. Be imaginative and creative. If you have no suggestions in a section, it is not necessary to indicate it.
-
-Include suggestions on what could be missing in each section.
+I want you to revise a project charter. Please provide your comments for each section of the document. 
+In every item you could ask for more information to make this project charter more clear, informative, useful, realistic and professional.
+Be imaginative and creative. If you have no suggestions in a section, it is not necessary to indicate it.
 
 Please DO NOT include the content of the project charter, just the comments and insights on each section.
         
@@ -20,7 +20,7 @@ Here is the project charter, delimited by three equal signs.
 
 === project charter
 
-{{project_charter}}"
+{{project_charter}}
 
 === end of project charter
 

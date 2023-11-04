@@ -4,7 +4,7 @@ if TYPE_CHECKING:  # Only imports the below statements during type checking
     from mimesis.agent.agent import Agent
 
 from abc import abstractmethod
-from typing import Any #Dict, List, Optional, Sequence, Tuple, Union
+from typing import Any, Union #Dict, List, Optional, Sequence, Tuple, Union
 from mimesis.prompt.prompt import PromptTemplate
 import tomllib
 
@@ -13,6 +13,7 @@ from pydantic import BaseModel
 class ActionReply(BaseModel):
     type: str
     name: str
+    revise: bool = False
 
 class Action(BaseModel):
     """Abstract Action class
@@ -21,13 +22,13 @@ class Action(BaseModel):
         name (str): Name of the action
         description (str): Description of the action
         definition (str): Definition of the action
-        reply_type (str): Type of reply to be returned
+        reply (str): Type of reply to be returned
         reply_name (str): Name of the reply to be returned
     """
     name: str
     description: str
     definition: str
-    reply: ActionReply
+    reply: Union[ActionReply,None] = None
     prompt: PromptTemplate
     memory: str
 

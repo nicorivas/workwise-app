@@ -1,0 +1,171 @@
+{% include 'index_header.html' with project=project task=task %}
+
+<div class="row g-0">
+  <div class="col" id="project-wrapper">
+
+    <div class="row g-0">
+
+      <!-- Tasks -->
+      <!-- Hyperscript: trigger selection of first toolbar button (usually 'Write') -->
+      <div class="col-auto" id="project-tasks-wrapper">
+
+        <!-- Task selector -->
+        <div class="row g-0" id="project-task-selector-wrapper">
+          <div class="col me-2">
+            {% include 'components/selector.html' with name="tasks" icon="bi-view-list" size=2 text=task.name items=tasks callback="taskRead" %}
+          </div>
+          <div class="col-auto">
+            <div id="create-task-button-open-modal" data-bs-toggle="modal" data-bs-target="#create-task-modal">
+              {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-plus-circle" size=2 border=1 %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Task indicator -->
+        <div id="project-task-indicator" class="htmx-indicator">
+          <div style="display:flex; align-items: center; justify-content: center; margin-top: 1em;">
+            {% include 'components/loader.html' %}
+          </div>
+        </div>
+
+        <!-- Task -->
+        <div id="project-task-wrapper">
+        </div>
+
+      </div>
+
+      <!-- Task documents -->
+      <div class="col" style="display: flex; justify-content: center;">
+        <div id="project-documents-wrapper">
+
+          {% include 'task/documents.html' %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% include 'task/create_task_modal.html' with form=task_create_form project=project %}
+
+{% include 'document/create_document_modal.html' with task=task %}
+
+<script>
+
+  let mediaRecorder;
+  let chunks = [];
+
+  function taskRead(task) {
+    // String is converted once on function definition, so it is always with 0.
+    // We then replace the 0 with the proper task id we get as parameter.
+    // This is done to use the django template tag to get the url.
+    url = `{% url 'task:read' 0 %}`;
+    // Show loading
+    jQuery("#project-task-indicator").addClass("htmx-request");
+    // Hide task
+    jQuery("#project-task-wrapper").hide();
+    // Call task:read
+    jQuery.ajax({
+      url: url.replace("0", task),
+      type: "GET",
+      success: function (data) {
+        // Replace wrapper with task data
+        jQuery("#project-task-wrapper").html(data);
+      },
+      error: function (xhr, errmsg, err) {
+        console.log(xhr.status + ": " + xhr.responseText);
+      },
+      complete: function () {
+        // Hide loading
+        jQuery("#project-task-indicator").removeClass("htmx-request");
+        // Show task
+        jQuery("#project-task-wrapper").show();
+        htmx.process(jQuery("#project-task-wrapper")[0]);
+      }
+    });
+  }
+
+  function documentRead(document) {
+    // String is converted once on function definition, so it is always with 0.
+    // We then replace the 0 with the proper document id we get as parameter.
+    // This is done to use the django template tag to get the url.
+    url = `{% url 'document:read' 0 %}`;
+    // Show loading
+    jQuery("#project-document-indicator").addClass("htmx-request");
+    // Hide document
+    jQuery("#project-document-wrapper").hide();
+    // Call document:read
+    jQuery.ajax({
+      url: url.replace("0", document),
+      type: "GET",
+      success: function (data) {
+        // Replace wrapper with document data
+        jQuery("#project-document-wrapper").html(data);
+      },
+      error: function (xhr, errmsg, err) {
+        console.log(xhr.status + ": " + xhr.responseText);
+      },
+      complete: function () {
+        // Hide loading
+        jQuery("#project-document-indicator").removeClass("htmx-request");
+        // Show document
+        jQuery("#project-document-wrapper").show();
+      }
+    });
+  }
+
+  function documentCreate(task) {
+    jQuery.ajax({
+      url: "{% url 'document:create' %}",
+      type: "POST",
+      data: {
+        task: task
+      },
+      success: function (data) {
+        // Replace wrapper with document data
+        console.log("Document created");
+        jQuery("#project-documents-wrapper").html(data);
+      },
+      error: function (xhr, errmsg, err) {
+        console.log(xhr.status + ": " + xhr.responseText);
+      },
+      complete: function () {
+        // Hide loading
+        //jQuery("#project-document-indicator").removeClass("htmx-request");
+        // Show document
+        //jQuery("#project-document-wrapper").show();
+      }
+    });
+  }
+
+  // Load task on initial project load
+  taskRead({{ task.id }});
+
+  jQuery(document).click(function (event) {
+    if (!jQuery(event.target).closest('.actions-dropdown').length) {
+      jQuery(".actions-list").hide();
+    }
+  });
+
+  // Function to hide the dropdown when the user clicks outside of it
+  document.addEventListener('click', function (event) {
+    /*
+    const dropdownContent = document.getElementBy('actions-dropdown');
+    var toggleButton = document.querySelector('#actions-list');
+
+    // Check if the clicked element is outside the dropdown and the toggle button
+    if (!dropdownContent.contains(event.target) && event.target !== toggleButton) {
+      // Send a request to hide the dropdown
+      jQuery("#actions-list").hide();
+    }
+    */
+
+    jQuery(".comment").each(function () {
+      // if the target of the click isn't the container nor a descendant of the container
+      if (!jQuery(this).is(event.target) && !event.target.closest(".lightbulb") && jQuery(this).has(event.target).length === 0) {
+        jQuery(this).hide();
+      }
+    });
+  });
+</script>

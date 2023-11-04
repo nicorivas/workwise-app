@@ -11,10 +11,13 @@ class InstructionType(models.Model):
         action (Action): The action that this instruction belongs to.
         previous_instruction (Instruction): The previous instruction that this instruction depends on.
     """
+    index = models.IntegerField(default=0)
     name = models.CharField(max_length=255)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     description = models.TextField(default="", null=True, blank=True)
     previous_instruction = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    step = models.IntegerField(choices=[(0,"Write"),(1,"Revise"),(2,"Modify")], default=0)
+    style = models.CharField(max_length=64, choices=[("normal","normal"),("seamless","seamless")], default="normal")
 
     def __str__(self):
         return f"Instruction Type {self.pk}: {self.name}"

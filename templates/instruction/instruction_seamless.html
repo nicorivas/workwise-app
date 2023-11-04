@@ -1,0 +1,11 @@
+
+<div id="instruction_{{instruction.pk}}" class="instruction instruction-seamless" data-step="{{instruction.type.step}}" data-id="{{instruction.pk}}">
+
+    <!-- Body -->
+    <div id="instruction-body-{{instruction.pk}}" class="row g-0 instruction-body-seamless">
+        <div id="sortable" class="col p-0 m-0">
+            {% include "instruction/elements/index.html" with instruction=instruction elements=instruction.type.instructionelement_set.all %}
+        </div>
+    </div>
+
+</div>

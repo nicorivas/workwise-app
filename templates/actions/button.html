@@ -1,0 +1,41 @@
+<form id="project-create-form" method="post" action="{% url 'task:create' %}">
+    <input type="hidden" name="name" value="{{action.name}}">
+    <input type="hidden" name="project" value="{{default_project.pk}}">
+    <input type="hidden" name="action" value="{{action.pk}}">
+    <input type="hidden" name="source" value="explorer">
+    {% csrf_token %}
+    <button type="submit" class="row g-0 agent-card-action {% if action.beta %}new{% endif %} {% if action.alpha %}coming-soon{% endif %}">
+        <div class="col">
+            <div class="row g-0 agent-card-action-header">
+                <div class="col">
+                    <h1 class="{% if action.beta %}new{% endif %} {% if action.alpha %}coming-soon{% endif %}">
+                        {{action.name}}
+                    </h1>
+                </div>
+                {% if action.alpha %}
+                <div class="col-auto">
+                    <div class="agent-card-badge coming-soon">
+                        Coming soon
+                    </div>
+                </div>
+                {% endif %}
+                {% if action.beta %}
+                <div class="col-auto">
+                    <div class="agent-card-badge new">
+                        New
+                    </div>
+                </div>
+                {% endif %}
+                <div class="col-auto">
+                    {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-info-circle" background="#fff" color="#ddd" size=0 %}
+                </div>
+            </div>
+            <div
+                class="row g-0 agent-card-action-description {% if action.beta %}new{% endif %} {% if action.alpha %}coming-soon{% endif %}">
+                {% if action.beta %}
+                <p>{{action.short_description}}</p>
+                {% endif %}
+            </div>
+        </div>
+    </button>
+</form>

@@ -1,0 +1,24 @@
+<div class="row g-0 instruction-header" id="instruction-header-possible-{{instruction.pk}}" style="{% if not possible %}display:none;{% endif %}">
+
+    <!-- Name -->
+    <div class="col my-auto">
+        <div class="instruction-possible-name" style="width:90%">
+            <p>{{instruction.type.name}}</p>
+        </div>
+    </div>
+
+    <!-- Create -->
+    <div class="col-auto trash my-auto"
+        hx-post="{% url 'instruction:create_from_template' instruction.pk %}"
+        hx-include="[id='project_id']"
+        hx-target="#instruction_{{instruction.pk}}"
+        hx-swap="innerHTML"
+        _=" on click
+            toggle .possible on the closest <div.instruction/> then
+            toggle the *display of #instruction-body-{{instruction.pk}} then
+            toggle the *display of #instruction-header-{{instruction.pk}} then 
+            toggle the *display of #instruction-header-possible-{{instruction.pk}} end">
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-plus-circle" %}
+    </div>
+
+</div>

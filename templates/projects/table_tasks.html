@@ -1,0 +1,25 @@
+{% load keyvalue %}
+
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Task</th>
+        <th>Last updated</th>
+        <th>Owner</th>
+        <th></th>
+    </tr>
+</thead>
+<tbody>
+    {% for task in tasks %}
+    <tr data-id="{{task.id}}">
+        <input type="hidden" id="task-id-{{task.id}}" name="task_id" value="{{ task.id }}">
+        <td><a href="{% url 'task:read_index' task.pk %}">{{ task.name }}</a></td>
+        <td><a href="{% url 'task:read_index' task.pk %}">{{ task.action.name }}</a></td>
+        <td style="color: var(--text-color-light);">{{task.updated_at}}</td>
+        <td style="color: var(--text-color-light);">{{task.created_by}}</td>
+        <td class="right">
+            {% include "components/kebabComponent/kebab.html" with dataelementid=task.pk name="tasks-task-kebab-"|addstr:task.pk right=1 %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>

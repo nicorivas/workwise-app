@@ -15,6 +15,14 @@ class CompanyView(View):
         }
         return render(request, "company/index.html", context)
 
+    def post(self, request, company_id):
+        print("CompanyView.post")
+        company = get_object_or_404(Company, pk=company_id)
+        context = {
+            "company": company,
+        }
+        return render(request, "company/company.html", context)
+
 class CompanySetView(View):
     
     def post(self, request, company_id):

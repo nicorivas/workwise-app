@@ -1,0 +1,13 @@
+<!-- Special button to call revision of document -->
+
+<div class="instruction-element-revise">
+  <div class="row g-0 mb-0">
+    <div class="col p-0">
+      <button type="button" class="button ie__revise__button" style="height:100%;width:100%;">
+        {{element.instructionelementrevise.button_label}}
+      </button>
+    </div>
+  </div>
+</div>
+
+{% include 'instruction/elements/revision.html' with name="instruction-element-revision-template" element=null hidden=1 %}

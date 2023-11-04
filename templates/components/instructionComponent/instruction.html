@@ -1,0 +1,21 @@
+{% if instruction.type.style == "seamless" %}
+{% include 'instruction/instruction_seamless.html' %}
+{% else %}
+<div id="instruction_{{instruction.pk}}" data-id="{{instruction.pk}}" data-type-name="{{instruction.type.name}}" data-step="{{instruction.type.step}}"
+    class="instruction {% if instruction.template %}instruction--template{% endif %}{% if possible %}instruction--possible{% endif %}">
+    
+    <!-- Header Possible -->
+    {% if not possible %}
+    {% include 'components/instructionComponent/instruction_header.html' %}
+    {% else %}
+    {% include 'components/instructionComponent/instruction_header_possible.html' %}
+    {% endif %}
+
+    <!-- Body -->
+    <div class="row g-0 instruction__body" id="instruction-body-{{instruction.pk}}">
+        <div class="col p-0 m-0" id="sortable" >
+            {% include "instruction/elements/index.html" with instruction=instruction elements=instruction.type.instructionelement_set.all %}
+        </div>
+    </div>
+</div>
+{% endif %}

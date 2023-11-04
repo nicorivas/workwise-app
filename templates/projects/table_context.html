@@ -1,0 +1,22 @@
+{% load keyvalue %}
+
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Created at</th>
+        <th></th>
+        <th></th>
+    </tr>
+</thead>
+<tbody>
+    {% for document in project.document_set.all %}
+    <tr>
+        <td><a href="{% url 'document:view' document.pk %}">{{ document.name }}</a></td>
+        <td>{{ document.date_published|date:"M d, Y" }}</td>
+        <td></td>
+        <td class="right">
+            {% include "components/kebabComponent/kebab.html" with dataelementid=document.pk name="context-document-kebab-"|addstr:document.pk right=1 %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>

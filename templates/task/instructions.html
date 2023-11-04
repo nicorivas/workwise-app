@@ -1,0 +1,12 @@
+<input hidden id="project_id" name="project_id" value="{{project.pk}}">
+<div id="instructions">
+    {% for instruction in instructions|dictsort:"type.index" %}
+    {% if instruction.type.step != 2 %}
+    {% include 'components/instructionComponent/instruction.html' with step=step %}
+    {% endif %}
+    {% endfor %}
+
+    {% for instruction in instructions_possible %}
+    {% include 'components/instructionComponent/instruction.html' with step=step possible=1 %}
+    {% endfor %}
+</div>

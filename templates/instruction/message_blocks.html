@@ -1,0 +1,5 @@
+{% for block in message.messageblock_set.all %}
+<div id="message_block_{{block.pk}}">
+    {% include 'instruction/message_block.html' with block=block %}
+</div>
+{% endfor %}

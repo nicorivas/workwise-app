@@ -1,8 +1,9 @@
 from django.urls import path
 
-from . import views
+from explorer.views import *
 
 app_name = "explorer"
 urlpatterns = [
-    path("", views.index, name="index")
+    path("", index_view, name="index"),
+    path("search/", explorer_search_view, name="search")
 ]

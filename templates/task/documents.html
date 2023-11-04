@@ -1,0 +1,28 @@
+<!-- View of all the documents of a task, with selector -->
+{% load static %}
+
+<script type="module" src="{% static 'js/document_p.js' %}?_={% now 'YmdHiu' %}"></script>
+
+<!-- Document selector -->
+<div class="row g-0" id="project-documents-selector-wrapper">
+    {% include 'task/document_selector.html' %}
+</div>
+
+<!-- Document loading indicator -->
+<div id="project-document-indicator" class="htmx-indicator">
+    <div style="display:flex; align-items: center; justify-content: center; margin-top: 1em;">
+        {% include 'components/loader.html' %}
+    </div>
+</div>
+
+{% if task.document_set.all %}
+<!-- Document selected -->
+<div class="row g-0" id="project-document-wrapper">
+    {% include 'document/document.html' with document=task.active_document %}
+</div>
+{% else %}
+<!-- In case there are no documents, show warning message -->
+<div class="warning-message">
+    <p>There are no documents. To create one, click on the add button <i class="bi bi-arrow-up-right"></i></p>
+</div>
+{% endif %}

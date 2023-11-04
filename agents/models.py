@@ -57,6 +57,41 @@ class Agent(models.Model):
 
             return True
 
+    def prompt(self, prompt:str, prompt_parameters:dict = {}):
+        from mimesis.agent.agent import Agent as AgentMimesis
+        from mimesis.actions.actions import Action, ActionReply
+        from mimesis.prompt.prompt import PromptTemplate
+        mms_agent = AgentMimesis(name=self.get_name, definition=self.get_definition)
+        reply = mms_agent.do(Action(
+            name="prompt",
+            description="",
+            definition="",
+            reply=ActionReply(type="Answer",name="Prompt reply"),
+            prompt=PromptTemplate(text=prompt, parameters=prompt_parameters),
+            memory=""
+            ))
+        print(reply)
+        return reply
+
+    def stream_prompt(self, request, prompt, fast=False):
+        from asgiref.sync import async_to_sync
+        from channels.layers import get_channel_layer
+        print("Agent.stream_prompt")
+        print(prompt)
+        channel_layer = get_channel_layer()
+        # Group names are set to the view path, so that each view call answers to a specific socket group.
+        group_name = request.path.replace("/", "")
+        async_to_sync(channel_layer.group_send)(group_name, {"type": "llm.call", "prompt":prompt, "fast":fast})
+
+    def do(self, action_file, action_parameters:dict = {}):
+        from mimesis.agent.agent import Agent as AgentMimesis
+        from mimesis.actions.actions import Action
+        mms_agent = AgentMimesis(name=self.get_name, definition=self.get_definition)
+        action = Action.load_from_file(action_file)
+        action.prompt.parameters = action_parameters
+        reply = mms_agent.do(action)
+        return reply[0]
+
     @property
     def get_definition(self):
         if self.definition:

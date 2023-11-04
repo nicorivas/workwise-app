@@ -1,0 +1,7 @@
+
+{% include 'components/tableComponent/table.html' with title="Context" name="project-context-table" table="projects/table_context.html" %}
+{% if not project.document_set.all %} 
+<div id="project-context__no-context" class="advise">
+    Use documents as context for every task of this project. Click on the 'add' button to create or add new documents.
+</div>
+{% endif %}

@@ -1,0 +1,17 @@
+{% load markdown_extras %}
+{% load static %}
+{# hx-post="{% url 'instruction:select_message_block' block.pk%}" #}
+<div class="row g-0 message-block position-relative {%if not block.selected%}message-block-unselected{%endif%}" hx-trigger="click" hx-target="#message_block_{{block.pk}}">
+    <div class="col">
+        {% if block.html %}
+        <span style="font-size:0.9em;">{{block.html | safe}}</span>
+        {% else %}
+        <span style="font-size:0.9em;">{{block.text | markdown | safe}}</span>
+        {% endif %}
+    </div>
+    <div class="col-2">
+        <div class="form-check form-switch float-end">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {% if block.selected %}checked{% endif %}>
+        </div>
+    </div>
+</div>

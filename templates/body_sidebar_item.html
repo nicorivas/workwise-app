@@ -1,0 +1,21 @@
+
+<li class="nav-item">
+    <input id="input-source-{{url}}" name="source" value="menu" hidden>
+    <a class="nav-link"
+        href="#"
+        hx-target="#main"
+        hx-get="/{{url}}/?source=menu"
+        hx-indicator="#main-loader-wrapper,#main"
+        hx-push-url="/{{url}}/">
+        <div class="row g-0">
+            <div class="col-auto">
+                <div style="position:relative;">
+                    <i class="bi {{icon}}"></i>
+                </div>
+            </div>
+            <div class="col ps-3 nav-link-text">
+                {{text}}
+            </div>
+        </div>
+    </a>
+</li>

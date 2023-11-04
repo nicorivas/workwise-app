@@ -1,0 +1,20 @@
+<!-- Table component-->
+
+<div id="{{name}}" class="table">
+
+<!-- Header -->
+<div class="table__header">
+    <div class="table__header__title">
+        <h2>{{title}}</h2>
+    </div>
+    <div class="table__header__actions">
+        {% include 'components/iconButtonComponent/iconButton.html' with name="context__add-document" icon="bi-plus-circle" text="Add" url="projects:create_context" project=project %}
+    </div>
+</div>
+
+<!-- Documents Table -->
+<table id="{{name}}__table" class="table__table display compact">
+    {% include table %}
+</table>
+
+</div>

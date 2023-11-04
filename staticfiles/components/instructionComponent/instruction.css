@@ -1,0 +1,136 @@
+.instruction {
+    border: 1px solid var(--border-color-normal);
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 0.5em;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.instruction--possible {
+    background-color: #fafafa;
+    box-shadow: 2px 2px rgb(235, 235, 235);
+}
+
+.instruction--template {
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 0.5em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px rgb(235, 231, 201);
+    width: 100%;
+}
+
+.instruction--selected {
+    border: 1px solid var(--border-highlight-strong);
+}
+
+
+@keyframes borderColorChange {
+    0% {
+        border-color: var(--border-highlight-strong);  /* Initial color: Red */
+    }
+    100% {
+        border-color: var(--border-highlight-strong-alternate);  /* Final color: Green */
+    }
+}
+
+.instruction--running {
+    /*border: 1px solid var(--border-highlight-strong) !important;*/
+    animation: borderColorChange 1s infinite alternate; /* Play the animation */
+}
+
+.instruction__header {
+    cursor: pointer;
+    transition: transform 0.4s ease-in-out;
+    padding: 1em;
+}
+
+.instruction__header p {
+    padding: 0;
+    margin: 0;
+}
+
+.instruction__header__name {
+    display: flex;
+    align-items: center;
+}
+
+.instruction__header__name h2 {
+    font-size: 1.0em;
+    font-weight: normal;
+    color: var(--text-color-dark);
+    margin: 0;
+    padding: 0;
+}
+
+.instruction__body {
+    padding: 1em;
+    padding-top: 0;
+}
+
+.instruction--template:hover {
+    background-color: rgba(255, 255, 255, 2.0);
+}
+
+.instruction-template-body h1 {
+    font-size: 0.9rem;
+    color: #353535;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.instruction-template-body p {
+    font-size: 0.9rem;
+    color: #777;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.instruction-element-dropdown {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.5em;
+}
+
+.instruction-element-dropdown p {
+    margin: 0;
+    padding: 0;
+}
+
+.instruction-element-wrapper {
+    margin-bottom: 0.5em;
+}
+
+.instruction-element.template {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 0.5em;
+}
+
+#instruction-element-details {
+    padding-left: 1em;
+}
+
+.instruction-element-detail {
+    padding: 1em;
+    box-shadow: 2px 2px rgb(235, 231, 201);
+    background-color: white;
+    border: 1px solid #ddd;
+}
+
+/* Seamless */
+
+.instruction-seamless {
+    padding-top: var(--wrapper-padding-small);
+    border: none;
+}
+
+.instruction-possible-name p {
+    padding: 0;
+    margin: 0;
+}

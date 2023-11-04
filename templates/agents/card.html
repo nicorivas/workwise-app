@@ -1,0 +1,39 @@
+{% load static %}
+
+<div class="agent-card rounded">
+
+    {% include 'agents/message_profile.html' with size=2 %}
+
+    <!-- Description -->
+    {% if show_description %}
+    <div class="agent-description">
+        <div class="row ps-4 pb-0 pe-4">
+            <div class="col-12">
+                {{agent.description}}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions -->
+    {% if show_actions %}
+    <div class="row g-0 agent-card-actions">
+        <div class="col">
+            {% for action in agent.actions.all|dictsortreversed:"beta" %}
+            {% if forloop.counter < 4 %}
+            {% include 'actions/button.html' with action=action agent=agent %}
+            {% endif %}
+            {% endfor %}
+            <div class="row g-0 agent-card-footer">
+                <div class="col">
+        
+                </div>
+                <div class="col-auto">
+                    <p>See all</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>

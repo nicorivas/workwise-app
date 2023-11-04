@@ -1,0 +1,51 @@
+<form id="project-create-form" method="post" action="{% url 'projects:create' %}">
+<input type="hidden" name="action" value="{{action.pk}}">
+<div class="search-result-card-wrapper" 
+    {% if not action.alpha %}
+    href="javascript:;" onclick="document.getElementById('project-create-form').submit();"
+    {% else %}
+    href="#"
+    {% endif %}
+    >
+
+    <div class="row g-0">
+
+        <!-- Agent profile & Action-->
+        <div class="col-6">
+
+            <!-- Agent profile -->
+            <div class="row g-0">
+                <div class="col">
+                    {% include 'agents/message_profile.html' with size=2 padding_left=1 padding_right=0.5 %} 
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="row g-0">
+                <div class="search-result-card-actions">
+                    {% include 'actions/button.html' with action=action %}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Advise -->
+        <div class="col-6">
+            <div id="search-result-card-advise-{{action.pk}}" class="search-result-card-advise">
+                <!-- Response is added here by jQuery -->
+            </div>
+            <!-- Direclty call function that trigger streaming response -->
+            <script>streamCallGeneral(`{% url 'agents:search_action_guide' agent.pk action.pk %}`, 'input-query','search-result-card-advise-{{action.pk}}')</script>
+            <div id="search-result-{{action.pk}}-card-advise-indicator" class="htmx-indicator">
+                {% include 'components/loader.html' %}
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Body -->
+    <div class="row search-result-card-actions">
+    </div>
+
+</div>
+</form>

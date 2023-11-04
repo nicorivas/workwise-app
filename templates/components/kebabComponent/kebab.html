@@ -1,0 +1,18 @@
+<div class="kebab" id="{{name}}" data-element-id="{{dataelementid}}">
+    <div class="kebab__button">
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-three-dots-vertical" size=1 %}
+    </div>
+    <div class="kebab__menu {% if right %}kebab__menu--right{% endif %}">
+        <div id="{{name}}__item__template" class="kebab__menu__item kebab__menu__item__template">
+            <p class="kebab__menu__item__text">Template</p>
+        </div>
+    </div>
+    {{items}}
+    {% for item in items %}
+    <div class="kebab__menu {% if right %}kebab__menu--right{% endif %}">
+        <div id="{{name}}__item" class="kebab__menu__item">
+            <p class="kebab__menu__item__text">{{item.name}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>

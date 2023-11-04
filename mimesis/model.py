@@ -10,8 +10,8 @@ from pydantic import BaseModel
 
 class LLM(BaseModel):
 
-    model: str = "gpt-3.5-turbo"
-    #model: str = "gpt-4"
+    #model: str = "gpt-3.5-turbo"
+    model: str = "gpt-4"
     log: bool = True
 
     def chat(self, agent: Agent, prompt: str, system: Union[str, None]) -> str:

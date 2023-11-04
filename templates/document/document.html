@@ -1,0 +1,10 @@
+{% load static %}
+
+<div class="document {% if document.is_format %}document--format{% endif %}" id="document-{{document.pk}}" data-id="{{document.pk}}">
+    <div class="document__header" id="document-header-{{document.pk}}">
+        {% include 'document/header.html' %}
+    </div>
+    <div class="document-body" id="document-body-{{document.pk}}">
+        {% include 'document/body.html' %}
+    </div>
+</div>

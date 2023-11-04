@@ -1,0 +1,10 @@
+<div class="icon
+{% if size == 2 %}icon--xl
+{% elif size == 1 %}icon--l
+{% elif size == -1 %}icon--s
+{% elif size == -2 %}icon--xs
+{% elif size == -3 %}icon--thin
+{% endif %}"
+style="{% if backgroundcolor %}background-color: {{backgroundcolor}};{% endif %}">
+    <i class="bi {{icon}}" style="{% if color %}color:{{color}};{% endif %}{% if large %}font-size:1.1em;{% endif %}"></i>
+</div>

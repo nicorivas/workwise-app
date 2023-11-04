@@ -1,0 +1,22 @@
+name = "Write Project Charter"
+description = "Write a project charter"
+definition = ""
+memory = "I wrote a project charter"
+
+[reply]
+name = "project_charter"
+type = "document"
+revise = true
+
+[prompt]
+text = """Act as a senior project manager, with more than 20 years of experience in managing all kinds of projects.
+        
+I will give you a proyect charter. I want you to summarize it in no more than two paragraphs. Here is the proyect charter:
+
+=== project charter
+
+{{project_charter}}
+
+=== end of project charter
+
+"""

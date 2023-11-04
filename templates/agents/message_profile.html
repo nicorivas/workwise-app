@@ -1,0 +1,20 @@
+<div class="row g-0 agent-profile">
+    <!-- Profile picture -->
+    <div class="col-auto my-auto agent-profile-picture">
+        {% include 'agents/message_profile_picture.html' with size=2 %}
+    </div>
+    <div class="col">
+        <!-- Agent title -->
+        <div class="row g-0">
+            <div class="col agent-profile-short-title">
+                <p class="p-0 m-0">{{agent.get_short_title}}</p>
+            </div>
+        </div>
+        <!-- Agent name -->
+        <div class="row g-0">
+            <div class="col agent-profile-name">
+                <p>{{agent.get_name}}</p>
+            </div>
+        </div>         
+    </div>
+</div>

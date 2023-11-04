@@ -1,0 +1,23 @@
+{% extends 'body.html' %}
+
+{% load markdown_extras %}
+{% load static %}
+
+{% block content %}
+
+<!-- Header -->
+{% include 'index_header.html' with a="Documents" b="Pages" c=document.name %}
+
+<!-- Nav -->
+{% include 'document/index_nav.html' with no_nav=1 %}
+
+<div class="p-3">
+    {% include 'document/document.html' %}
+</div>
+
+<script type="module">
+    import DocumentComponent from "{% static 'components/documentComponent/document.js' %}";
+    let document = new DocumentComponent(".document");
+</script>
+
+{% endblock %}

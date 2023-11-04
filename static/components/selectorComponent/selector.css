@@ -1,0 +1,118 @@
+/* Selector */
+/* Dropdown select component */
+
+.selector {
+    position: relative;
+}
+
+.selector p {
+    color: #000;
+    margin: 0;
+}
+
+.selector--small {
+    border-radius: 15px;
+}
+
+.selector--active {
+    /**/
+}
+
+.selector__selected-item {
+    border: 1px solid var(--border-color-normal);
+    border-radius: 20px;
+    background-color: #fff;
+}
+
+.selector__selected-item--highlight {
+    border: 1px solid var(--border-highlight);
+    border-radius: 20px;
+    background-color: #fff;
+}
+
+.selector__selected-item--open {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom: 1px solid var(--border-color-normal);
+    box-shadow: 2px 2px #eaeaea;
+}
+
+
+.selector__selected-item-prefix {
+    padding-left: var(--wrapper-padding-small);
+}
+
+.selector__selected-item-suffix {
+    padding-right: 1em;
+    padding-left: 1em;
+    color: var(--text-color-light);
+}
+.selector__selected-item-text-container {
+    text-align: left;
+    overflow: hidden;/* clears from float */
+}
+
+.selector__selected-item-text {
+    /* Ellipsis at end of text */
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.selector__items-container {
+    cursor: pointer;
+    position: absolute;
+    z-index: 1000;
+    margin: 0;
+    padding-top: 0.5em;
+    padding-bottom: 1.0em;
+    list-style: none;
+    width: 100%;
+    top: 2.3em;
+    left: 0;
+    text-align: left;
+    border: 1px solid var(--border-color-normal);
+    border-top: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: #fff;
+    box-shadow: 2px 2px #eaeaea;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.selector__items-container--small {
+    top: 1.0em !important;
+}
+
+.selector__items-container--highlight {
+    border: 1px solid var(--border-highlight) !important;
+    border-top: none !important;
+}
+
+.selector__item {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    color: var(--text-color-light-darker);
+}
+
+.selector__item:hover {
+    background-color: var(--background-highlight-hover);
+}
+
+.selector__item--small {
+    padding-left: 30px;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+}
+
+.selector__item-prefix {
+    margin-left: var(--wrapper-padding-small);
+    width: 30px;
+}
+
+.selector__item-text {
+    display: flex;
+    align-items: center;
+}

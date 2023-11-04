@@ -1,0 +1,22 @@
+{% for document in documents %}
+<div class="row g-0 dropdown-item"
+    hx-trigger="click"
+    hx-post="{% url 'instruction:element_document_link_link' %}"
+    hx-target="#selected-document-{{element.pk}}"
+    hx-swap="innerHTML"
+    hx-vals='{"document_id":{{document.pk}}}'
+    _="on click hide .dropdown-menu-w end">
+    <div class="col-auto ml-2">
+        {% if document.source == "google_docs" %}
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-filetype-doc" %}
+        {% else %}
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-file-earmark" %}
+        {% endif %}
+    </div>
+    <div class="col">
+        <p>
+            {{document.name}}
+        </p>
+    </div>
+</div>
+{% endfor %}

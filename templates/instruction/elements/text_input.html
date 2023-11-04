@@ -1,0 +1,66 @@
+{% load keyvalue %}
+
+<div class="row g-0 text-input-wrapper">
+
+    <div class="col text-input-textarea-wrapper">
+        <textarea class="instruction-input" name="{{element.name}}" id="instruction-text" rows="5">{{data|keyvalue:element.name}}</textarea>
+    </div>
+
+    <div class="col-auto p-1 my-auto" id="recordButton">
+      {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-mic" %}
+    </div>
+    
+</div>
+
+<div id="prompt_modal">
+    {# include 'projects/modal_prompt.html' #}
+</div>
+
+<script>
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      mediaRecorder = new MediaRecorder(stream);
+
+      jQuery("#recordButton .icon-button").on("click", (e) => {
+        let button = jQuery(e.target).closest(".icon-button");
+        console.log("MICROFONO CLICK", button);
+        if (mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+          button.find(".icon").html('<i class="bi bi-mic"></i>');
+        } else {
+          mediaRecorder.start();
+          button.find(".icon").html('<i class="bi bi-stop-circle"></i>');
+        }
+      });
+
+      mediaRecorder.ondataavailable = function (e) {
+        chunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = function (e) {
+        const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+        chunks = [];
+        const audioURL = window.URL.createObjectURL(blob);
+        //document.querySelector("#audioElement").src = audioURL;
+        document.querySelector("#instruction-text").textContent = "Transcribing audio..."
+        document.querySelector("#instruction-text").classList.add("text-muted");
+        // Call the function to upload audio
+        uploadAudio(blob);
+      };
+    });
+
+  function uploadAudio(blob) {
+    let fd = new FormData();
+    fd.append('audio', blob, 'audio.ogg');
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    jQuery.ajax({
+      type: 'POST',
+      url: 'transcribe_audio/',
+      data: fd,
+      processData: false,
+      contentType: false
+    }).done(function (data) {
+      document.querySelector("#instruction-text").classList.remove("text-muted");
+      document.querySelector("#instruction-text").textContent = data.text;
+    });
+  }
+</script>

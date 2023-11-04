@@ -1,0 +1,33 @@
+{% load static %}
+{% load keyvalue %}
+
+<!--
+    Navigation side list of elements.
+    Create at the top.
+    Search at the top, to be implemented.
+-->
+
+<div id="{{name}}" class="list">
+
+<!-- Creation of projects, opens a Modal -->
+<div id="create-project-button-open-modal" class="list__create" data-bs-toggle="modal" data-bs-target="#create-project-modal">
+    <p>+ Create Project</p>
+</div>
+
+<!-- List of projects -->
+{% if projects %}
+<!-- 
+    Input sets 'POST' variable source="menu", so that projects:read 
+    returns the view for main, instead of index view.
+-->
+<input id="input-source" type="hidden" name="source" value="menu">
+<div class="list-group">
+    {% include 'components/listComponent/item.html' with name=name|add:"-item-template" template=1 %}
+    {% for project in projects %}    
+    {% include 'components/listComponent/item.html' with name="project-menu-item-"|addstr:project.pk %}
+    {% endfor %}
+</div>
+{% else %}
+{% endif %}
+
+</div>

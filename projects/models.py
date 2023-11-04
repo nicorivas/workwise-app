@@ -1,10 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
-from agents.models import Agent
-from actions.models import Action
-from document.models import Document, DocumentElement
+
 from company.models import Company
-import json
-import commonmark
 
 class Record(models.Model):
     voice_record = models.FileField(upload_to="records")
@@ -22,15 +19,16 @@ class Record(models.Model):
 
 class Project(models.Model):
 
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    index = models.IntegerField(default=0)
+    default = models.BooleanField(default=False)
     name = models.CharField(max_length=256)
+    icon = models.CharField(max_length=64, null=True, blank=True)
     description = models.CharField(max_length=512)
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)
-    action = models.ForeignKey(Action, on_delete=models.CASCADE, null=True, blank=True)
-    document = models.ForeignKey(Document, on_delete=models.CASCADE, null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return f"{self.pk}. {self.name}"
     
     def add_instruction(self, instruction_type_name):
         from instruction.models.instruction import Instruction, InstructionType

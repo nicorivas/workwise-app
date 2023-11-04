@@ -1,0 +1,13 @@
+<div class="row g-0">
+    <div class="col" id="task-wrapper" data-id="{{task.pk}}">
+
+        <!-- Toolbar -->
+        {% include 'task/toolbar.html' %}
+
+        <!-- Table with list of tasks -->
+        {% include 'task/table.html' %}
+
+    </div>
+</div>
+
+{% include 'task/create_task_modal.html' %}
