@@ -21,3 +21,4 @@ dump.rdb
 docker-compose.yml
 dockerfile-dev-azure
 dockerfile-dev-local
+.VSCodeCounter
