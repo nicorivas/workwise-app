@@ -17,3 +17,7 @@ fingpt.egg-info/
 secrets
 service_account.json
 db copy.sqlite3
+dump.rdb
+docker-compose.yml
+dockerfile-dev-azure
+dockerfile-dev-local
