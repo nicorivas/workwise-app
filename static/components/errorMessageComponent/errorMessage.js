@@ -31,13 +31,6 @@ export default class ErrorMessage extends AbstractComponent {
     }
 
     render() {
-        /*
-        if (this.state["visible"]) {
-            this.$element.show();
-        } else {
-            this.$element.hide();
-        }
-        */
         this.$element.toggleClass("error-message--fade-in", this.state["visible"])
         this.$element.toggleClass("error-message--fade-out", !this.state["visible"])
     }

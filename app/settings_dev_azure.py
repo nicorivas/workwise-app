@@ -16,8 +16,6 @@ import os
 from decouple import config
 import allauth
 
-load_dotenv()
-
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +30,10 @@ ALLOWED_HOSTS = ["localhost"
                 ,'*.eastus.azurecontainerapps.io'
                 ,'*.eastus.azurecontainerapps.io/'
                 ,'workwise-dev.thankfulplant-e9044387.eastus.azurecontainerapps.io'
+                ,'workwise-dev.eastus.cloudapp.azure.com'
+                ,'www.getworkwise.ai'
+                ,'app.getworkwise.ai'
+                ,'*.getworkwise.ai'
                 ,'20.127.221.195']
 CSRF_TRUSTED_ORIGINS = ['https://*.' + os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     "chat.apps.ChatConfig",
     "user.apps.UserConfig",
     "task.apps.TaskConfig",
+    "flow.apps.FlowConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,7 +67,11 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'channels',
+    'channels_redis',
     'rest_framework',
+    'django_filters',
+    "invitations",
 ]
 
 MIDDLEWARE = [
@@ -76,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app.middleware.LoginRequiredMiddleware',
     #'allauth.account.middleware.AccountMiddleware', # allauth: can't use it do to pypandoc requiring older version of allauth
 ]
 
@@ -208,6 +216,19 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "nico@getworkwise.ai"
+EMAIL_HOST_PASSWORD = "iiwb gflk fmae mava"
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter' # Invitations
+
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
@@ -235,3 +256,28 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
+
+OPEN_URLS = [
+    "/accounts/login/",
+    "/accounts/logout/",
+    "/accounts/signup/",
+    "/accounts/password/reset/",
+    "/accounts/password/reset/done/",
+    "/accounts/password/reset/key/",
+    "/accounts/password/reset/key/done/",
+    "/accounts/inactive/",
+    "/accounts/email/",
+    "/accounts/confirm-email/",
+    "/accounts/password/change/",
+    "/accounts/password/set/",
+    "/accounts/social/signup/",
+    "/accounts/social/connections/",
+    "/accounts/social/connections/disconnect/",
+    "/accounts/social/connections/disconnect/google/",
+    "/accounts/social/login/cancelled/",
+    "/accounts/social/login/error/",
+    "/flow/",
+    "/flow/carozzi/",
+    "/onboarding/"
+]

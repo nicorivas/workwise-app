@@ -16,11 +16,16 @@ Button component
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     padding: var(--wrapper-padding-normal);
     border-radius: var(--border-radius);
     background-color: var(--background-button);
     color: #fff;
     border: none;
+}
+
+.button--box {
+    width: 100%;
 }
 
 .button:hover {
@@ -49,10 +54,6 @@ Button component
 .button__text {
     margin: 0;
     padding-left: var(--wrapper-padding-small);
-}
-
-.button__loader {
-    display: none;
 }
 
 .button__loader--running {

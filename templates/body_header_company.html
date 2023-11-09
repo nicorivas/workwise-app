@@ -1,5 +1,5 @@
 <!-- Anonymous users have no company -->
-{% if company %}
+{% if company and not company.default %}
 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
     {{company.name}}
 </button>

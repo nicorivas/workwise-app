@@ -1,6 +1,6 @@
-<div class="button-container">
+<div class="button-container" id="{{name}}" >
     {% if radio %}
-    <div id="{{name}}" type="button" class="button button--radio {{class}}">
+    <div class="button button--radio {{class}}">
         {% if icon %}
         <div class="document-source-icon">
         </div>
@@ -9,9 +9,10 @@
         <p class="button__text">{{label}}</p>
     </div>
     {% else %}
-    <button id="{{name}}" type="button" class="button button--radio {{class}}">
-        <div class="button__loader">{% include 'components/loader_button.html' %}</div>
+    <div class="button {{class}} {% if box %} button--box {% endif %}">
+        <div class="button__loader" style="width: 25px;opacity:0;">{% include 'components/loader_button.html' %}</div>
         <p class="button__text">{{label}}</p>
-    </button>
+        <div class="button__loader__placeholder" style="width: 25px;opacity:0;">{% include 'components/loader_button.html' %}</div>
+    </div>
     {% endif %}
 </div>

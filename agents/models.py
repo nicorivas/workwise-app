@@ -25,7 +25,7 @@ class Trait(models.Model):
 class Personality(models.Model):
     
     name = models.CharField(max_length=256)
-    traits = models.ManyToManyField(Trait, null=True, blank=True)
+    traits = models.ManyToManyField(Trait, blank=True)
 
     def __str__(self):
         return self.name

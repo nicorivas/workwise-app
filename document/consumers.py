@@ -1,6 +1,7 @@
 import json
 import openai
 import pypandoc
+import logging
 from datetime import datetime
 
 from urllib.parse import parse_qs
@@ -15,7 +16,7 @@ openai.api_key = settings.OPENAI_API_KEY
 class OpenAIConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
-        print("OpenAIConsumer.connect", self.channel_name)
+        logging.warning("OpenAIConsumer.connect " + self.channel_name)
         # We set the group_name to the url of the view (with parameters),
         # so that then we can send the message to the correct group from the view.
         # If no name is given default to global.

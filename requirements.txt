@@ -75,3 +75,5 @@ django-filter==23.3.0
 pypandoc==1.11.0
 weaviate-client==3.24.1
 llama-index==0.8.27
+python-dotenv==1.0.0
+django-invitations==2.0.0

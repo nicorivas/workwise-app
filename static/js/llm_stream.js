@@ -91,3 +91,5 @@ streamCallGeneral = function (view_url, source_element_id, destination_element_i
         }
     };
 }
+
+export default streamCallGeneral;

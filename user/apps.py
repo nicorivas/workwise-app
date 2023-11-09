@@ -7,7 +7,7 @@ class UserConfig(AppConfig):
 
     def ready(self):
         # Implicitly connect signal handlers decorated with @receiver.
-        from . import signals
+        import user.signals.handlers
 
         ## Explicitly connect a signal handler.
         #request_finished.connect(signals.my_callback)

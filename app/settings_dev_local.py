@@ -11,18 +11,22 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from dotenv import load_dotenv
 from pathlib import Path
-import os
+import os, logging
 
 from decouple import config
 import allauth
 
-load_dotenv()
+if not os.getenv('IN_DOCKER'):
+    load_dotenv()
+else:
+    if not os.getenv('IN_DOCKER').lower() in ('true','1','t'):
+        load_dotenv()
 
-OPENAI_API_KEY = config('OPENAI_API_KEY')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = '5d46cd6a8a6e1416024ed063d36edf3de7c18fecfa03137cb650202c490d5183'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
@@ -42,6 +46,7 @@ INSTALLED_APPS = [
     "chat.apps.ChatConfig",
     "user.apps.UserConfig",
     "task.apps.TaskConfig",
+    "flow.apps.FlowConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,7 +62,8 @@ INSTALLED_APPS = [
     'channels',
     'channels_redis',
     'rest_framework',
-    'django_filters'
+    'django_filters',
+    "invitations",
 ]
 
 MIDDLEWARE = [
@@ -68,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app.middleware.LoginRequiredMiddleware',
     #'allauth.account.middleware.AccountMiddleware', # allauth: can't use it do to pypandoc requiring older version of allauth
 ]
 
@@ -96,7 +103,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(os.getenv("REDIS_HOST"), os.getenv("REDIS_PORT"))],
         },
     },
 }
@@ -198,6 +205,8 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+# AUTH
+
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -209,9 +218,18 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-ACCOUNT_EMAIL_VERIFICATION = "none"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "nico@getworkwise.ai"
+EMAIL_HOST_PASSWORD = "iiwb gflk fmae mava"
 
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter' # Invitations
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -221,3 +239,24 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
+OPEN_URLS = [
+    "/accounts/login/",
+    "/accounts/logout/",
+    "/accounts/signup/",
+    "/accounts/password/reset/",
+    "/accounts/password/reset/done/",
+    "/accounts/password/reset/key/",
+    "/accounts/password/reset/key/done/",
+    "/accounts/inactive/",
+    "/accounts/email/",
+    "/accounts/confirm-email/",
+    "/accounts/password/change/",
+    "/accounts/password/set/",
+    "/accounts/social/signup/",
+    "/accounts/social/connections/",
+    "/accounts/social/connections/disconnect/",
+    "/accounts/social/connections/disconnect/google/",
+    "/accounts/social/login/cancelled/",
+    "/accounts/social/login/error/",
+]

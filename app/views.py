@@ -55,3 +55,6 @@ def component(request, component):
 
 def socket_test(request):
     return render(request, "app/socket_test.html")
+
+def onboarding(request):
+    return render(request, "app/onboarding.html")

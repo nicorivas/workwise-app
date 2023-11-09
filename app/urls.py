@@ -26,6 +26,7 @@ urlpatterns = [
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path("logout", views.logout_view, name="logout"),
     path("", views.main, name="main"),
+    path("onboarding/", views.onboarding, name="onboarding"),
     path("explorer/", include("explorer.urls")),
     path("actions/", include("actions.urls")),
     path("company/", include("company.urls")),
@@ -44,4 +45,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('socket-test/', views.socket_test, name="socket-test"),
+    path("invitations/", include('invitations.urls', namespace='invitations')),
+    path("flow/", include('flow.urls', namespace='flow')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
