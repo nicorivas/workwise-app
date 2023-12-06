@@ -1,0 +1,22 @@
+{% load keyvalue %}
+
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Created at</th>
+        <th></th>
+        <th></th>
+    </tr>
+</thead>
+<tbody>
+    {% for action in actions|dictsort:"name" %}
+    <tr>
+        <td><a href="{% url 'actions:read' action.pk %}">{{ action.name }}</a></td>
+        <td>{{ action.date_published|date:"M d, Y" }}</td>
+        <td></td>
+        <td class="right">
+            {% include "components/kebabComponent/kebab.html" with dataelementid=action.pk name="context-document-kebab-"|addstr:action.pk right=1 %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>

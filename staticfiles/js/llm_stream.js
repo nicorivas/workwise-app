@@ -8,14 +8,22 @@ streamCallGeneral = function (view_url, source_element_id, destination_element_i
     The response is used to render the destination_element_id.
     TODO: Don't assume that response is markdown.
     */
-    console.log("streamCallGeneral")
+    console.log("streamCallGeneral 3")
 
     let csrf_token = Cookies.get('csrftoken')
     let response = "";
     // Parameter sets the group of the socket connection to the url.
     // This allows us to have multiple socket connections open at once, and stream answers
     // from the server to specific ones based on the url that called the view.
-    const socket = new WebSocket('ws://redis:6379/ws/openai_stream/?group_name=' + view_url);
+    const hostname = window.location.hostname
+    let websocket_url = ""
+    // If its localhost
+    if (hostname == "127.0.0.1" || hostname == "localhost") {
+        websocket_url = `ws://${hostname}:8000/ws/openai_stream/?group_name=` + view_url
+    } else {
+        websocket_url = `ws://${hostname}/ws/openai_stream/?group_name=` + view_url
+    }
+    const socket = new WebSocket(websocket_url)
 
     // Check if source element exists
     if (jQuery(`#${source_element_id}`).length == 0) {
@@ -73,5 +81,13 @@ streamCallGeneral = function (view_url, source_element_id, destination_element_i
 
     socket.onerror = function (error) {
         console.log(`[error] socket.onerror: ${error.message}`);
+    };
+
+    socket.onclose = function(event) {
+        if (event.wasClean) {
+            console.log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+        } else {
+            console.error('Connection died', event);
+        }
     };
 }

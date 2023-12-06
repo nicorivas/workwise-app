@@ -13,7 +13,7 @@ class LoginRequiredMiddleware:
 
     def __call__(self, request):
         logging.warning("MIDDLEWARE "+request.path_info)
-        if "accounts/" not in request.path_info:
+        if "accounts/" not in request.path_info and "api/" not in request.path_info:
             if not request.user.is_authenticated and \
                not any([fnmatch.fnmatch(request.path_info, l) for l in self.open_urls]):
                 return redirect(self.login_url+'?next='+request.path)

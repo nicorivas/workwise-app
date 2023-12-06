@@ -1,0 +1,26 @@
+.header {
+    display: flex;
+    align-items: center;
+    background-color: #160f2a;
+    text-align: right;
+    line-height: normal;
+    height: 45px;
+}
+
+.header p {
+    color: #e0e1eb;
+    margin: 0px;
+}
+
+.header__logo {
+    display: inline-block;
+    font-size: 1em;
+    vertical-align: middle;
+}
+
+.header__company .btn {
+    border: 1px solid #8786b4;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9em;
+}

@@ -1,0 +1,13 @@
+#prompts {
+    padding: var(--wrapper-padding-normal);
+}
+
+.prompts__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prompts__header .selector {
+    width: 400px;
+}

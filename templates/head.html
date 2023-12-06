@@ -63,6 +63,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
 
   <!-- Components styles -->
+  <link rel="stylesheet" href="{% static 'views/actionsView/actions.css' %}">
+  <link rel="stylesheet" href="{% static 'views/promptsView/prompts.css' %}">
+  <link rel="stylesheet" href="{% static 'components/headerComponent/header.css' %}">
+  <link rel="stylesheet" href="{% static 'components/helpSidebarComponent/helpSidebar.css' %}">
   <link rel="stylesheet" href="{% static 'components/selectorComponent/selector.css' %}">
   <link rel="stylesheet" href="{% static 'components/chipsComponent/chips.css' %}">
   <link rel="stylesheet" href="{% static 'components/buttonComponent/button.css' %}">
@@ -184,7 +188,7 @@
     /* Sidebar */
 
     #sidebar {
-      width: 150px;
+      width: 50px;
       background-color: #fff;
       position: sticky;
       top: 0;
@@ -194,7 +198,7 @@
     }
 
     #sidebar.collapsed {
-      width: 0px;
+      width: 50px;
     }
 
     #sidebar a {
@@ -237,39 +241,6 @@
 
     #sidebar .nav-link.active {
       background-color: #eaf2f7;
-    }
-
-    /* Header */
-
-    .header {
-      display: flex;
-      align-items: center;
-      background-color: #160f2a;
-      text-align: right;
-      padding: 0.5em 0 0.5em 0;
-      line-height: normal;
-    }
-
-    .header p {
-      color: #e0e1eb;
-      margin: 0px;
-    }
-
-    .header .logo {
-      display: inline-block;
-      font-size: 1em;
-      vertical-align: middle;
-    }
-
-    .header-company .btn {
-      border: 1px solid #636363;
-      border-radius: 5px;
-      padding-top: 0;
-      padding-bottom: 0;
-      padding-left: 0.5em;
-      padding-right: 0.5em;
-      color: #fff;
-      font-size: 0.9em;
     }
 
     /* Explorer */

@@ -18,6 +18,7 @@ urlpatterns = [
     path("<int:document_id>/body/", DocumentBodyView.as_view(), name="document_body"),
     # API
     path("api/v1/document/<int:document_id>/", DocumentReadApiView.as_view(), name="api_read"),
+    path("api/v1/document/<int:document_id>/reply", DocumentReadReplyApiView.as_view(), name="api_read"),
     path("api/v1/document/<int:document_id>/save", DocumentSaveApiView.as_view(), name="api_save"),
     # AJAX/HTMX
     path("<int:document_id>/refresh/", DocumentBodyView.as_view(), name="refresh"),

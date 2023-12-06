@@ -310,16 +310,23 @@ export default class DocumentComponent extends AbstractComponent {
 
     stream(instruction, instruction_element_id) {
 
-        console.log("DocumentComponent:stream", instruction, instruction_element_id)
+        console.log("DocumentComponent:stream", instruction, instruction_element_id);
 
         let document_id = this.$element.data("id");
-        console.log("DocumentComponent:stream - document_id", document_id)
         let socket_data = {};
         let response = "";
         let get_prompt_data = {};
-        let instruction_element_call_url = `/instruction/${instruction.id}/element/${instruction_element_id}/call_prompt`
+        let instruction_element_call_url = `/instruction/${instruction.id}/element/${instruction_element_id}/call_prompt`;
 
-        const socket = new WebSocket('ws://127.0.0.1:8000/ws/openai_stream/?group_name=' + instruction_element_call_url);
+        const hostname = window.location.hostname;
+        let websocket_url = "";
+        // If its localhost
+        if (hostname == "127.0.0.1" || hostname == "localhost") {
+            websocket_url = `ws://${hostname}:8000/ws/openai_stream/?group_name=` + instruction_element_call_url;
+        } else {
+            websocket_url = `ws://${hostname}:80/ws/openai_stream/?group_name=` + instruction_element_call_url;
+        }
+        const socket = new WebSocket(websocket_url);
     
         this.setState({
             "status": "streaming"

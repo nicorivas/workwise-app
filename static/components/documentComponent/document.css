@@ -4,6 +4,7 @@
     border: 1px solid #fff;
     max-height: 800px;
     overflow-y: scroll;
+    width: 100%;
     max-width: 800px;
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
@@ -16,6 +17,14 @@
 
 .document--streaming, .document--loading { 
     border: 1px solid #000;
+}
+
+.document--flow.document--streaming {
+    border: 1px solid #fff;
+}
+
+.document--flow {
+    margin: 1em;
 }
 
 .document h1 {
@@ -94,7 +103,7 @@
     margin: 0;
 }
 
-.document-body {
+.document__body {
     background-color: white;
 }
 

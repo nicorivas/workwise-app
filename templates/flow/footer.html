@@ -1,0 +1,19 @@
+<div class="step-indicator">
+    <!-- Check if user is admin -->
+    {% if flow.debug %}
+    <span>
+        <i class="bi bi-arrow-bar-left" id="btn-prev"></i>
+    </span>
+    {% endif %}
+    <div class="dots">
+        <span class="dot active"></span>
+    </div>
+    {% if flow.debug %}
+    <span>
+        <i class="bi bi-arrow-bar-right" id="btn-next"></i>
+    </span>
+    {% endif %}
+</div>
+{% if flow.footer_text %}
+<h1>{{flow.footer_text}}</h1>
+{% endif %}

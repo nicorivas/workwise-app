@@ -1,10 +1,15 @@
 {% load static %}
 
-<div class="document {% if document.is_format %}document--format{% endif %}" id="document-{{document.pk}}" data-id="{{document.pk}}">
+<div class="document {% if document.is_format %}document--format{% endif %} {% if flow %} document--flow{% endif %}" id="document-{{document.pk}}" data-id="{{document.pk}}">
+    {% if not flow %}
     <div class="document__header" id="document-header-{{document.pk}}">
         {% include 'document/header.html' %}
     </div>
-    <div class="document-body" id="document-body-{{document.pk}}">
+    {% endif %}
+    <div class="document__body" id="document__body-{{document.pk}}">
         {% include 'document/body.html' %}
+    </div>
+    <div class="document__footer" id="document__footer-{{document.pk}}">
+        {# include 'document/footer.html' #}
     </div>
 </div>

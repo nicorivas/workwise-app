@@ -1,9 +1,10 @@
-import json
+import json, os
 
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 
 from document.models import Document
 from company.models import Company
@@ -55,6 +56,17 @@ def component(request, component):
 
 def socket_test(request):
     return render(request, "app/socket_test.html")
+
+def email_test(request):
+    return render(request, "app/email_test.html")
+
+@csrf_exempt
+def send_email(request):
+    from django.core.mail import send_mail
+    send_mail('Subject here', 'Here is the message.', 'nico@getworkwise.ai', [
+        'bernardita.ihnen@getworkwise.ai',
+        'nicorivas@gmail.com'
+        ], fail_silently=False)
 
 def onboarding(request):
     return render(request, "app/onboarding.html")

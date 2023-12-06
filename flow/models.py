@@ -1,4 +1,4 @@
-import json
+import json, logging
 
 from django.db import models
 from django.shortcuts import get_object_or_404
@@ -6,7 +6,24 @@ from django.shortcuts import get_object_or_404
 from mimesis.actions import actions
 from mimesis.agent import agent as agentMimesis
 
+from instruction.models import InstructionType
 from agents.models import Agent
+from company.models import Company
+from projects.models import Project
+from actions.models import Action
+
+# Flow model
+class Flow(models.Model):
+    name = models.CharField(max_length=256)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE)
+    title = models.CharField(max_length=256, null=True, blank=True)
+    logo = models.ImageField(upload_to="flow_logos", null=True, blank=True)
+    description = models.TextField(default="", null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+    footer_text = models.TextField(default="", null=True, blank=True)
+    debug = models.BooleanField(default=False)
+    instruction_types = models.ManyToManyField(InstructionType, blank=True)
 
 # Create a Pitch model
 class Pitch(models.Model):
@@ -28,16 +45,19 @@ class Pitch(models.Model):
     pitch_analysis_long = models.TextField(default="")
 
     def analyse(self, request):
-        
         agent = get_object_or_404(Agent, pk=1)
-
         mimesis_action = "mimesis/library/pitch_evaluation/PitchEvaluation"
-        
         action = actions.Action.load_from_file(f"{mimesis_action}")
         agent_mimesis = agentMimesis.Agent()
-    
-        prompt = action.do(agent_mimesis)
+        prompt = action.do(agent_mimesis, pitch=request.POST["query"])
+        agent.stream_prompt(request, prompt, fast=False)
 
-        agent.stream_prompt(request, prompt, fast=True)
-
-        self.pitch_analysis_short = "Hola"
+    def analyse_long(self, request):
+        agent = get_object_or_404(Agent, pk=1)
+        mimesis_action = "mimesis/library/pitch_evaluation/PitchEvaluationLong"
+        action = actions.Action.load_from_file(f"{mimesis_action}")
+        agent_mimesis = agentMimesis.Agent()
+        prompt = action.do(agent_mimesis, pitch=request.POST["pitch"])
+        response = agent.prompt(prompt, {"pitch":request.POST["pitch"]})
+        self.pitch_analysis_long = response[0]["text"]
+        self.save()

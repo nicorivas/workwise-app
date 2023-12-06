@@ -155,6 +155,19 @@ class InstructionElementDetailsView(View):
 
 instruction_element_details_view = InstructionElementDetailsView.as_view()
 
+class InstructionElementTranscribeView(View):
+
+    def post(self, request, instruction_id:int, instruction_element_id:int):
+        instruction = get_object_or_404(Instruction, id=instruction_id)
+        instruction_element_text_input = get_object_or_404(InstructionElementTextInput, id=instruction_element_id)
+        transcript = instruction_element_text_input.transcribe(request.FILES['audio'])
+        instruction.data = {instruction_element_text_input.name: transcript["text"]}
+        instruction.save()
+
+        return JsonResponse({"transcript": transcript["text"]}, safe=False)
+
+instruction_element_transcribe_view = InstructionElementTranscribeView.as_view()
+
 class InstructionElementCallView(View):
 
     def post(self, request, instruction_id:int, instruction_element_id:int, stream=True):

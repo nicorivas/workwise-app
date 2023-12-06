@@ -1,0 +1,32 @@
+{% extends 'flow/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="flow" id="flow-container" data-id="{{flow.pk}}" data-project="{{flow.project.pk}}" data-action="{{flow.action.pk}}">
+    <!--<form class="flow--fixed-height" id="pitch-form" novalidate="novalidate">-->
+    <div class="header">
+        {% include 'flow/header.html' %}
+    </div>
+    <div class="body">
+        <!-- Task creation -->
+        {% include 'flow/step_register.html' %}
+        <!-- Task -->
+        <div id="task-container">
+        {% include 'flow/task.html' %}
+        </div>
+        <!-- Finish -->
+        {% include 'flow/step_finish.html' %}
+    </div>
+    <div class="footer">
+        {% include 'flow/footer.html' %}
+    </div>
+</div>
+
+</div>
+
+<script type="module">
+    import FlowView from "{% static 'views/flowView/flow.js' %}";
+    const flowView = new FlowView('#flow-container');
+</script>
+{% endblock %}

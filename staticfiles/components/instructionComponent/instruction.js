@@ -88,7 +88,7 @@ export default class InstructionComponent extends AbstractComponent{
 
         if (this.task) {
             // Hide all elements
-            this.task.collapseInstructions();
+            this.task.closeInstructions();
         }
 
         if (this.step == 2) {

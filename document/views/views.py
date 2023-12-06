@@ -202,7 +202,7 @@ class DocumentRefreshView(View):
     def forward(response, document):
         print("DocumentRefreshView.forward")
         url = reverse("document:refresh", kwargs={"document_id":document.pk})
-        html = f"<div hx-trigger='load' hx-get='{url}' hx-target='#document-body-{document.pk}'></div>"
+        html = f"<div hx-trigger='load' hx-get='{url}' hx-target='#document__body-{document.pk}'></div>"
         response.write(html)
         return response
     
@@ -253,22 +253,23 @@ class DocumentViewView(View):
 class DocumentReadApiView(View):
     
     def get(self, request, document_id):
-        print("DocumentReadApiView.get", document_id)
         document = get_object_or_404(Document, pk=document_id)
-        print("DocumentReadApiView.get:document", document)
         if document.json:
             if isinstance(document.json, dict):
-                print("DocumentReadApiView.get:document.json", document.json)
                 return JsonResponse(document.json, safe=True)
             else:
-                print("DocumentReadApiView.get:document.json", document.json)
                 return JsonResponse(json.loads(document.json), safe=True)
         else:
-            print("DocumentReadApiView.get NO")
             blocks = [{
                 "type": "paragraph",
                 "data": {"text": ""}}]
             return JsonResponse({"time": 1698280894778, "blocks": blocks, "version": '2.28.2'})
+        
+class DocumentReadReplyApiView(View):
+    
+    def get(self, request, document_id):
+        document = get_object_or_404(Document, pk=document_id)
+        return JsonResponse({"reply": document.reply})
     
 class DocumentSaveApiView(View):
         
@@ -276,9 +277,8 @@ class DocumentSaveApiView(View):
         print("DocumentSaveApiView.post", document_id)
         document = get_object_or_404(Document, pk=document_id)
         document.clear_elements()
-        print("document_data", request.POST.get('document_data'))
-        document.json = request.POST.get('document_data')
-        print("document_json", document.json)
+        document.reply = request.POST.get('document_reply')
+        document.json = request.POST.get('document_json')
         document.save()
         return JsonResponse("{}", safe=False)
     

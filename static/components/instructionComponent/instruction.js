@@ -1,6 +1,7 @@
 import AbstractComponent from "../abstractComponent.js";
 import ChipsComponent from "../chipsComponent/chips.js";
 import DropdownComponent from "../kebabComponent/kebab.js";
+import InstructionElementTextInputComponent from "../instructionElementTextInput/instructionElementTextInput.js";
 import InstructionElementAgentCallComponent from "../instructionElementAgentCall/instructionElementAgentCall.js";
 import InstructionElementReviseComponent from "../instructionElementRevise/instructionElementRevise.js";
 import InstructionElementRevisionComponent from "../instructionElementRevision/instructionElementRevision.js";
@@ -32,6 +33,7 @@ export default class InstructionComponent extends AbstractComponent{
         
         // State
         this.state = {
+            "loaded": true,
             "hidden": true,
             "open": false,
             "status": "idle",
@@ -55,6 +57,12 @@ export default class InstructionComponent extends AbstractComponent{
             new ChipsComponent(jQuery(element), this);
         })
         
+        // ... and text input components
+        this.$element.find(".instruction-element__text-input").each((index, element) => {
+            let instructionElementTextInputComponent = new InstructionElementTextInputComponent(jQuery(element), this);
+            this.instructionElements.push(instructionElementTextInputComponent);
+        })
+
         // ... and agent call components
         this.$element.find(".instruction-element-agent-call").each((index, element) => {
             let instructionElementAgentCallComponent = new InstructionElementAgentCallComponent(jQuery(element), this);
@@ -76,6 +84,7 @@ export default class InstructionComponent extends AbstractComponent{
 
         this.bindEvents();
         this.setState(this.state);
+        this.hideAgentCall();
     }
 
     bindEvents() {
@@ -88,7 +97,7 @@ export default class InstructionComponent extends AbstractComponent{
 
         if (this.task) {
             // Hide all elements
-            this.task.collapseInstructions();
+            this.task.closeInstructions();
         }
 
         if (this.step == 2) {
@@ -136,6 +145,10 @@ export default class InstructionComponent extends AbstractComponent{
         this.$body.show();
     }
 
+    open() {
+        this.setState({"open":true});
+    }
+
     createRevision(documentSection=null, documentSectionIndex=null) {
         console.log("InstructionComponent.createRevision()",documentSection,documentSectionIndex)
 
@@ -177,15 +190,21 @@ export default class InstructionComponent extends AbstractComponent{
         }
     }
 
+    hideAgentCall() {
+        this.$element.find(".instruction-element-agent-call").hide();
+    }
+
+    showAgentCall() {
+        this.$element.find(".instruction-element-agent-call").show();
+    }
+
     render() {
         if (this.state["status"] == "running") {
             this.$element.addClass("instruction--running");
         } else {
-            console.log("InstructionComponent.render(): set state to idle");
             this.$element.removeClass("instruction--running");
             // Propagate end of state to all elements
             for (let instructionElement of this.instructionElements) {
-                console.log(instructionElement);
                 instructionElement.setState({"status":"idle"});
             }
         }

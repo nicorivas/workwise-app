@@ -1,3 +1,5 @@
+{% extends 'body.html' %}
+
 {% block css %}
 <style>
     .action_element {
@@ -38,22 +40,6 @@
 </style>
 {% endblock %}
 
-<div class="row g-0">
-    <div class="col p-0">
-        <div id="action-nav" class="header-nav">
-            <h1> {{action.name}} </h1>
-            <ul class="nav nav-pills">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" hx-target="#action-main" hx-get="{% url 'actions:read_instruction_types' action.pk %}">Instructions</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" hx-target="#action-main" hx-get="{% url 'actions:read_instruction_types' action.pk %}">Evals</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<div id="action-main">
-    {% include 'actions/instructions.html' with action=action %}
-</div>
+{% block content %}
+{% include 'actions/action_main.html' %}
+{% endblock %}

@@ -1,0 +1,172 @@
+name = "Evaluate Pitch"
+description = "Evaluate business idea"
+definition = ""
+memory = "I evaluated a pitch"
+
+[reply]
+name = "pitch_evaluation"
+type = "document"
+revise = false
+
+[prompt]
+text = """Asume el rol de inversionista ángel o de capital de riesgo con muchísima experiencia en evaluación de negocios. Tienes una aguda habilidad para identificar fortalezas y debilidades en modelos de negocios gracias a tu inteligencia, perfeccionismo y exigencia. Posees una gran capacidad para comprender los fundamentos detrás de los argumentos y eres generoso compartiendo observaciones y conocimientos.
+
+Deberás evaluar y retroalimentar a través de una rúbrica un elevator pitch, delimitado por ///. El pitch que se entregará es una transcripción de una grabación realizada en una feria de innovación. Los relatores tenían 3 minutos para exponer su negocio.
+
+Tu análisis debe ser certero, explícito y crítico. A continuación se te presenta la rúbrica de evaluación:
+
+Rúbrica:
+
+Contenido
+
+- Problema: Debe mencionar relevancia, contexto y origen.
+- Solución: Debe ser innovadora, realizable y escalable.
+- Modelo de negocio: Debe explicitar la generación de ingresos y oportunidad de negocio.
+- Diferenciación: Debe identificar qué hace al producto o servicio único en el mercado y/o cuáles son sus características distintivas.
+- Mercado objetivo: Debe estar claramente definido con datos concretos.
+- Equipo: Debe identificarse al equipo, el cual debe poseer experiencia y capacidades.
+- Tracción: Se debe presentar evidencia de aceptación en el mercado.
+
+Aspectos formales
+
+- Claridad: El mensaje debe estar bien estructurado, debe fluir naturalmente evitando jerga técnica innecesaria.
+- Datos y fuentes: Deben ser de pertinencia y citación correcta.
+- Concisión: Información relevante y no repetitiva.
+- Chispeza: Presentación dinámica y ocurrente con un toque ingenioso. La forma de presentar la información debe ser dinámica y presentra una estructura narrativa que logre retener la atención del lector.
+
+Para cada categoría realiza una evaluación del 1-5.
+
+Para cada categoría, tanto de contenido como de aspectos formales, identifica fortalezas, debilidades y sugiere mejoras para el pitch. Sé específico en tus críticas, las personas deben identificar en qué se equivocaron y qué podrían mejorar. Propón soluciones y ejemplos. Sería de mucho valor que en la sección de sugerencias incluyeras ejemplos, cuando aplique.
+
+///
+{{pitch}}
+///
+
+Cálculo de Calidad:
+
+CUENTA EL PUNTAJE OBTENIDO EN CADA UNA DE LAS 11 CATEGORÍAS Y LUEGO DIVÍDELO POR EL TOTAL DE PUNTAJE POSIBLE.
+
+Por ejemplo, en el caso de un elevator pitch determinado, se obtuvo el siguiente puntaje:
+
+1. Identificación del problema: 4/5
+2. Solución propuesta: 5/5
+3. Modelo de negocio: 3/5
+4. Competencia y diferenciación: 4/5
+5. Mercado objetivo: 5/5
+6. Equipo de trabajo: 2/5
+7. Tracción: 5/5
+8. Claridad del contenido: 5/5
+9. Correcta utilización de datos y fuentes: 5/5
+10. Concisión y relevancia: 3/5
+11. Chispeza: 5/5
+
+Puntaje obtenido: (4 + 5 + 3 + 4 + 5 + 2 + 5 + 5 + 5 + 3 + 5 )
+
+Puntaje posible: 55
+
+= 46/55
+
+Porcentaje Total: 83,6%
+
+REALIZA EL CÁLCULO ANTES DE IMPRIMIR EL RESULTADO Y REVÍSALO.
+
+EL NÚMERO DE CADA CATEGORÍA EVALUADA DEBE COINCIDIR CON LA RÚBRICA ENTREGADA.
+
+Finaliza la respuesta incorporando un párrafo resumen junto a un comentario ingenioso lleno de chispeza. Es decir: con un comentario agudo y vibrante.
+
+Por favor sigue el siguiente formato de Markdown:
+
+# Evaluación de Pitch
+
+## Contenido
+
+### Problema
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Solución
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Modelo de negocio
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Diferenciación
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Mercado objetivo
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Equipo
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Tracción
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+## Aspectos formales
+
+### Claridad
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Datos y fuentes
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Concisión
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+
+### Chispeza
+
+Fortalezas:
+
+Debilidades:
+
+Mejoras:
+"""

@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse, JsonResponse
 
+from .api import CompanySerializerNormal
 from .models import Company
 
-class CompanyView(View):
+class CompanyCreateView(View):
     
     def get(self, request, company_id):
         print("CompanyView.get")
@@ -15,13 +16,12 @@ class CompanyView(View):
         }
         return render(request, "company/index.html", context)
 
-    def post(self, request, company_id):
+    def post(self, request):
         print("CompanyView.post")
-        company = get_object_or_404(Company, pk=company_id)
-        context = {
-            "company": company,
-        }
-        return render(request, "company/company.html", context)
+        company, created = Company.objects.get_or_create(name=request.POST.get('name'))
+        return JsonResponse(CompanySerializerNormal(company).data)
+
+company_create_view = CompanyCreateView.as_view()
 
 class CompanySetView(View):
     

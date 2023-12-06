@@ -18,6 +18,10 @@
     border: 1px solid #000;
 }
 
+.document--flow {
+    margin: 1em;
+}
+
 .document h1 {
     font-size: 1.2rem;
 }
@@ -94,7 +98,7 @@
     margin: 0;
 }
 
-.document-body {
+.document__body {
     background-color: white;
 }
 

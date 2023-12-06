@@ -14,8 +14,8 @@
 <button type="button" 
     hx-trigger="click"
     hx-get="{% url 'document:document_body' document.pk %}"
-    hx-target="#document-body-{{document.pk}}"
-    hx-indicator="#document-body-{{document.pk}}-indicator">Update body</button>
+    hx-target="#document__body-{{document.pk}}"
+    hx-indicator="#document__body-{{document.pk}}-indicator">Update body</button>
 <button type="button"
     hx-trigger="click"
     hx-post="{% url 'document:document_header' document.pk %}"

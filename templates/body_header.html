@@ -1,32 +1,28 @@
 {% load socialaccount %}
 {% load static %}
 
-<div class="row g-0 header">
+<div class="row g-0 header" id="header">
     <div class="col-auto ps-4">
-        <div class="logo">
-            <p>WorkWise</p>
+        <div class="header__logo">
+            <img src="{% static 'logo.png' %}" style="width: 35px;">
         </div>
     </div>
     <div class="col">
     </div>
     <div class="col-auto">
-        <div class="header-company me-3" hx-trigger="load" hx-get="{% url 'header_company' %}" hx-target="this">
+        <div class="header__company me-2" hx-trigger="load" hx-get="{% url 'header_company' %}" hx-target="this">
         </div>
     </div>
-    <div class="col-auto p-0">
-        {% if user.is_authenticated %}
-        <div class="icon my-auto me-3">
-            {% include "components/iconButtonComponent/iconButton.html" with backgroundcolor="#554a76" color="#fff" icon="bi-patch-question-fill" %}
-        </div>
-        {% endif %}
+    {% if user.is_authenticated %}
+    <div class="col-auto p-0 me-2">
+        {% include "components/iconButtonComponent/iconButton.html" with name="header__help" header=1 icon="bi-patch-question-fill" %}
     </div>
-    <div class="col-auto p-0">
-        {% if user.is_authenticated %}
-        <div class="icon me-2">
-            {% include "components/iconButtonComponent/iconButton.html" with backgroundcolor="#554a76" color="#fff" icon="bi-bell-fill" %}
-        </div>
-        {% endif %}
+    {% endif %}
+    {% if user.is_authenticated %}
+    <div class="col-auto p-0 me-2">
+        {% include "components/iconButtonComponent/iconButton.html" with name="header__not" header=1 icon="bi-bell-fill" %}
     </div>
+    {% endif %}
     <div class="col-auto" style="padding: 0em 1.5em 0em 0.5em;">
         <div class="profile-image-wrap" style="position: relative;">
             <a href="#">

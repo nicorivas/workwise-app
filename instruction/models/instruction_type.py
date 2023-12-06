@@ -15,9 +15,16 @@ class InstructionType(models.Model):
     name = models.CharField(max_length=255)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     description = models.TextField(default="", null=True, blank=True)
+    flow_visible = models.BooleanField(default=False)
+    flow_title = models.CharField(max_length=255, default="", null=True, blank=True)
+    flow_description = models.TextField(default="", null=True, blank=True)
     previous_instruction = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     step = models.IntegerField(choices=[(0,"Write"),(1,"Revise"),(2,"Modify")], default=0)
-    style = models.CharField(max_length=64, choices=[("normal","normal"),("seamless","seamless")], default="normal")
+    style = models.CharField(max_length=64, choices=[
+        ("normal","normal")
+        ,("seamless","seamless")
+        ,("flow","flow")
+        ], default="normal")
 
     def __str__(self):
         return f"Instruction Type {self.pk}: {self.name}"

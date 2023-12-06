@@ -1,3 +1,5 @@
+import logging
+
 from django.db import models
 from django.templatetags.static import static
 
@@ -70,14 +72,12 @@ class Agent(models.Model):
             prompt=PromptTemplate(text=prompt, parameters=prompt_parameters),
             memory=""
             ))
-        print(reply)
+        logging.warning(reply)
         return reply
 
     def stream_prompt(self, request, prompt, fast=False):
         from asgiref.sync import async_to_sync
         from channels.layers import get_channel_layer
-        print("Agent.stream_prompt")
-        print(prompt)
         channel_layer = get_channel_layer()
         # Group names are set to the view path, so that each view call answers to a specific socket group.
         group_name = request.path.replace("/", "")

@@ -26,6 +26,7 @@ export default class InstructionElementAgentCallComponent extends AbstractCompon
             "Create job profile": this.agentCallWriteToDocument,
             "Crear planificación estratégica": this.agentCallWriteToDocument,
             "Evaluate pitch": this.agentCallWriteToDocument,
+            "Analyze Power Pitch": this.agentCallWriteToDocument,
             "LinkedIn Post": this.agentCallWriteToFormat,
             "Project Charter Email": this.agentCallWriteToFormat,
             "Summary": this.agentCallWriteToFormat,
@@ -63,6 +64,8 @@ export default class InstructionElementAgentCallComponent extends AbstractCompon
 
     async agentCallWriteToFormat(instruction, event) {
         console.log("InstructionComponent.agentCallWriteToFormat()")
+        console.log(jQuery(event.currentTarget))
+        console.log(jQuery(event.currentTarget).closest(".instruction-element"))
         let instruction_element_id = jQuery(event.currentTarget).closest(".instruction-element").data("id");
         let documentId = instruction.task.document.getId();
         try {
@@ -100,10 +103,14 @@ export default class InstructionElementAgentCallComponent extends AbstractCompon
     }
 
     async agentCallWriteToDocument(instruction, event) {
-        console.log("InstructionComponent.writeToDocument()")
         instruction.setState({"status":"running"});
         let instruction_element_id = jQuery(event.currentTarget).closest(".instruction-element").data("id");
-        instruction.task.document.stream(instruction, instruction_element_id);
+        if (instruction.task.document) {
+            instruction.task.document.stream(instruction, instruction_element_id);
+        } else {
+            console.warn("InstructionComponent.writeToDocument(): Document not found");
+        }
+        
     }
 
 }

@@ -10,12 +10,12 @@ export default class ButtonComponent extends AbstractComponent {
      * 
      * @param {string|jQuery} element 
      */
-    constructor(element, async = true) {
+    constructor(element, async = true, selectable = true) {
         super(element);
         // Elements
         this.$button = this.$element.find(".button");
         this.$loader = this.$element.find(".button__loader");
-        this.selectable = true;
+        this.selectable = selectable;
         this.async = async;
         // Default state
         this.state = {
@@ -71,14 +71,14 @@ export default class ButtonComponent extends AbstractComponent {
     render() {
         if (this.state["status"] == "running") {
             this.$button.addClass("button--running");
-            this.$loader.show();
+            this.$loader.css('opacity', 100.0);
         } else if (this.state["status"] == "disabled") {
             this.$button.addClass("button--disabled");
-            this.$loader.show();
+            this.$loader.css('opacity', 0.0);
         } else if (this.state["status"] == "idle") {
             this.$button.removeClass("button--disabled");
             this.$button.removeClass("button--running");
-            this.$loader.hide();
+            this.$loader.css('opacity', 0.0);
         }
 
         this.$button.toggleClass("button--selected", this.state["selected"]);

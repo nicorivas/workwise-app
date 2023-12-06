@@ -8,7 +8,7 @@ streamCallGeneral = function (view_url, source_element_id, destination_element_i
     The response is used to render the destination_element_id.
     TODO: Don't assume that response is markdown.
     */
-    console.log("streamCallGeneral")
+    console.log("streamCallGeneral 1")
 
     let csrf_token = Cookies.get('csrftoken')
     let response = "";
@@ -21,7 +21,7 @@ streamCallGeneral = function (view_url, source_element_id, destination_element_i
     if (hostname == "127.0.0.1" || hostname == "localhost") {
         websocket_url = `ws://${hostname}:8000/ws/openai_stream/?group_name=` + view_url
     } else {
-        websocket_url = `ws://${hostname}:80/ws/openai_stream/?group_name=` + view_url
+        websocket_url = `ws://${hostname}/ws/openai_stream/?group_name=` + view_url
     }
     const socket = new WebSocket(websocket_url)
 
@@ -91,5 +91,3 @@ streamCallGeneral = function (view_url, source_element_id, destination_element_i
         }
     };
 }
-
-export default streamCallGeneral;

@@ -1,0 +1,7 @@
+{% load static %}
+{% if flow.logo %}
+<img class="header__image" src="{{flow.logo.url}}" alt="Logo">
+{% endif %}
+{% if flow.title %}
+<h1 class="header__text">{{flow.title}}</h1>
+{% endif %}

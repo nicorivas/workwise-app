@@ -3,7 +3,6 @@ import ErrorMessageComponent from "../components/errorMessageComponent/errorMess
 export default class AbstractView {
 
     constructor(element) {
-        console.log("AbstractView.constructor()", element);
         this.$element; // The jQuery element for this view
         this.data = {}; // A basic example of how you might manage data for this view
         this.events = {}; // Store event listeners

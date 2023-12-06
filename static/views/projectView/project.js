@@ -9,11 +9,8 @@ export default class ProjectView extends AbstractView {
     
     constructor(element, view, id=null) {
         super(element);
-        console.log("ProjectView.constructor()", this, element, view, id);
+        console.log("ProjectView.constructor()");
         this.parentView = view;
-        this.projectsDropdown;
-        this.contextTable;
-        this.tasksTable;
         this.id = id;
         this.init();
     }

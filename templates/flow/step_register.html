@@ -1,0 +1,51 @@
+<div class="step" id="step-1">
+    <div class="step__title">
+        <!-- <h2>Completa el formulario para avanzar</h2> -->
+    </div>
+    <div class="step__body">
+        <form id="task-create" novalidate="novalidate">
+            {% if form.author_name %}
+            <div class="form-group">
+                {{ form.author_name.errors }}
+                {{ form.author_name.label_tag }} {{ form.author_name }}
+                <div class="form-group__error" id="{{form.author_name.id_for_label}}-error">
+                    <p></p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if form.author_email %}
+            <div class="form-group">
+                {{ form.author_email.errors }}
+                {{ form.author_email.label_tag }} {{ form.author_email }}
+                <div class="form-group__error" id="{{form.author_email.id_for_label}}-error">
+                    <p></p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if form.startup_name %}
+            <div class="form-group">
+                {{ form.startup_name.errors }}
+                {{ form.startup_name.label_tag }} {{ form.startup_name }}
+                <div class="form-group__error" id="{{form.startup_name.id_for_label}}-error">
+                    <p></p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if form.startup_level %}
+            <div class="form-group">
+                {{ form.startup_level.errors }}
+                {{ form.startup_level.label_tag }} {{ form.startup_level }}
+                <div class="form-group__error" id="{{form.startup_level.id_for_label}}-error">
+                    <p></p>
+                </div>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+    <div class="step__footer">
+        {% include 'components/buttonComponent/button.html' with label="Comenzar" name="btn-create-task" box=1 %}
+    </div>
+</div>

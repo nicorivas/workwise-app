@@ -1,6 +1,6 @@
 {% load keyvalue %}
 
-<div class="instruction-element-agent-call">
+<div class="instruction-element instruction-element-agent-call" data-id="{{element.pk}}">
 {% with name="agent-call-"|addstr:element.pk %}
 {% include 'components/buttonComponent/button.html' with label=element.instructionelementagentcall.button_label name=name class="agent-call" %}
 {% endwith %}

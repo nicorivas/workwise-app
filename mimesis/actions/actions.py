@@ -46,7 +46,7 @@ class Action(BaseModel):
         Returns:
             TODO: Specify
         """
-        return self.prompt.get_prompt(**kwargs)
+        return self.prompt.get_prompt(parameters=kwargs)
 
 class Chain(BaseModel):
     """Chain of actions

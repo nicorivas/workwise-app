@@ -57,6 +57,9 @@ class CompanyUserInvitation(AbstractBaseInvitation):
 class Profile(models.Model):
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # Full name
+    full_name = models.CharField(max_length=256, null=True, blank=True)
+    # Profile picture
     picture = models.ImageField(upload_to="profile_pictures", default="profile_pictures/default.png", null=True, blank=True)
     # Companies a user is part of
     companies = models.ManyToManyField(Company, blank=True, default=3)

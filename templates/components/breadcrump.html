@@ -25,5 +25,13 @@
         {% include 'components/breadcrump_element.html' with text=task.name_and_type active=1 dropdown=1 italic=1 %}
         {% endif %}
 
+        {% if action %}
+        {% include 'components/breadcrump_element.html' with text="Home" icon="bi-house-fill" %}
+        {% include 'components/breadcrump_separator.html' %}
+        {% include 'components/breadcrump_element.html' with text="Actions" icon="bi-collection-fill" url="actions:index" %}
+        {% include 'components/breadcrump_separator.html' %}
+        {% include 'components/breadcrump_element.html' with text=action.name italic=1 url="actions:read" urlparam=action.pk %}
+        {% endif %}
+
     </div>
 </div>

@@ -1,66 +1,41 @@
 {% load keyvalue %}
 
-<div class="row g-0 text-input-wrapper">
-
+<div class="instruction-element instruction-element__text-input {% if flow %} instruction-element--flow instruction-element--flow__text-input {% endif %}" data-id ={{element.id}} data-type="{{element.type.name}}">
+    {% if flow %}
+    <div class="instruction-element__header instruction-element--flow__header">
+        <h2 class="instruction-element__header__title">{{element.flow_title}}</h2>
+        {% include 'components/buttonComponent/button.html' with label="Volver a grabar" name="btn-rerecord-record" box=1 %}
+    </div>
+    <div class="instruction-element__body instruction-element--flow__body">
+        <div class="icon record-icon" id="btn-start-record-icon">
+            <i class="bi bi-mic"></i>
+            <div class="pulse"></div>
+            <div class="pulse"></div>
+            <div class="pulse"></div>
+        </div>
+        <div class="timer" id="timer">
+            <h3>4:00</h3>
+        </div>
+        <textarea class="instruction-input" name="{{element.name}}" id="instruction-text" rows="5">{{data|keyvalue:element.name}}</textarea>
+    </div>
+    <div class="instruction-element__footer instruction-element--flow__footer">
+        {% include 'components/buttonComponent/button.html' with label="Reiniciar" name="btn-restart-record" box=1 %}
+        {% include 'components/buttonComponent/button.html' with label="Grabar" name="btn-start-record" box=1 %}
+        {% include 'components/buttonComponent/button.html' with label="Finalizar" name="btn-stop-record" box=1 %}
+    </div>
+    {% else %}
     <div class="col text-input-textarea-wrapper">
         <textarea class="instruction-input" name="{{element.name}}" id="instruction-text" rows="5">{{data|keyvalue:element.name}}</textarea>
     </div>
-
     <div class="col-auto p-1 my-auto" id="recordButton">
-      {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-mic" %}
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-mic" %}
     </div>
-    
+    {% endif %}
 </div>
 
-<div id="prompt_modal">
-    {# include 'projects/modal_prompt.html' #}
+<div class="instruction-element__text-input__indicator">
+    <div class="transcribing">
+        {% include 'components/loader.html' %}
+        <h3>Estamos procesando tu pitch</h3>
+    </div>
 </div>
-
-<script>
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
-      mediaRecorder = new MediaRecorder(stream);
-
-      jQuery("#recordButton .icon-button").on("click", (e) => {
-        let button = jQuery(e.target).closest(".icon-button");
-        console.log("MICROFONO CLICK", button);
-        if (mediaRecorder.state === 'recording') {
-          mediaRecorder.stop();
-          button.find(".icon").html('<i class="bi bi-mic"></i>');
-        } else {
-          mediaRecorder.start();
-          button.find(".icon").html('<i class="bi bi-stop-circle"></i>');
-        }
-      });
-
-      mediaRecorder.ondataavailable = function (e) {
-        chunks.push(e.data);
-      };
-
-      mediaRecorder.onstop = function (e) {
-        const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
-        chunks = [];
-        const audioURL = window.URL.createObjectURL(blob);
-        //document.querySelector("#audioElement").src = audioURL;
-        document.querySelector("#instruction-text").textContent = "Transcribing audio..."
-        document.querySelector("#instruction-text").classList.add("text-muted");
-        // Call the function to upload audio
-        uploadAudio(blob);
-      };
-    });
-
-  function uploadAudio(blob) {
-    let fd = new FormData();
-    fd.append('audio', blob, 'audio.ogg');
-    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-    jQuery.ajax({
-      type: 'POST',
-      url: 'transcribe_audio/',
-      data: fd,
-      processData: false,
-      contentType: false
-    }).done(function (data) {
-      document.querySelector("#instruction-text").classList.remove("text-muted");
-      document.querySelector("#instruction-text").textContent = data.text;
-    });
-  }
-</script>

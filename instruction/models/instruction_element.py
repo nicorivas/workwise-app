@@ -1,4 +1,5 @@
 import json, logging
+import openai
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -23,7 +24,7 @@ class InstructionElementType(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.name
+        return f"{self.pk} - {self.name}"
 
     def template(self):
         if self.name == self.InstructionElementTypes.MESSAGE:
@@ -66,7 +67,10 @@ class InstructionElement(models.Model):
     instruction_type = models.ForeignKey(InstructionType, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     index = models.IntegerField(default=0)
-    guide = models.TextField(null=True, blank=True)
+    guide = models.TextField(null=True, blank=True)    
+    flow_title = models.CharField(max_length=255, default="", null=True, blank=True)
+    flow_description = models.TextField(default="", null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.pk}. {self.instruction_type.name} - {self.type} - {self.name}"
@@ -98,10 +102,14 @@ class InstructionElementTextInput(InstructionElement):
         self.type = InstructionElementType.objects.get(name=InstructionElementType.InstructionElementTypes.TEXT_INPUT)
 
     def __str__(self):
-        return self.name
+        return f"{self.pk}. {self.instruction_type.name} - {self.type} - {self.name}"
     
     def template(self):
         return self.type.template()
+    
+    def transcribe(self, audio_file):
+        transcript = openai.Audio.transcribe("whisper-1", audio_file)
+        return transcript
 
 class InstructionElementMessage(InstructionElement):
 
@@ -112,7 +120,7 @@ class InstructionElementMessage(InstructionElement):
         self.type = InstructionElementType.objects.get(name=InstructionElementType.InstructionElementTypes.MESSAGE)
 
     def __str__(self):
-        return self.name
+        return f"{self.pk}. {self.instruction_type.name} - {self.type} - {self.name}"
     
     def template(self):
         return self.type.template()
@@ -130,16 +138,17 @@ class InstructionElementAgentCall(InstructionElement):
         self.type = InstructionElementType.objects.get(name=InstructionElementType.InstructionElementTypes.AGENT_CALL)
 
     def __str__(self):
-        return self.name
+        return f"{self.pk}. {self.instruction_type.name} - {self.type} - {self.name}"
     
     def call_agent(self, request, instruction, stream=False):
-        print(f"InstructionElementAgentCall.call_agent() called: {request.POST}")
+        logging.warning(f"InstructionElementAgentCall.call_agent() called: {request.POST}")
 
         # Update instruction data based on POST, that is, the form values
         instruction.update(request.POST)
 
         # The parameters to give to the agent action are held in the instruction data, that is, the values of the form.
         action_parameters = instruction.data
+        logging.warning("action_parameters", action_parameters)
 
         # Load action from file description in Mimesis library
         action = actions.Action.load_from_file(f"{self.mimesis_action}")
@@ -159,7 +168,8 @@ class InstructionElementAgentCall(InstructionElement):
         for document_link in document_links:
             action.prompt.parameters[document_link.name] = Document.objects.get(pk=action_parameters[document_link.name]).text
 
-        print(action.prompt.parameters)
+        logging.warning(action.prompt)
+        logging.warning(action.prompt.parameters)
 
         replies = []
 
@@ -183,12 +193,16 @@ class InstructionElementAgentCall(InstructionElement):
         else:
             
             # Load Agent from caché
-            agent = Agent(**json.loads(request.session['agent']))
+            request_agent = request.session.get('agent')
+            if (request_agent):
+                agent = Agent(**json.loads(request.session['agent']))
+            else:
+                agent = Agent()
 
             if not stream:
                 # In the syncrhonous case (we wait until LLM response is finished), just execute action in mimesis
-                print(f"Calling Mimesis action {action.name}")
-                print(f"{action.prompt.get_prompt()}")
+                logging.warning(f"Calling Mimesis action {action.name}")
+                logging.warning(f"{action.prompt.get_prompt()}")
                 reply = agent.do(action)
                 replies += reply
                 instruction.finished = True
@@ -198,6 +212,7 @@ class InstructionElementAgentCall(InstructionElement):
                 # In the asynchronous case (we stream LLM response), we return the prompt to the front to make the async request.
                 print(f"Getting prompt from Mimesis {action.name}")
                 prompt = agent.prompt(action=action)
+                logging.warning(f"{prompt}")
                 self.instruction_type.action.agent.stream_prompt(request, prompt, fast=False)
                 return prompt
 

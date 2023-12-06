@@ -6,7 +6,7 @@ from app.routing import router
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ["id", "index", "name", "project", "action"]
+        fields = ["id", "index", "name", "project", "action", "created_by"]
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()

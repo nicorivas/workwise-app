@@ -85,6 +85,7 @@ class Document(models.Model):
     source = models.CharField(max_length=64, null=True, blank=True, choices=source_choices) # Where does the document come from
     source_id = models.CharField(max_length=256, null=True, blank=True) # The id of the document at the source (i.e. Google Docs id)
     source_url = models.CharField(max_length=512, null=True, blank=True) # The url of the document at the source (i.e. the Google Docs url)
+    reply = models.TextField(null=True, blank=True) # The text of the document
     json = models.JSONField(null=True, blank=True) # The json representation of the document
     sections = models.JSONField(null=True, blank=True) # The division of the document in sections
     is_format = models.BooleanField(default=False) # Whether this document is a format or not

@@ -13,12 +13,20 @@ table.dataTable a:hover {
     align-items: center;
 }
 
+.table__header h2 {
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+}
+
 .table__table {
     width: 100%;
     border-collapse: collapse;
 }
 
-table.dataTable thead th, table.dataTable tfoot th {
+table.dataTable thead th,
+table.dataTable tfoot th {
     font-weight: 300;
     color: #aaa;
 }

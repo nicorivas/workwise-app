@@ -8,25 +8,27 @@
     <script>
         // Click 0of button
         document.getElementById("button").addEventListener("click", function(){
-            console.log("button clicked")
+            console.log("button clicked");
             //const socket = new WebSocket('ws://localhost:8000/ws/openai_stream/');
             //const socket = new WebSocket('ws://redis:8000/ws/openai_stream/');
             let connection_string = document.getElementById("connection").value;
+            console.log("opening connection", connection_string);
             const socket = new WebSocket(connection_string);
+            console.log(socket);
             socket.onopen = function (event) {
-                console.log("socket.onopen")
+                console.log("socket.onopen");
             };
 
             socket.onmessage = function (event) {
-                console.log("socket.onmessage")
+                console.log("socket.onmessage");
             };
 
             socket.onerror = function (error) {
-                console.log(`[error] socket.onerror: ${error.message}`);
+                console.log(`socket.onerror: ${error.message}`);
             };
 
             socket.onclose = function(event) {
-                console.log("socket.onclose")
+                console.log("socket.onclose", event);
             };
         });
     </script>

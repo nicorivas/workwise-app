@@ -1,0 +1,22 @@
+{% load static %}
+
+{% include 'index_header.html' with action=action %}
+
+<div id="action">
+
+<div class="row g-0">
+    <div class="col p-0">
+        {% include 'components/tabsComponent/tabs.html' with name="action-tabs" %}
+    </div>
+</div>
+
+<div id="action-main">
+    {# include 'actions/instructions.html' with action=action #}
+</div>
+
+</div>
+
+<script type="module">
+    import ActionView from "{% static 'views/actionView/action.js' %}";
+    let actionView = new ActionView("#action", {{ action.pk}});
+</script>

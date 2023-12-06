@@ -16,16 +16,14 @@
 
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
-  <div class="container-fluid p-0">
+  <div class="container-fluid p-0" id="body">
 
     {% include 'body_header.html' %}
 
     <div class="row g-0">
 
       <!-- Sidebar -->
-      <div id="sidebar" class="col-auto">
-        {% include 'body_sidebar.html' %}
-      </div>
+      {% include 'components/sidebarComponent/sidebar.html' %}
 
       <!-- Main -->
       <div id="main" class="col">
@@ -37,6 +35,9 @@
 
       <!-- Loading indicator -->
       {% include 'components/loader_indicator.html' with id="main-loader-wrapper" col=1 %}
+
+      <!-- Help Sidebar -->
+      {% include 'components/helpSidebarComponent/helpSidebar.html' %}
 
     </div>
 
@@ -52,6 +53,11 @@
 
   {% include 'components/errorMessageComponent/errorMessage.html' %}
   
+  <script type="module">
+    import BodyView from "{% static 'views/bodyView/body.js' %}";
+    let bodyView = new BodyView("#body");
+  </script>
+
 </body>
 
 </html>

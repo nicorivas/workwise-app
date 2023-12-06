@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost","127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "user.apps.UserConfig",
     "task.apps.TaskConfig",
     "flow.apps.FlowConfig",
+    "prompt.apps.PromptConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -218,12 +219,14 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "nico@getworkwise.ai"
-EMAIL_HOST_PASSWORD = "iiwb gflk fmae mava"
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
@@ -259,4 +262,10 @@ OPEN_URLS = [
     "/accounts/social/connections/disconnect/google/",
     "/accounts/social/login/cancelled/",
     "/accounts/social/login/error/",
+    "/flow/",
+    "/flow/*",
+    "/onboarding/",
+    "/instruction/*/element/*/transcribe",
+    "/instruction/*/element/*/call_prompt",
+    "/media/*"
 ]

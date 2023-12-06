@@ -1,0 +1,13 @@
+<!-- Step 4 -->
+
+<div class="step__title">
+    <h2>Feedback de tu pitch</h2>
+</div>
+
+<div class="step__body">
+    {% include 'document/document.html' with document=task.active_document flow=1 %}
+</div>
+
+<div class="step__footer">
+    {% include 'components/buttonComponent/button.html' with label="Finalizar" name="btn-last" %}
+</div>

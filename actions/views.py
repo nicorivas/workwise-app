@@ -18,7 +18,7 @@ from instruction.models.instruction import Instruction
 class ActionsView(View):
 
     def get(self, request, action_id=None):
-        print("ActionsView.get")
+        print("ActionsView.get", request.GET)
         # Get all actions
         actions = Action.objects.all()
         if request.session.get("company_id"):
@@ -31,7 +31,10 @@ class ActionsView(View):
             "actions": actions,
             "action": action
         }
-        return render(request, "actions/index.html", context)
+        if request.GET.get("source") == "menu":
+            return render(request, "actions/main.html", context)
+        else:
+            return render(request, "actions/index.html", context)
 
     def post(self, request, action_id=None):
         print("ActionsView.post")
@@ -68,8 +71,27 @@ class ActionReadView(View):
             ,"elements": elements
             ,"action_element_create_form": instruction_element_create_form
         }
-        return render(request, "actions/actions.html", context)
-    
+        return render(request, "actions/action.html", context)
+
+class ActionReadPromptsView(View):
+
+    def get(self, request, action_id):
+
+        print("ActionReadPromptsView.get")
+
+        action = get_object_or_404(Action, id=action_id)
+
+        prompts = action.prompt_set.all()
+
+        context = {
+            "action": action,
+            "prompts": prompts
+        }
+        
+        return render(request, "prompt/index.html", context)
+
+action_read_prompts_view = ActionReadPromptsView.as_view()
+
 class ActionReadInstructionTypesView(View):
 
     def get(self, request, action_id):

@@ -1,0 +1,10 @@
+{% load static %}
+
+<div id="sidebar" class="col-auto">
+    {% include 'components/iconButtonComponent/iconButton.html' with name="sidebar__explorer" sidebar=1 icon="bi-rocket-takeoff-fill" %}
+    {% include 'components/iconButtonComponent/iconButton.html' with name="sidebar__projects" sidebar=1 icon="bi-journal-text" %}
+    {% include 'components/iconButtonComponent/iconButton.html' with name="sidebar__agents" sidebar=1 icon="bi-people-fill" %}
+    {% include 'components/iconButtonComponent/iconButton.html' with name="sidebar__documents" sidebar=1 icon="bi-files" %}
+    {% include 'components/iconButtonComponent/iconButton.html' with name="sidebar__company" sidebar=1 icon="bi-grid-fill" %}
+    {% include 'components/iconButtonComponent/iconButton.html' with name="sidebar__actions" sidebar=1 icon="bi-collection-fill" %}
+</div>

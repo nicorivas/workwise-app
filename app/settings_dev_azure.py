@@ -24,19 +24,21 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG').lower() in ('true','1','t')
 
-ALLOWED_HOSTS = ["localhost"
-                ,"127.0.0.1"
-                ,'workwise-test.azurewebsites.net'
-                ,'*.eastus.azurecontainerapps.io'
-                ,'*.eastus.azurecontainerapps.io/'
-                ,'workwise-dev.thankfulplant-e9044387.eastus.azurecontainerapps.io'
-                ,'workwise-dev.eastus.cloudapp.azure.com'
-                ,'www.getworkwise.ai'
-                ,'app.getworkwise.ai'
-                ,'*.getworkwise.ai'
-                ,'20.127.221.195']
-CSRF_TRUSTED_ORIGINS = ['https://*.' + os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
-
+ALLOWED_HOSTS = ["*"]
+#ALLOWED_HOSTS = ["localhost"
+#                ,"127.0.0.1"
+#                ,'workwise-test.azurewebsites.net'
+#                ,'*.eastus.azurecontainerapps.io'
+#                ,'*.eastus.azurecontainerapps.io/'
+#                ,'workwise-dev.thankfulplant-e9044387.eastus.azurecontainerapps.io'
+#                ,'workwise-dev.eastus.cloudapp.azure.com'
+#                ,'www.getworkwise.ai'
+#                ,'app.getworkwise.ai'
+#                ,'getworkwise.ai'
+#                ,'*.getworkwise.ai'
+#                ,'20.127.221.195']
+CSRF_TRUSTED_ORIGINS = ['https://app.getworkwise.ai']
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 
 # Application definition
@@ -55,6 +57,7 @@ INSTALLED_APPS = [
     "user.apps.UserConfig",
     "task.apps.TaskConfig",
     "flow.apps.FlowConfig",
+    "prompt.apps.PromptConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -216,12 +219,14 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "nico@getworkwise.ai"
-EMAIL_HOST_PASSWORD = "iiwb gflk fmae mava"
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
@@ -278,6 +283,9 @@ OPEN_URLS = [
     "/accounts/social/login/cancelled/",
     "/accounts/social/login/error/",
     "/flow/",
-    "/flow/carozzi/",
-    "/onboarding/"
+    "/flow/*",
+    "/onboarding/",
+    "/instruction/*/element/*/transcribe",
+    "/instruction/*/element/*/call_prompt",
+    "/media/*",
 ]

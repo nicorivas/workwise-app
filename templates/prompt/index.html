@@ -1,0 +1,16 @@
+{% load static %}
+
+<div class="prompts" id="prompts">
+    <div class="prompts__header">
+        {% include 'components/selectorComponent/selector.html' with name="prompts" items=prompts %}
+        {% include 'components/iconButtonComponent/iconButton.html' with name="prompts__add-prompt" icon="bi-plus-circle" text="Add" url="prompt:create" %}
+    </div>
+    <div id="prompt__wrapper">
+        {% include 'prompt/prompt.html' with prompt=prompts.0 %}
+    </div>
+</div>
+
+<script type="module">
+    import PromptsView from "{% static 'views/promptsView/prompts.js' %}";
+    let promptsView = new PromptsView("#prompts");
+</script>

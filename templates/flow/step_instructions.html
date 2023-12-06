@@ -1,0 +1,40 @@
+<!-- Every instruction is a different step -->
+{% for instruction in instructions|dictsort:"type.index" %}
+<div class="instruction step__instruction" id="instruction-{{instruction.pk}}" data-id="{{instruction.pk}}" data-type-name="{{instruction.type.name}}">
+
+    <div class="instruction__header instruction__header--flow">
+    </div>
+
+    <div class="instruction__body instruction__body--flow">
+        {% for element in instruction.type.instructionelement_set.all|dictsort:"index" %}
+
+        {% include element.template with element=element data=instruction.data action=instruction.type.action agent=agent edit=instruction.template flow=1 %}
+        
+        {% endfor %}
+    </div>
+
+    <div class="instruction__footer instruction__footer--flow">
+    </div>
+
+</div>
+{% endfor %}
+
+{% if flow.debug %}
+<div class="step__instruction__debug" data-index="{{forloop.counter0}}">
+    <div>
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-arrow-bar-left" name="step__instruction__debug__prev" %}
+    </div>
+    <div>
+        {{ instruction.pk }} - {{ instruction.name }}
+    </div>
+    <div>
+        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-arrow-bar-right" name="step__instruction__debug__next" %}
+    </div>
+</div>
+{% endif %}
+
+<!--
+<div class="instruction-element instruction-element-wrapper" id="instruction-element-{{element.pk}}" data-id="{{element.pk}}">
+{# include 'instruction/elements/element.html' #}
+</div>
+-->

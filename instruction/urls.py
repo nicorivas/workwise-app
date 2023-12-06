@@ -33,6 +33,7 @@ urlpatterns = [
     path("<int:instruction_id>/element/<int:instruction_element_id>/read", instruction_element_read_view, name="element_read"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/update", instruction_element_update_view, name="element_update"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/delete", instruction_element_delete_view, name="element_delete"),
+    path("<int:instruction_id>/element/<int:instruction_element_id>/transcribe", instruction_element_transcribe_view, name="element_transcribe"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/call", instruction_element_call_view, name="element_call"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/call_prompt", instruction_element_call_prompt_view, name="element_call_prompt"),
     path("<int:instruction_id>/element/<int:instruction_element_id>/revise", instruction_element_revise_view, name="element_revise"),

@@ -1,0 +1,15 @@
+<!-- Steps 2: Instructions -->
+<div class="step" id="step-instructions">
+    <form id="task" novalidate="novalidate" data-id="{{task.id}}">
+        {% if task %}
+        {% include 'flow/step_instructions.html' %}
+        {% endif %}
+    </form>
+</div>
+
+<!-- Steps 3: Document -->
+<div class="step" id="step-document">
+    {% if task %}
+    {% include 'flow/step_document.html' %}
+    {% endif %}
+</div>
