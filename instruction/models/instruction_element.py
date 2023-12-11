@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .instruction import InstructionType, Message
 
 from document.models import Document
+from prompt.models import Prompt
 from mimesis.agent.agent import Agent
 import mimesis.actions.actions as actions
 
@@ -67,10 +68,10 @@ class InstructionElement(models.Model):
     instruction_type = models.ForeignKey(InstructionType, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     index = models.IntegerField(default=0)
+    title = models.TextField(null=True, blank=True)
     guide = models.TextField(null=True, blank=True)    
     flow_title = models.CharField(max_length=255, default="", null=True, blank=True)
     flow_description = models.TextField(default="", null=True, blank=True)
-
 
     def __str__(self):
         return f"{self.pk}. {self.instruction_type.name} - {self.type} - {self.name}"
@@ -96,6 +97,8 @@ class InstructionElementTextInput(InstructionElement):
 
     message = models.TextField(null=True, blank=True)
     audio = models.BooleanField(default=True)
+    feedback_prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE, null=True, blank=True)
+    feedback_text = models.TextField(null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -148,7 +151,6 @@ class InstructionElementAgentCall(InstructionElement):
 
         # The parameters to give to the agent action are held in the instruction data, that is, the values of the form.
         action_parameters = instruction.data
-        logging.warning("action_parameters", action_parameters)
 
         # Load action from file description in Mimesis library
         action = actions.Action.load_from_file(f"{self.mimesis_action}")
@@ -167,9 +169,6 @@ class InstructionElementAgentCall(InstructionElement):
         document_links = InstructionElementDocumentLink.objects.filter(instruction_type=instruction.type)
         for document_link in document_links:
             action.prompt.parameters[document_link.name] = Document.objects.get(pk=action_parameters[document_link.name]).text
-
-        logging.warning(action.prompt)
-        logging.warning(action.prompt.parameters)
 
         replies = []
 

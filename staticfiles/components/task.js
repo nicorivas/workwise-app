@@ -43,7 +43,7 @@ export default class TaskView extends AbstractComponent {
         this.selector.addFunction(this.selectorItemClick, [this.document]);
 
         // Set initial state of instructions
-        this.collapseInstructions();
+        this.closeInstructions();
         this.instructionsSidebars["instructions"].selectStep(0);
         this.selectInstruction(0);
     }
@@ -68,7 +68,7 @@ export default class TaskView extends AbstractComponent {
         }
     }
 
-    collapseInstructions() {
+    closeInstructions() {
         for (const instruction of this.instructionsComponents) {
             instruction.collapse();
         }

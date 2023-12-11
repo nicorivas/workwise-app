@@ -16,6 +16,7 @@ export default class TaskComponent extends AbstractComponent {
     }
 
     init() {
+        console.log("Task");
         // Initialize instructions
         let $instructions = this.$element.find(".instruction");
         for (const $instruction of $instructions) {
@@ -53,6 +54,9 @@ export default class TaskComponent extends AbstractComponent {
     }
 
     openInstruction(index) {
+        if (index >= this.instructions.length) {
+            return;
+        }
         this.instructions[index].open();
     }
 

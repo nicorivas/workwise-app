@@ -1,0 +1,21 @@
+#help-sidebar {
+    width: 0px;
+    border-left: 1px solid var(--border-color-normal);
+}
+
+#help-sidebar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--wrapper-padding-large);
+}
+
+#help-sidebar__header h1 {
+    font-size: 14px;
+    margin: 0;
+    padding: var(--wrapper-padding-normal);
+}
+
+.help-sidebar--open {
+    width: 400px !important;
+}

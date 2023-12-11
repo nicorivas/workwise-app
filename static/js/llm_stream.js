@@ -21,7 +21,7 @@ streamCallGeneral = function (view_url, source_element_id, destination_element_i
     if (hostname == "127.0.0.1" || hostname == "localhost") {
         websocket_url = `ws://${hostname}:8000/ws/openai_stream/?group_name=` + view_url
     } else {
-        websocket_url = `ws://${hostname}/ws/openai_stream/?group_name=` + view_url
+        websocket_url = `wss://${hostname}/ws/openai_stream/?group_name=` + view_url
     }
     const socket = new WebSocket(websocket_url)
 

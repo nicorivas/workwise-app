@@ -1,0 +1,590 @@
+html, body {
+    min-height: 100%;
+    font-family: 'Inter';
+    font-size: 14px;
+}
+
+:root {
+    --color-text: #444;
+    --border-color-normal: #eee;
+    --border-radius: 5px;
+    --wrapper-padding-normal: 10px;
+    --background-color: #E2E2E2;
+    --background-color-bright: #ffffff;
+    --background-color-dark: #d4373f;
+    --background-color-darker: #ad2128;
+    --background-button: #d4373f;
+    --background-button-hover: #ad2128;
+    --background-button-active: #ad2128;
+    --background-highlight-hover: #e5dcff;
+    --background-color-alternate: #8155D0;
+    --background-color-alternate-darker: #5f3aa5;
+    --color-text: #dd3a42;
+    --background-color-soft: #eee;
+    --color-error-light: #ffb5b5;
+    --color-error-normal: #d68d8d;
+    --error-message-background: #000;
+}
+
+input, textarea, select {
+    font-family: 'Inter';
+    font-size: 14px;
+}
+
+/* Radio buttons should have width 50 */
+input[type=radio] {
+    width: 50px;
+    margin: 0;
+}
+
+/* Input should exclude radio */
+input:focus:not([type=radio]), textarea:focus, select:focus {
+    outline: none !important;
+    border: 1px solid red;
+    box-shadow: 0 0 10px #719ECE;
+}
+
+body {
+    background-color: var(--background-color);
+    /* Distinct background color */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+form {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: var(--color-text);
+}
+
+h2 {
+    margin-top: 0;
+    font-weight: normal;
+    font-size: 20px;
+}
+
+h3 {
+    margin-top: 1em;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+.flow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.flow--fixed-height {
+    height: 100vh;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    /* Adjust the logo size as needed */
+    height: 100px;
+}
+
+.header__image {
+    width: 150px;
+}
+
+.header__text {
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+/* STEPS */
+
+.body {
+    width: 500px;
+    height: 100%;
+    overflow-y: hidden;
+    display: flex;
+    justify-content: center;
+
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fff;
+    height: 97%;
+    padding: 1em;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px #989898;
+    margin: 5px;
+    width: 100%;
+}
+
+.step__instruction.hidden {
+    display: none;
+}
+
+.step__title {
+    text-align: center;
+}
+
+.step__footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    /* gap between elements */
+    column-gap: 1em;
+}
+
+.step__footer button {
+    width: 450px;
+}
+
+.step__footer #btn-restart-record {
+    width: 200px;
+}
+
+.step__footer #btn-stop-record {
+    width: 200px;
+}
+
+.step__body {
+    display: flex;
+    flex: 1;
+    overflow-y: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.step__instruction__debug {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#step-4 .step__body {
+    height: 85%;
+}
+
+.step__tooltip {
+    color: #888;
+    line-height: 1.5em;
+}
+
+.timer h3 {
+    font-size: 20px;
+}
+
+#instruction-text {
+    font-size: 14px;
+    line-height: 1.5em;
+    overflow: scroll;
+    width: 100%;
+    height: 100%;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-top: 1em;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    resize: none;
+}
+
+.step__body__answer {
+    flex-grow: 1;
+    overflow-y: auto;
+    font-size: 14px;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.step__body__answer__indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3em;
+}
+
+/* Formato markdown de respuesta */
+
+.step__body__answer__text {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.step__body__answer__text p {
+    margin:0;
+    padding:0;
+    line-height: 1.5em;
+    padding-bottom: 0.5em;
+}
+
+.step__body__answer__text h1 {
+    font-size: 16px;
+    color: #000
+}
+
+.step__body__answer__text h2 {
+    font-size: 14px;
+    color: #000
+}
+
+.step__body__answer__text h3 {
+    margin-top: 2em;
+    font-size: 14px;
+    color: #000;
+    font-weight: 600;
+}
+
+#step__record {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#step__transcribe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: .5em;
+}
+
+input, select {
+    width: 100%;
+    padding: .75em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#id_startup_level {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#id_startup_level label {
+    width: 190px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #dadada;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* Modify label when radio button is selected */
+#id_startup_level input[type="radio"]:checked~label {
+    border: 1px solid #000;
+}
+
+.button-container {
+    width: 100%;
+}
+
+.submit-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: .75em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1em;
+}
+
+.step-indicator {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.dots {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.dot {
+    background-color: var(--background-color-bright);
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.dot.active {
+    background-color: var(--color-text);
+}
+
+@media (max-width: 600px) {
+    .body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .flow {
+        margin: 0;
+        width: 100%;
+    }
+
+    .step {
+        border-radius: 0px;
+    }
+
+    .step__footer button {
+        width: 300px;
+    }
+}
+
+.record-icon {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 500px;
+    padding: 15px;
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+    background-color: var(--background-color-soft);
+    z-index: 1;
+}
+
+.record-icon:hover {
+    background-color: #ffdf6d;
+}
+
+.record-icon--recording {
+    background-color: #FAC504;
+}
+
+.record-icon .bi-mic {
+    z-index: 1;
+}
+
+.record-icon .pulse:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+.record-icon .pulse:nth-child(3) {
+    animation-delay: 1.4s;
+}
+
+.btn {
+    background-color: var(--background-color-dark);
+}
+
+.btn:hover {
+    background-color: var(--background-color-darker);
+}
+
+.btn-alt {
+    background-color: var(--background-color-alternate) !important;
+}
+
+.btn-alt:hover {
+    background-color: var(--background-color-alternate-darker) !important;
+}
+
+.record-icon .pulse {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background-color: #FAC504;
+    animation: pulse-animation 2s infinite;
+    z-index: 0;
+}
+
+@keyframes pulse-animation {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100px;
+}
+
+.footer h1 {
+    font-size: 20px;
+}
+
+.form-group {
+    width: 80%;
+    margin-bottom: 1em;
+}
+
+.form-group__error {
+    color: var(--color-error-normal);
+}
+
+.form-group__error p {
+    margin: 0;
+    margin-top: 5px;
+    font-size: 14px;
+    height: 14px;
+}
+
+.is-invalid {
+    box-shadow: inset 0 0 0 1px #fdb8b8;
+}
+
+input {
+    box-sizing: border-box;
+}
+
+::placeholder {
+    color: rgb(205, 205, 205);
+    opacity: 1;
+    /* Firefox */
+}
+
+.step__body__last {
+    text-align: center;
+}
+
+#id_pitch_analysis_short {
+    
+}
+
+.instruction {
+    height: 100%;
+    width: 100%;
+}
+
+#task {
+    height: 100%;
+}
+
+#task-container {
+    /*width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    */
+    display: flex;
+    flex: 1;
+}
+
+.instruction__body--flow {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    height: 100%;
+}
+
+.instruction-element--flow {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.instruction-element--flow__footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    column-gap: 1em;
+}
+
+.instruction-element--flow__body {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.instruction-element__text-input__indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.instruction-element__text-input__guide p {
+    line-height: 1.5em;
+    color: var(--color-text)
+}
+
+.instruction-element__text-input__textarea textarea {
+    border: 1px solid var(--border-color-normal);
+    border-radius: var(--border-radius);
+    padding: 1.0em;
+    font-size: 0.9em;
+    color: #444;
+    width: 100%;
+}
+
+.transcribing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#document-editor p {
+    line-height: 20px;
+}

@@ -1,10 +1,9 @@
 {% load keyvalue %}
-
 <div class="instruction-element instruction-element__text-input {% if flow %} instruction-element--flow instruction-element--flow__text-input {% endif %}" data-id ={{element.id}} data-type="{{element.type.name}}">
     {% if flow %}
     <div class="instruction-element__header instruction-element--flow__header">
         <h2 class="instruction-element__header__title">{{element.flow_title}}</h2>
-        {% include 'components/buttonComponent/button.html' with label="Volver a grabar" name="btn-rerecord-record" box=1 %}
+        {% include 'components/buttonComponent/button.html' with label="Volver a grabar" name="btn-rerecord-record" box=1 light=1 %}
     </div>
     <div class="instruction-element__body instruction-element--flow__body">
         <div class="icon record-icon" id="btn-start-record-icon">
@@ -16,7 +15,7 @@
         <div class="timer" id="timer">
             <h3>4:00</h3>
         </div>
-        <textarea class="instruction-input" name="{{element.name}}" id="instruction-text" rows="5">{{data|keyvalue:element.name}}</textarea>
+        <textarea class="instruction-input" name="{{element.name}}" id="instruction-text-{{element.pk}}" rows="5">{{data|keyvalue:element.pk}}</textarea>
     </div>
     <div class="instruction-element__footer instruction-element--flow__footer">
         {% include 'components/buttonComponent/button.html' with label="Reiniciar" name="btn-restart-record" box=1 %}
@@ -24,11 +23,22 @@
         {% include 'components/buttonComponent/button.html' with label="Finalizar" name="btn-stop-record" box=1 %}
     </div>
     {% else %}
-    <div class="col text-input-textarea-wrapper">
-        <textarea class="instruction-input" name="{{element.name}}" id="instruction-text" rows="5">{{data|keyvalue:element.name}}</textarea>
+    <div class="text-input-textarea-wrapper instruction-element__text-input__name">
+        <h3>{{element.title}}</h3>
     </div>
-    <div class="col-auto p-1 my-auto" id="recordButton">
-        {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-mic" %}
+    <div class="text-input-textarea-wrapper instruction-element__text-input__guide">
+        <p>{{element.guide}}</p>
+    </div>
+    <div class="text-input-textarea-wrapper instruction-element__text-input__textarea">
+        <textarea class="instruction-input" name="{{element.name}}" id="instruction-text-{{element.pk}}" rows="5">{{data|keyvalue:element.pk}}</textarea>
+        <div class="instruction-element__text-input__textarea__buttons">
+            {% if element.instructionelementtextinput.feedback_prompt %}
+            {% include 'components/instructionElementFeedback/instructionElementFeedback.html' %}
+            {% endif %}
+            <div id="recordButton">
+                {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-mic" %}
+            </div>
+        </div>
     </div>
     {% endif %}
 </div>

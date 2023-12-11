@@ -1,3 +1,5 @@
+import logging
+
 from django import template
 
 from instruction.models import InstructionElementAgentCall
@@ -7,7 +9,7 @@ register = template.Library()
 @register.filter
 def keyvalue(dict, key):    
     try:
-        return dict[key]
+        return dict[str(key)]
     except KeyError:
         return ''
 
@@ -18,11 +20,8 @@ def filter_instruction_step(elements, step):
 
 @register.filter
 def cast_element(element):
-    print(element.__class__)
     if element.type.name == "ACA":
         element.__class__ = InstructionElementAgentCall
-        print(element.__class__)
-        print(element.button_label)
     return element
 
 @register.filter

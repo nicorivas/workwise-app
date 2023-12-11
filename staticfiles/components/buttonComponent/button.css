@@ -24,6 +24,10 @@ Button component
     border: none;
 }
 
+.button--light {
+    background-color: #cdcdcd;
+}
+
 .button--box {
     width: 100%;
 }

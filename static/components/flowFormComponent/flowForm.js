@@ -71,8 +71,12 @@ export default class FlowFormComponent extends AbstractComponent {
             jQuery("#task-container").html(html);
         }
         
-        this.analyseButton = new ButtonComponent('.button.agent-call', true, false);
-        this.analyseButton.bindEvent("click", this.nextStep, null, this);
+        if (jQuery(".button.agent-call").length > 0) {
+            this.analyseButton = new ButtonComponent('.button.agent-call', true, false);
+            this.analyseButton.bindEvent("click", this.nextStep, null, this);
+        } else {
+            console.warn("No analyse button found.");
+        }
 
         this.lastButton = new ButtonComponent('#btn-last', true, false);
         this.lastButton.bindEvent("click", this.nextStep, null, this);
@@ -158,7 +162,7 @@ export default class FlowFormComponent extends AbstractComponent {
                     this.loadTask(response);
                     this.nextStep();
                     button.setState({ "status": "idle" })
-                    window.history.pushState("", "", `/flow/${this.flow.id}/task/${this.task.id}`);
+                    window.history.pushState("", "", `/flow/${this.flow.id}/task/${this.task.id}/`);
                 }
             },
             error: (xhr, status, error) => {

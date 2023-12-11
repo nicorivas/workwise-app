@@ -1,4 +1,7 @@
 .icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     color: #666;
     position: relative;
@@ -47,6 +50,21 @@
 
 .icon-button--border {
     border: 2px solid var(--border-highlight);
+}
+
+.icon-button--header {
+    color: #fff;
+    background-color: #554a76 !important;
+}
+
+.icon-button--sidebar .icon {
+    border-radius: 0px !important;
+}
+
+.icon-button--sidebar {
+    border-radius: 0px !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .icon-button__text {

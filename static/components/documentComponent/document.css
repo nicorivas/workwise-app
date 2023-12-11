@@ -38,6 +38,7 @@
 
 .document h3 {
     font-size: 1.0rem;
+    font-weight: bold;
 }
 
 .document .comment {
@@ -161,4 +162,12 @@
 #document-editor-wrapper-indicator {
     min-height: 900px;
     padding: var(--wrapper-padding-document)
+}
+
+#document-editor p {
+    line-height: 22px;
+}
+
+#document-editor li {
+    line-height: 22px;
 }

@@ -17,7 +17,6 @@ export default class InstructionElement extends AbstractComponent {
             "body_hidden": false,
             "footer_hidden": false,
         }
-        this.init();
     }
 
     init() {
@@ -42,5 +41,13 @@ export default class InstructionElement extends AbstractComponent {
     
     destroy() {
         /* */
+    }
+
+    /* -- */
+
+    value() {
+        if (this.type == "TXT") {
+            return this.textField.val();
+        }
     }
 }

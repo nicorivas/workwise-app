@@ -24,7 +24,6 @@ class Task(models.Model):
     # User who created the task
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
-
     def __str__(self):
         return f"{self.pk}. {self.name} ({self.project.name})"
     

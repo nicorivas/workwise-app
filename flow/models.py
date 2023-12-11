@@ -23,6 +23,8 @@ class Flow(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     footer_text = models.TextField(default="", null=True, blank=True)
     debug = models.BooleanField(default=False)
+    style = models.CharField(max_length=32, choices=[("default", "Default"), ("web", "Web")], default="default")
+    css = models.CharField(max_length=64, default="flow.css")
     instruction_types = models.ManyToManyField(InstructionType, blank=True)
 
 # Create a Pitch model
@@ -43,21 +45,3 @@ class Pitch(models.Model):
     pitch_prompt = models.TextField(default="")
     pitch_analysis_short = models.TextField(default="")
     pitch_analysis_long = models.TextField(default="")
-
-    def analyse(self, request):
-        agent = get_object_or_404(Agent, pk=1)
-        mimesis_action = "mimesis/library/pitch_evaluation/PitchEvaluation"
-        action = actions.Action.load_from_file(f"{mimesis_action}")
-        agent_mimesis = agentMimesis.Agent()
-        prompt = action.do(agent_mimesis, pitch=request.POST["query"])
-        agent.stream_prompt(request, prompt, fast=False)
-
-    def analyse_long(self, request):
-        agent = get_object_or_404(Agent, pk=1)
-        mimesis_action = "mimesis/library/pitch_evaluation/PitchEvaluationLong"
-        action = actions.Action.load_from_file(f"{mimesis_action}")
-        agent_mimesis = agentMimesis.Agent()
-        prompt = action.do(agent_mimesis, pitch=request.POST["pitch"])
-        response = agent.prompt(prompt, {"pitch":request.POST["pitch"]})
-        self.pitch_analysis_long = response[0]["text"]
-        self.save()

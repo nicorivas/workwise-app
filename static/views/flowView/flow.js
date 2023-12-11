@@ -37,8 +37,10 @@ export default class FlowView extends AbstractView {
         this.flowForm = new FlowFormComponent('#flow-container', this);
         this.flowForm.init();
 
-        this.navPrevButton = new ButtonComponent('#btn-prev', true, false);
-        this.navNextButton = new ButtonComponent('#btn-next', true, false);
+        if (jQuery("#btn-prev").length > 0) {
+            this.navPrevButton = new ButtonComponent('#btn-prev', true, false);
+            this.navNextButton = new ButtonComponent('#btn-next', true, false);
+        }
 
         //this.navPrevInstructionButton = new ButtonComponent("#step__instruction__debug__prev", true, false);
         //this.navNextInstructionButton = new ButtonComponent("#step__instruction__debug__next", true, false);
@@ -54,8 +56,10 @@ export default class FlowView extends AbstractView {
     bindEvents() {
 
         // Navigating steps
-        this.navPrevButton.bindEvent('click', this.flowForm.prevStep, null, this.flowForm);
-        this.navNextButton.bindEvent('click', this.flowForm.nextStep, null, this.flowForm);
+        if (jQuery("#btn-prev").length > 0) {
+            this.navPrevButton.bindEvent('click', this.flowForm.prevStep, null, this.flowForm);
+            this.navNextButton.bindEvent('click', this.flowForm.nextStep, null, this.flowForm);
+        }
 
         // Navigating instructions
         //this.navPrevInstructionButton.bindEvent('click', this.flowForm.prevInstruction, null, this.flowForm);
@@ -75,7 +79,23 @@ export default class FlowView extends AbstractView {
         Returns user to the first flow page.
     */
     finishHandler(view) {
-        window.location.href = `/flow/${view.id}/`;
+        // Send email by calling email endpoint
+        let flow_id = view.id;
+        let task_id = view.flowForm.task.id;
+        jQuery.ajax({
+            url: `/flow/${flow_id}/task/${task_id}/send_email/`,
+            type: 'POST',
+            data: {
+                "csrfmiddlewaretoken": Cookies.get('csrftoken')
+            },
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+        window.location.href = `/flow/${flow_id}/`;
     }
 
 }

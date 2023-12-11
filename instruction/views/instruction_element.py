@@ -271,6 +271,32 @@ class InstructionElementRevisionCallView(View):
 
 instruction_element_revision_call_view = InstructionElementRevisionCallView.as_view()
 
+class InstructionElementFeedbackCallView(View):
+
+    def post(self, request, instruction_id:int, instruction_element_id:int):
+        logging.warn(f"InstructionElementFeedbackCallView.post {request.POST} {instruction_id} {instruction_element_id}")
+
+        instruction = get_object_or_404(Instruction, id=instruction_id)
+        # TODO: Type of element is hard coded (could be any instruction element)
+        instruction_element = get_object_or_404(InstructionElementTextInput, id=instruction_element_id)
+
+        # Get parameters from instruction data
+        # Instruction data is saved by 'id's, but we need the names to replace fields in the prompt.
+        # That's why we fetch the names of every instruction element from the database.
+        instruction_data = instruction.data
+        results = InstructionElement.objects.filter(id__in=instruction_data.keys()).values_list('pk', 'name')
+        parameters = {result[1]: instruction_data[str(result[0])] for result in results}
+
+        if instruction_element.feedback_prompt:
+            group = request.path.replace("/", "")
+            r = instruction_element.feedback_prompt.call(group, parameters, stream=True)
+        else:
+            r = "error, instruction has no feedback prompt."
+
+        return JsonResponse({"response":r}, safe=False)
+
+instruction_element_feedback_call_view = InstructionElementFeedbackCallView.as_view()
+
 class InstructionElementDocumentLinkView(View):
 
     def get(self, request, instruction_id:int, instruction_element_id:int):

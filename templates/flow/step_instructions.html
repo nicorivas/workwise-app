@@ -3,13 +3,16 @@
 <div class="instruction step__instruction" id="instruction-{{instruction.pk}}" data-id="{{instruction.pk}}" data-type-name="{{instruction.type.name}}">
 
     <div class="instruction__header instruction__header--flow">
+        <!--
+        <div class="instruction__header__save">
+            <div class="btn" id="instruction-save">Save</div>
+        </div>
+        -->
     </div>
 
     <div class="instruction__body instruction__body--flow">
         {% for element in instruction.type.instructionelement_set.all|dictsort:"index" %}
-
-        {% include element.template with element=element data=instruction.data action=instruction.type.action agent=agent edit=instruction.template flow=1 %}
-        
+        {% include element.template with element=element data=instruction.data action=instruction.type.action agent=agent edit=instruction.template flow=0 %}
         {% endfor %}
     </div>
 
@@ -32,9 +35,3 @@
     </div>
 </div>
 {% endif %}
-
-<!--
-<div class="instruction-element instruction-element-wrapper" id="instruction-element-{{element.pk}}" data-id="{{element.pk}}">
-{# include 'instruction/elements/element.html' #}
-</div>
--->

@@ -1,0 +1,30 @@
+<div class="instruction-element-feedback-wrapper" data-id="{{feedback.id}}">
+    {% include 'components/iconButtonComponent/iconButton.html' with name="instruction-element-feedback__open" icon="bi-chat-text" %}
+    <div class="instruction-element-feedback-overlay"></div>
+    <div class="instruction-element-feedback">
+        <div class="instruction-element-feedback__header">
+            <div class="instruction-element-feedback__header__title">
+                <h3>Comentarios {{feedback.id}}</h3>
+            </div>
+            <div class="instruction-element-feedback__header__close" id="closefeedback">
+                {% include 'components/iconButtonComponent/iconButton.html' with icon="bi-x" %}
+            </div>
+        </div>
+        <div class="instruction-element-feedback__body">
+            <div class="instruction-element-feedback__body__text" id="instruction-element-feedback-{{feedback.instruction_element.pk}}__body__text">
+                <div class="text" style="position: relative;">
+                    {{feedback.html|safe}}
+                    <fade/>
+                </div>
+            </div>            
+            <div class="instruction-element-feedback__body__text--indicator">
+                {% include 'components/loader.html' %}
+            </div>
+        </div>
+        <div class="instruction-element-feedback__footer">
+            <div class="instruction-element-feedback__body__read-more">
+                {% include 'components/buttonComponent/button.html' with name="read-more-button" label="Read more" %}
+            </div>
+        </div>
+    </div>
+</div>

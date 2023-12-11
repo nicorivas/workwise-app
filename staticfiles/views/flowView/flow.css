@@ -14,6 +14,7 @@ html, body {
     --background-button: #d4373f;
     --background-button-hover: #ad2128;
     --background-button-active: #ad2128;
+    --background-highlight-hover: #e5dcff;
     --background-color-alternate: #8155D0;
     --background-color-alternate-darker: #5f3aa5;
     --color-text: #dd3a42;
@@ -51,6 +52,13 @@ body {
     height: 100vh;
 }
 
+form {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
 h1 {
     color: var(--color-text);
 }
@@ -73,6 +81,10 @@ h3 {
     align-items: flex-start;
 }
 
+.flow--fixed-height {
+    height: 100vh;
+}
+
 /* HEADER */
 .header {
     display: flex;
@@ -86,7 +98,6 @@ h3 {
 
 .header__image {
     width: 150px;
-    margin-top: 20px;
 }
 
 .header__text {
@@ -121,6 +132,10 @@ h3 {
     width: 100%;
 }
 
+.step__instruction.hidden {
+    display: none;
+}
+
 .step__title {
     text-align: center;
 }
@@ -148,10 +163,20 @@ h3 {
 
 .step__body {
     display: flex;
+    flex: 1;
+    overflow-y: auto;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
+}
+
+.step__instruction__debug {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 #step-4 .step__body {
@@ -163,30 +188,25 @@ h3 {
     line-height: 1.5em;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
 .timer h3 {
     font-size: 20px;
 }
 
-#id_pitch {
+#instruction-text {
     font-size: 14px;
     line-height: 1.5em;
     overflow: scroll;
+    width: 100%;
     height: 100%;
     padding-left: 1em;
     padding-right: 1em;
     padding-top: 1em;
     padding-bottom: 1em;
-    margin-bottom: 1em;
+    margin-top: 1em;
     box-sizing: border-box;
     border: 1px solid #eee;
-    width: 100%;
     border-radius: 5px;
+    resize: none;
 }
 
 .step__body__answer {
@@ -258,10 +278,6 @@ form {
     height: 100%;
 }
 
-.form-group {
-    margin-bottom: 1em;
-}
-
 label {
     display: block;
     margin-bottom: .5em;
@@ -316,8 +332,18 @@ input, select {
 }
 
 .step-indicator {
-    text-align: center;
-    margin-top: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.dots {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .dot {
@@ -431,15 +457,18 @@ input, select {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 100%;
     height: 100px;
 }
 
 .footer h1 {
     font-size: 20px;
-    padding-top: 10px;
-    padding-bottom: 20px;
+}
+
+.form-group {
+    width: 80%;
+    margin-bottom: 1em;
 }
 
 .form-group__error {
@@ -473,4 +502,73 @@ input {
 
 #id_pitch_analysis_short {
     
+}
+
+.instruction {
+    height: 100%;
+    width: 100%;
+}
+
+#task {
+    height: 100%;
+}
+
+#task-container {
+    /*width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    */
+    display: flex;
+    flex: 1;
+}
+
+.instruction__body--flow {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    height: 100%;
+}
+
+.instruction-element--flow {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.instruction-element--flow__footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    column-gap: 1em;
+}
+
+.instruction-element--flow__body {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.instruction-element__text-input__indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.transcribing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#document-editor p {
+    line-height: 20px;
 }

@@ -10,6 +10,7 @@ export default class InstructionComponent extends AbstractComponent{
     
     constructor(element, task) {
         super(element);
+        console.log("InstructionComponent.constructor()", element, task);
         
         // Parent
         this.task = task;
@@ -18,6 +19,7 @@ export default class InstructionComponent extends AbstractComponent{
         this.$header = this.$element.find(".instruction__header");
         this.$body = this.$element.find(".instruction__body");
         this.$bodySeamless = this.$element.find(".instruction-body-seamless"); // TODO Fix
+        this.$buttonSave = this.$element.find("#instruction-save");
         
         // Components
         this.options = []; // Options dropdown
@@ -44,6 +46,7 @@ export default class InstructionComponent extends AbstractComponent{
     }
 
     init() {
+        console.log("InstructionComponent.init()", this);
 
         // Options dropdown
         if (this.$element.find(".kebab").length > 0) {
@@ -89,6 +92,10 @@ export default class InstructionComponent extends AbstractComponent{
 
     bindEvents() {
         this.bindEventToElement("click", this.headerClick, this.$header)
+        this.$buttonSave.on("click", (event) => {
+            event.stopImmediatePropagation();
+            this.save();
+        });
     }
 
     headerClick(event) {
@@ -217,6 +224,34 @@ export default class InstructionComponent extends AbstractComponent{
 
         this.$body.toggle(this.state["open"]);
 
+    }
+
+    save() {
+        // Make this a Promise
+        return new Promise((resolve, reject) => {
+            let data = {}
+            for (let instructionElement of this.instructionElements) {
+                console.log(instructionElement.id);
+                data[`${instructionElement.id}`] = instructionElement.value();
+            }
+            console.log(data);
+            jQuery.ajax({
+                url: `/instruction/${this.id}/save/`,
+                type: "POST",
+                data: {
+                    "csrfmiddlewaretoken": Cookies.get('csrftoken')
+                    ,"data": JSON.stringify(data)
+                },
+                success: (data) => {
+                    console.log("InstructionComponent.save() success", data);
+                    resolve(data);
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                    reject(err);
+                },
+            })
+        });
     }
 
 }

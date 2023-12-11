@@ -22,6 +22,8 @@ export default class DocumentComponent extends AbstractComponent {
             "format_open": this.$element.hasClass("document--format")
         }
         // Others
+        this.reply;
+        this.editorJS = false;
         this.editor;
         this.editorData;
         this.task = task;
@@ -33,21 +35,22 @@ export default class DocumentComponent extends AbstractComponent {
 
     init() {
         // Formats Kebab
-        this.kebabFormats = new KebabComponent(this.$headerFormats.find("#document-formats-kebab"));
-        this.getFormats().then((formats) => {;
-            for (const format of formats) {
-                let $item = this.kebabFormats.addItem(format.name, format.id);
-                $item.on("click", (e) => { 
-                    console.log(format.id);    
-                    this.setState({
-                        "status":"loading",
-                        "id": format.id,
-                        "format_open": true
-                    });
-                    this.editorLoad();
-                })
-            }
-        })
+        if (this.$header.length != 0) {
+            this.kebabFormats = new KebabComponent(this.$headerFormats.find("#document-formats-kebab"));
+            this.getFormats().then((formats) => {;
+                for (const format of formats) {
+                    let $item = this.kebabFormats.addItem(format.name, format.id);
+                    $item.on("click", (e) => { 
+                        this.setState({
+                            "status":"loading",
+                            "id": format.id,
+                            "format_open": true
+                        });
+                        this.editorLoad();
+                    })
+                }
+            })
+        }
 
         // Formats selector
         /*
@@ -72,7 +75,6 @@ export default class DocumentComponent extends AbstractComponent {
 
         // Formats close
         jQuery(".document__header__format-close").click(() => {
-            console.log("Close format");
             this.setState({
                 "status":"loading",
             });
@@ -84,9 +86,8 @@ export default class DocumentComponent extends AbstractComponent {
             this.save(this.state["id"]);
         })
 
-        // Read the document, if there is id.
+        // Load the editor.
         if (this.state.id) {
-            //this.read(this.state.id);
             this.editorLoad();
         }
 
@@ -101,12 +102,9 @@ export default class DocumentComponent extends AbstractComponent {
                 type: 'GET',
                 data: {"is_format": true, "parent_document_id": this.state["id"]},
                 success: (data) => {
-                    console.log('Formats: ', data)
                     resolve(data);
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
-                    console.log('Error: ', textStatus)
-                    console.log('Get formats failed: ', errorThrown)
                     reject();
                 }
             
@@ -176,7 +174,7 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     bindEvents() {
-        console.log("DocumentComponent.bindEvents");
+        /*console.log("DocumentComponent.bindEvents");*/
     }
 
     hideToolbar() {
@@ -194,8 +192,6 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     read(document_id=null) {
-        console.log("DocumentComponent.read", document_id, this.state["id"]);
-
         // Set state to loading.
         this.setState({
             "status": "loading",
@@ -206,7 +202,6 @@ export default class DocumentComponent extends AbstractComponent {
         this.editorLoad();
 
         let url = `/document/${this.state["id"]}/`
-        
         // Call document:read
         return new Promise((resolve, reject) => { 
             jQuery.ajax({
@@ -214,7 +209,6 @@ export default class DocumentComponent extends AbstractComponent {
                 type: "GET",
                 success: (data) => {
                     // Replace wrapper with document data
-                    console.log(data);
                     //this.elementUpdate(data)
                 },
                 error: function (xhr, errmsg, err) {
@@ -225,7 +219,6 @@ export default class DocumentComponent extends AbstractComponent {
                     if (jQuery(".document").hasClass("document--format")) {
                         this.openFormat();
                     }
-                    console.log("DocumentComponent.read finished", this.state["id"]);
                     this.setState({"status": "idle"});
                     resolve();
                 }
@@ -235,48 +228,61 @@ export default class DocumentComponent extends AbstractComponent {
 
     editorLoad() {
         this.$element.find("#document-editor").html("");
-        this.editor = new EditorJS({
-            holder: 'document-editor',
-            tools: {
-                header: Header,
-                delimiter: Delimiter,
-                paragraph: {
-                    class: Paragraph,
-                    inlineToolbar: true,
-                },
-                list: {
-                    class: List,
-                    inlineToolbar: true,
-                    config: {
-                        defaultStyle: 'unordered'
+        if (this.editorJS) {
+            this.editor = new EditorJS({
+                holder: 'document-editor',
+                tools: {
+                    header: Header,
+                    delimiter: Delimiter,
+                    paragraph: {
+                        class: Paragraph,
+                        inlineToolbar: true,
+                    },
+                    list: {
+                        class: List,
+                        inlineToolbar: true,
+                        config: {
+                            defaultStyle: 'unordered'
+                        }
                     }
+                },
+                onReady: () => {
+                    this.editorRead();
                 }
-            },
-            onReady: () => {
-                console.log('Editor.js is ready to work!')
-                this.editorRead();
-            }
-        });
+            });
+        } else {
+            this.editorRead();
+        };
     }
 
     editorRead() {
         jQuery("#document-editor-wrapper-indicator").show();
         jQuery("#document-editor-wrapper").hide();
         jQuery.ajax({
-            url: `/document/api/v1/document/${this.state["id"]}`,
+            url: `/document/api/v1/document/${this.state["id"]}/reply`,
             type: 'GET',
             success: (data) => {
-                console.log("data",data);
                 jQuery("#document-editor-wrapper-indicator").hide();
                 jQuery("#document-editor-wrapper").show();
                 // Update if data is not empty
                 if (!jQuery.isEmptyObject(data)) {
                     this.setState({"status":"idle"});
-                    this.editorData = data;
-                    console.log("Caca",this.editorData)
-                    this.editorUpdate();
-                    if (this.task) {
-                        this.task.documentReady();
+                    if (this.editorJS) {
+                        this.editorData = data;
+                        this.editorUpdate();
+                        if (this.task) {
+                            //this.task.documentReady();
+                        }
+                    } else {
+                        if (data.reply) {
+                            this.reply = data.reply;
+                            let md = markdownit();
+                            let html = md.render(this.reply);
+                            jQuery("#document-editor").html(html);
+                        } else {
+                            jQuery("#document-editor").html("");
+                        }
+                        
                     }
                 }
             }
@@ -284,34 +290,43 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     editorClear() {
-        console.log("DocumentComponent.editorClear");
-        this.editor.clear();
+        if (this.editorJS) {
+            if (this.editor) {
+                this.editor.clear();
+            } else {
+                console.warn("DocumentComponent.editorClear: editor not found")
+            }
+        } else {
+            this.$element.find("#document-editor").html("");
+        }
     }
 
     editorUpdate(save = false) {
-        console.log("DocumentComponent.editorUpdate()", save)
-        this.editor.clear().then(() => {
-            console.log("DocumentComponent.editorUpdate():clear")
-            this.editor.render(this.editorData).then(() => {
-                console.log("DocumentComponent.editorUpdate():rendered")
-                this.editor.save().then((output_data) => {
-                    console.log("DocumentComponent.editorUpdate():saved")
-                    this.editorData = output_data;
-                    this.loadSections();
-                    if (save) {
-                        this.save_back(this.state["id"], output_data)
-                    }
-                }).catch((error) => {
-                    console.log('# Saving document failed: ', error)
+        if (this.editorJS) {
+            this.editor.clear().then(() => {
+                this.editor.render(this.editorData).then(() => {
+                    this.editor.save().then((output_data) => {
+                        this.editorData = output_data;
+                        this.loadSections();
+                        if (save) {
+                            this.save_back(this.state["id"], output_data)
+                        }
+                    }).catch((error) => {
+                        console.log('# Saving document failed: ', error)
+                    });
                 });
-            });
-        })
+            })
+        } else {
+            let md = markdownit();
+            let result = md.render(this.reply);
+            jQuery("#document-editor").html(result);
+            if (save) {
+                this.save_back(this.state["id"], this.reply, false)
+            }
+        }
     }
 
     stream(instruction, instruction_element_id) {
-
-        console.log("DocumentComponent:stream", instruction, instruction_element_id);
-
         let document_id = this.$element.data("id");
         let socket_data = {};
         let response = "";
@@ -324,7 +339,7 @@ export default class DocumentComponent extends AbstractComponent {
         if (hostname == "127.0.0.1" || hostname == "localhost") {
             websocket_url = `ws://${hostname}:8000/ws/openai_stream/?group_name=` + instruction_element_call_url;
         } else {
-            websocket_url = `ws://${hostname}:80/ws/openai_stream/?group_name=` + instruction_element_call_url;
+            websocket_url = `wss://${hostname}/ws/openai_stream/?group_name=` + instruction_element_call_url
         }
         const socket = new WebSocket(websocket_url);
     
@@ -345,8 +360,6 @@ export default class DocumentComponent extends AbstractComponent {
                 get_prompt_data[jQuery(this).attr("name")] = jQuery(this).attr("value")
             }
         });
-
-        console.log("get_prompt_data", get_prompt_data);
     
         // Call to inititate stream. Get the prompt and then call the LLM.
         jQuery.ajax({
@@ -378,18 +391,18 @@ export default class DocumentComponent extends AbstractComponent {
                 // Only update after 1 second
                 if (time_since_last_message > 1000) {
                     // Update the document with the response
+                    this.reply = data.response_text;
                     this.editorData = data.document_json;
                     this.editorUpdate()
                     time_last_message = Date.now();
+
                 }
-                //document_update(document_data)
-    
             } else if (data.status == "end") {
                 // Stream finished, update the document
-                console.log("Stream end", instruction);
                 this.editorData = data.document_json;
+                this.reply = data.response_text;
                 this.editorUpdate(true);
-                this.task.documentReady();
+                //this.task.documentReady();
                 instruction.setState({"status":"idle"});
                 this.setState({"status": "idle"})
                 socket.close();
@@ -403,21 +416,27 @@ export default class DocumentComponent extends AbstractComponent {
     
     }
 
-    save_back(document_id, output_data) {
-        console.log("document_save_back", document_id);
+    save_back(document_id, output_data, json=true) {
         let csrfToken = Cookies.get('csrftoken');
         let url = `/document/api/v1/document/${document_id}/save`
-        console.log(url);
+        let document_reply = null;
+        let document_json = null;
+        if (json) {
+            document_json = JSON.stringify(output_data);
+        } else {
+            document_reply = output_data;
+        }
         jQuery.ajax({
             url: url,
             type: 'POST',
             data: {
                 'csrfmiddlewaretoken': csrfToken,
-                'document_data': JSON.stringify(output_data)
+                'document_reply': document_reply,
+                'document_json': document_json
             },
             dataType: 'json',
             success: (data) => {
-                console.log('Document saved successfully: ', data)
+                /**/
             },
             error: (jqXHR, textStatus, errorThrown) => {
                 console.log('Error: ', textStatus)
@@ -428,19 +447,20 @@ export default class DocumentComponent extends AbstractComponent {
     }
     
     save(document_id) {
-        console.log("save", document_id)
-        this.editor.save().then((output_data) => {
-            console.log('Document data: ', output_data)
-            this.save_back(document_id, output_data)
-        }).catch((error) => {
-            console.log('Saving document failed: ', error)
-        });
+        if (!this.editorJS) {
+            this.save_back(document_id, this.reply, false);
+        } else {
+            this.editor.save().then((output_data) => {
+                this.save_back(document_id, output_data)
+            }).catch((error) => {
+                console.log('Saving document failed: ', error)
+            });
+        }
     }
 
     /* Editor editing */
 
     loadSections() {
-        console.log("DocumentComponent.loadSections", this.editorData);
         /* Data is the data returned by EditorJS.save() */
         let blocks = this.editorData.blocks;
         let sections = [];
@@ -477,7 +497,7 @@ export default class DocumentComponent extends AbstractComponent {
             },
             dataType: 'json',
             success: (data) => {
-                console.log('Sections saved successfully: ', data)
+                /*console.log('Sections saved successfully: ', data)*/
             },
             error: (jqXHR, textStatus, errorThrown) => {
                 console.log('Saving sections failed: ', errorThrown)
@@ -486,14 +506,11 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     selectSection(sectionIndex, scroll=false) {
-        console.log("DocumentComponent.selectSection", sectionIndex, scroll);
-
         // Deselect everything
         this.$element.find(".ce-block").removeClass("ce-block--selected");
 
         // Find DOM elements that have id's in the section
         let section = this.sections[sectionIndex];
-        console.log(section);
         this.$element.find(`.ce-block[data-id="${section.header.id}"]`).each((index, element) => {
             jQuery(element).addClass("ce-block--selected");
         })
@@ -512,7 +529,6 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     scrollToSection(sectionIndex) {
-        console.log("scrollToSection", sectionIndex);
         let section = this.sections[sectionIndex];
         var selected = this.$element.find(`.ce-block[data-id="${section.header.id}"]`);
         this.$element.animate({scrollTop: selected[0].offsetTop},'fast');

@@ -41,7 +41,6 @@ export default class DocumentComponent extends AbstractComponent {
                 for (const format of formats) {
                     let $item = this.kebabFormats.addItem(format.name, format.id);
                     $item.on("click", (e) => { 
-                        console.log(format.id);    
                         this.setState({
                             "status":"loading",
                             "id": format.id,
@@ -76,7 +75,6 @@ export default class DocumentComponent extends AbstractComponent {
 
         // Formats close
         jQuery(".document__header__format-close").click(() => {
-            console.log("Close format");
             this.setState({
                 "status":"loading",
             });
@@ -176,7 +174,7 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     bindEvents() {
-        console.log("DocumentComponent.bindEvents");
+        /*console.log("DocumentComponent.bindEvents");*/
     }
 
     hideToolbar() {
@@ -194,8 +192,6 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     read(document_id=null) {
-        console.log("DocumentComponent.read", document_id, this.state["id"]);
-
         // Set state to loading.
         this.setState({
             "status": "loading",
@@ -213,7 +209,6 @@ export default class DocumentComponent extends AbstractComponent {
                 type: "GET",
                 success: (data) => {
                     // Replace wrapper with document data
-                    console.log(data);
                     //this.elementUpdate(data)
                 },
                 error: function (xhr, errmsg, err) {
@@ -252,7 +247,6 @@ export default class DocumentComponent extends AbstractComponent {
                     }
                 },
                 onReady: () => {
-                    console.log('Editor.js is ready to work!')
                     this.editorRead();
                 }
             });
@@ -270,7 +264,6 @@ export default class DocumentComponent extends AbstractComponent {
             success: (data) => {
                 jQuery("#document-editor-wrapper-indicator").hide();
                 jQuery("#document-editor-wrapper").show();
-                console.log(data);
                 // Update if data is not empty
                 if (!jQuery.isEmptyObject(data)) {
                     this.setState({"status":"idle"});
@@ -298,7 +291,6 @@ export default class DocumentComponent extends AbstractComponent {
 
     editorClear() {
         if (this.editorJS) {
-            console.log("DocumentComponent.editorClear");
             if (this.editor) {
                 this.editor.clear();
             } else {
@@ -335,9 +327,6 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     stream(instruction, instruction_element_id) {
-
-        console.log("DocumentComponent:stream", instruction, instruction_element_id);
-
         let document_id = this.$element.data("id");
         let socket_data = {};
         let response = "";
@@ -350,7 +339,7 @@ export default class DocumentComponent extends AbstractComponent {
         if (hostname == "127.0.0.1" || hostname == "localhost") {
             websocket_url = `ws://${hostname}:8000/ws/openai_stream/?group_name=` + instruction_element_call_url;
         } else {
-            websocket_url = `ws://${hostname}:80/ws/openai_stream/?group_name=` + instruction_element_call_url;
+            websocket_url = `wss://${hostname}/ws/openai_stream/?group_name=` + instruction_element_call_url
         }
         const socket = new WebSocket(websocket_url);
     
@@ -410,7 +399,6 @@ export default class DocumentComponent extends AbstractComponent {
                 }
             } else if (data.status == "end") {
                 // Stream finished, update the document
-                console.log("Stream end", instruction);    
                 this.editorData = data.document_json;
                 this.reply = data.response_text;
                 this.editorUpdate(true);
@@ -429,7 +417,6 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     save_back(document_id, output_data, json=true) {
-        console.log("document_save_back", document_id);
         let csrfToken = Cookies.get('csrftoken');
         let url = `/document/api/v1/document/${document_id}/save`
         let document_reply = null;
@@ -439,8 +426,6 @@ export default class DocumentComponent extends AbstractComponent {
         } else {
             document_reply = output_data;
         }
-        console.log(document_json);
-        console.log(document_reply);
         jQuery.ajax({
             url: url,
             type: 'POST',
@@ -451,7 +436,7 @@ export default class DocumentComponent extends AbstractComponent {
             },
             dataType: 'json',
             success: (data) => {
-                console.log('Document saved successfully: ', data)
+                /**/
             },
             error: (jqXHR, textStatus, errorThrown) => {
                 console.log('Error: ', textStatus)
@@ -462,12 +447,10 @@ export default class DocumentComponent extends AbstractComponent {
     }
     
     save(document_id) {
-        console.log("save", document_id)
         if (!this.editorJS) {
             this.save_back(document_id, this.reply, false);
         } else {
             this.editor.save().then((output_data) => {
-                console.log('Document data: ', output_data)
                 this.save_back(document_id, output_data)
             }).catch((error) => {
                 console.log('Saving document failed: ', error)
@@ -478,7 +461,6 @@ export default class DocumentComponent extends AbstractComponent {
     /* Editor editing */
 
     loadSections() {
-        console.log("DocumentComponent.loadSections", this.editorData);
         /* Data is the data returned by EditorJS.save() */
         let blocks = this.editorData.blocks;
         let sections = [];
@@ -515,7 +497,7 @@ export default class DocumentComponent extends AbstractComponent {
             },
             dataType: 'json',
             success: (data) => {
-                console.log('Sections saved successfully: ', data)
+                /*console.log('Sections saved successfully: ', data)*/
             },
             error: (jqXHR, textStatus, errorThrown) => {
                 console.log('Saving sections failed: ', errorThrown)
@@ -524,14 +506,11 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     selectSection(sectionIndex, scroll=false) {
-        console.log("DocumentComponent.selectSection", sectionIndex, scroll);
-
         // Deselect everything
         this.$element.find(".ce-block").removeClass("ce-block--selected");
 
         // Find DOM elements that have id's in the section
         let section = this.sections[sectionIndex];
-        console.log(section);
         this.$element.find(`.ce-block[data-id="${section.header.id}"]`).each((index, element) => {
             jQuery(element).addClass("ce-block--selected");
         })
@@ -550,7 +529,6 @@ export default class DocumentComponent extends AbstractComponent {
     }
 
     scrollToSection(sectionIndex) {
-        console.log("scrollToSection", sectionIndex);
         let section = this.sections[sectionIndex];
         var selected = this.$element.find(`.ce-block[data-id="${section.header.id}"]`);
         this.$element.animate({scrollTop: selected[0].offsetTop},'fast');

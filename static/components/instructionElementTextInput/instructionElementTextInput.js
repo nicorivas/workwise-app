@@ -1,12 +1,16 @@
 import InstructionElement from "../instructionElement/instructionElement.js";
+import InstructionElementFeedback from "../instructionElementFeedback/instructionElementFeedback.js";
 import ButtonComponent from "../buttonComponent/button.js";
+import IconButtonComponent from "../iconButtonComponent/iconButton.js";
 
 export default class InstructionElementTextInputComponent extends InstructionElement {
 
     constructor(element, instruction = null, view = null) {
         super(element);
+        console.log("InstructionElementTextInputComponent.constructor()", element, instruction, view);
         this.id = this.$element.data("id");
         this.type = this.$element.data("type");
+        this.$feedback = this.$element.find(".instruction-element-feedback-wrapper");
         // Parent
         this.instruction = instruction;
         // Define state
@@ -17,6 +21,7 @@ export default class InstructionElementTextInputComponent extends InstructionEle
         this.record = this.$element.find("#btn-start-record").length > 0;
         this.audioChunks = [];
         // Components
+        this.feedback = null;
         this.rerecordRecordButton = null;
         this.startRecordButton = null;
         this.startRecordIconButton = null;
@@ -30,6 +35,7 @@ export default class InstructionElementTextInputComponent extends InstructionEle
     }
 
     init() {
+        console.log("InstructionElementTextInputComponent.init()");
         this.createComponents();
         this.bindEvents();
     }
@@ -43,20 +49,26 @@ export default class InstructionElementTextInputComponent extends InstructionEle
             this.restartRecordButton = new ButtonComponent(this.$element.find('#btn-restart-record'), false, false);
             this.rerecordRecordButton = new ButtonComponent(this.$element.find('#btn-rerecord-record'), false, false);
         }
-        this.textField = this.$element.find("#instruction-text");
-        this.textField.hide();
+        if (this.$feedback.length > 0) {
+            this.feedback = new InstructionElementFeedback(this.$feedback, this);
+        }
+        this.textField = this.$element.find(`#instruction-text-${this.id}`);
         if (this.textField.text().length > 0) {
             this.setState({"has_transcription": true});
         }
     }
 
     bindEvents() {
+        console.log("InstructionElementTextInputComponent.bindEvents()");
         if (this.record) {
             this.startRecordButton.bindEvent("click", this.startRecordHandler, null, this);
             this.startRecordIconButton.bindEvent("click", this.startRecordHandler, null, this);
             this.stopRecordButton.bindEvent("click", this.stopRecordHandler, null, this);
             this.restartRecordButton.bindEvent("click", this.restartRecordHandler, null, this);
             this.rerecordRecordButton.bindEvent("click", this.rerecordRecordHandler, null, this);
+        }
+        if (this.$feedback.length > 0) {
+            this.textField.on('blur', (event) => this.textFieldInputHandler(event, this));
         }
     }
 
@@ -87,6 +99,7 @@ export default class InstructionElementTextInputComponent extends InstructionEle
                     jQuery(".record-icon").hide();
                     jQuery(".timer").hide();
                     this.$title.hide();
+                    this.rerecordRecordButton.$element.show();
                     this.startRecordButton.$element.hide();
                     this.textField.show();
                     this.instruction.showAgentCall();
@@ -94,6 +107,7 @@ export default class InstructionElementTextInputComponent extends InstructionEle
                     jQuery(".record-icon").show();
                     jQuery(".timer").show();
                     this.$title.show();
+                    this.rerecordRecordButton.$element.hide();
                     this.startRecordButton.$element.show();
                     this.textField.hide();
                     this.instruction.hideAgentCall();
@@ -103,6 +117,8 @@ export default class InstructionElementTextInputComponent extends InstructionEle
                 this.stopRecordButton.$element.hide();
                 this.restartRecordButton.$element.hide();
             }
+        } else {
+            jQuery(".instruction-element__text-input__indicator").hide();
         }
     }
     
@@ -184,7 +200,6 @@ export default class InstructionElementTextInputComponent extends InstructionEle
     }
 
     transcribe(blob) {
-        console.log("transcribe");
         this.setState({"status":"transcribing"})
         let fd = new FormData();
         fd.append('audio', blob, 'audio.ogg');
@@ -198,7 +213,6 @@ export default class InstructionElementTextInputComponent extends InstructionEle
             processData: false,
             contentType: false,
             success: (successData) => {
-                console.log(successData);
                 this.textField.text(successData.transcript);
                 this.audioChunks = [];
                 this.setState({"status":"idle", "has_transcription": true})
@@ -211,109 +225,8 @@ export default class InstructionElementTextInputComponent extends InstructionEle
         })
     }
 
-    /*
-    analyse(view) {
-        view.flowForm.nextStep();
-        view.setData({"analysing": true});
-        view.analysisText.find(".text").text("");
-        view.analysisText.find(".indicator").show();
-
-        // Update pitch with data
-        let data = jQuery("#pitch-form").serializeArray();
-        let jsonData = {};
-        data.forEach(function(item) {
-            jsonData[item.name] = item.value;
-        });
-        let url = `/api/pitch/${view.pitchId}/`
-        jQuery.ajax({
-            type: 'PUT',
-            url: url,
-            contentType: 'application/json',
-            data: JSON.stringify(jsonData),
-            success: (successData) => {
-                //
-            },
-            beforeSend: function(xhr) {
-                // Include the CSRF token as a header
-                xhr.setRequestHeader("X-CSRFToken", Cookies.get("csrftoken"));
-            },
-            error: (xhr, status, error) => {
-                console.error(xhr);
-            },
-        })
-
-        // Long analysis (sent by email)
-        url = '/flow/analyse_long/';
-        data.push({"name":"pitch_id", "value":view.pitchId});
-        jQuery.ajax({
-            type: 'POST',
-            url: url,
-            data: data,
-            success: (successData) => {
-                //
-            },
-            beforeSend: function(xhr) {
-                // Include the CSRF token as a header
-                xhr.setRequestHeader("X-CSRFToken", Cookies.get("csrftoken"));
-            },
-            error: (xhr, status, error) => {
-                console.error(xhr);
-            },
-        })
-
-        view.llm.stream("/flow/analyse/", "id_pitch", "step__body__answer", {"pitch_id": view.pitchId}).then((response) => {
-            let data = jQuery("#pitch-form").serializeArray();
-            let jsonData = {};
-            // Check if length of response is long enough to be a proper answer
-            data.forEach(function(item) {
-                jsonData[item.name] = item.value;
-            });
-            jsonData["pitch_analysis_short"] = response;
-            url = `/api/pitch/${view.pitchId}/`
-            jQuery.ajax({
-                type: 'PUT',
-                url: url,
-                contentType: 'application/json',
-                data: JSON.stringify(jsonData),
-                success: (successData) => {
-                    //
-                },
-                beforeSend: function(xhr) {
-                    // Include the CSRF token as a header
-                    xhr.setRequestHeader("X-CSRFToken", Cookies.get("csrftoken"));
-                },
-                error: (xhr, status, error) => {
-                    console.error(xhr);
-                },
-            })
-            view.setData({"analysing": false});
-            // Analizar button
-            this.setState({"status": "idle"})
-        }).catch((error) => {
-            view.setData({"analysing": false});
-            // Analizar button
-            this.setState({"status": "idle"})
-        })
+    textFieldInputHandler(event, component) {
+        console.log("InstructionElementTextInputComponent.textFieldInputHandler()", event, component, this);
+        this.feedback.call();
     }
-    */
-
-    uploadAudio(blob) {
-        let fd = new FormData();
-        fd.append('audio', blob, 'audio.ogg');
-        fd.append('csrfmiddlewaretoken', Cookies.get("csrftoken"));
-        jQuery.ajax({
-            type: 'POST',
-            url: '/flow/transcribe/',
-            data: fd,
-            processData: false,
-            contentType: false,
-            success: (successData) => {
-                //
-            },
-            error: (xhr, status, error) => {
-                console.error(xhr);
-            },
-        });
-    }
-
 }

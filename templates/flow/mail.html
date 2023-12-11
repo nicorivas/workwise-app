@@ -8,15 +8,21 @@
 
     <div style="width:600px;">
 
-    <p>{{pitch.author_name}},</p>
+    <p>Estimado {{task.created_by.profile.full_name}},</p>
 
-    <p>¡Muchas gracias por haber participado en <i>Comparte tu pitch</i> en el stand de Carozzi!</p>
+    <p>¡Muchas gracias por haber participado en <i>Comparte tu pitch</i>!</p>
 
-    <p>A continuación te compartimos una versión extendida del feedback que te dio nuestra IA.</p>
+    <p>A continuación, te devolvemos tu pitch junto al feedback que te dio nuestra IA.</p>
 
-    {{pitch_analysis_long_html | safe}}
+    <p style="color: #dd3a42; font-weight: 600; font-size: 1.2em;">Pitch</p>
 
-    <p>¡Te deseamos el mejor de los éxitos con tu startup {{pitch.startup_name}}!</p>
+    {{pitch | safe}}
+
+    <p style="color: #dd3a42; font-weight: 600; font-size: 1.2em;">Análisis</p>
+
+    {{analysis | safe}}
+
+    <p>¡Te deseamos el mejor de los éxitos!</p>
 
     </div>
 

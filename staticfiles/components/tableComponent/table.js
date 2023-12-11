@@ -42,6 +42,7 @@ export default class TableComponent extends AbstractComponent {
             kebabComponent.addItem("Delete");
         })
         if (this.table.rows().data().length == 0) {
+            console.log("Empty table")
             this.setState({"empty": true});
         };
         this.bindEvents();

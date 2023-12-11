@@ -1,0 +1,49 @@
+:root {
+    --color-text: #444;
+    --background-color: #f0fff9;
+}
+
+body {
+    background-color: var(--background-color);
+}
+
+.header {
+    height: 100px;
+}
+
+.body {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow-y: none;
+    padding: 50px;
+}
+
+.flow {
+    width: 800px;
+}
+
+.step {
+    width: 500px;
+
+}
+
+.instruction-element__text-input__textarea {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.instruction-element__text-input__textarea textarea {
+    border: 1px solid #cacaca;
+}
+
+.instruction-element__text-input__textarea__buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 0.5em;
+    padding-left: 0.5em;
+}

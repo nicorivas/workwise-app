@@ -7,7 +7,7 @@ export default class LLM {
 
     stream(view_url, source_element_id, destination_element_id, view_data=null) {
 
-        console.log("LLM:stream");
+        //console.log("LLM:stream");
 
         return new Promise((resolve, reject) => {
         
@@ -34,25 +34,25 @@ export default class LLM {
             } else {
                 websocket_url = `wss://${hostname}/ws/openai_stream/?group_name=` + view_url
             }
-            console.log("Connecting to ", websocket_url);
+            //console.log("Connecting to ", websocket_url);
             const socket = new WebSocket(websocket_url);
 
             // Check if source element exists
             if (jQuery(`#${source_element_id}`).length == 0) {
-                console.log(`LLM:stream: source_element_id ${source_element_id} does not exist`);
+                //console.log(`LLM:stream: source_element_id ${source_element_id} does not exist`);
                 return;
             }
 
             // Check if destination element exists with jQuery
             if (jQuery(`#${destination_element_id}`).length == 0) {
-                console.log(`LLM:stream: destination_element_id ${destination_element_id} does not exist`);
+                //console.log(`LLM:stream: destination_element_id ${destination_element_id} does not exist`);
                 return;
             }
 
             socket.onopen = function (event) {
                 // Called when the socket connection is established.
                 // AJAX call to the view
-                console.log("LLM:stream.socket.onopen")
+                //console.log("LLM:stream.socket.onopen")
                 let data = {
                     csrfmiddlewaretoken: csrf_token,
                     query: jQuery(`#${source_element_id}`).val(),
@@ -66,7 +66,7 @@ export default class LLM {
                         // Nothing to do: call is made from the server to the socket directly.
                     },
                     error: function (xhr, errmsg, err) {
-                        console.log(`streamCallGeneral.error:\n ${xhr.status}: ${xhr.responseText}`);
+                        //console.log(`streamCallGeneral.error:\n ${xhr.status}: ${xhr.responseText}`);
                     }
                 });
             };
@@ -74,7 +74,7 @@ export default class LLM {
             socket.onmessage = function (event) {
                 // Each message is a response from the server with a chunk of the model response.
                 // We save the total response and each time we get a new chunk we render the markdown.
-                console.log("LLM:stream.socket.onmessage");
+                //console.log("LLM:stream.socket.onmessage");
                 const data = JSON.parse(event.data);
                 if (data.status == "continue") {
                     // Add received chunk, in data.response, to total response
@@ -94,16 +94,16 @@ export default class LLM {
             };
 
             socket.onerror = function (error) {
-                console.log(`LLM:stream.socket.onerror: ${error.message}`);
+                //console.log(`LLM:stream.socket.onerror: ${error.message}`);
             };
 
             socket.onclose = (event) => {
-                console.log("LLM:stream.socket.onclose", event)
+                //console.log("LLM:stream.socket.onclose", event)
                 if (event.wasClean) {
-                    console.log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+                    //console.log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
                     resolve(response);
                 } else {
-                    console.error('Connection died', event);
+                    //console.error('Connection died', event);
                     reject();
                 }
             }

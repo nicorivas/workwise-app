@@ -1,5 +1,8 @@
 import AbstractComponent from "../abstractComponent.js";
 
+/* Complex dropdown selector  
+*/
+
 export default class SelectorComponent extends AbstractComponent {
 
     constructor(element) {
@@ -59,6 +62,7 @@ export default class SelectorComponent extends AbstractComponent {
     }
 
     itemClick(e) {
+        console.log(e);
         e.stopPropagation();
 
         // Get item clicked
@@ -66,12 +70,11 @@ export default class SelectorComponent extends AbstractComponent {
 
         // Iterate over functions and call them
         this.functions.forEach((funcObject) => {
-            const {func, args} = funcObject;
-            args.push($item);
-            console.log("Button.buttonClick(): call function", func, args);
+            let {func, args} = funcObject;
             // Execute the function, when it finished executing, set state back to idle
-            Promise.resolve(func(...args)).then((e) => {
-                console.log("Button.buttonClick(): return function", func, args);
+            Promise.resolve(func(...[...args,$item])).then((e) => {
+                this.setState({"selected": $item})
+                //console.log("Button.buttonClick(): return function", func, args);
             });
         });
 
@@ -87,7 +90,6 @@ export default class SelectorComponent extends AbstractComponent {
     selectionAfter($item) {
         this.setState({
             "open": false,
-            "selected_text":jQuery.trim($item.text())
         })
     }
 

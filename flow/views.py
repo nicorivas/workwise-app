@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib.auth.models import User
 
+from instruction.models import Feedback
 from projects.models import Project
 from company.models import Company
 from actions.models import Action
@@ -46,8 +47,6 @@ class FlowReadView(View):
             context["task"] = task
             context["document"] = task.active_document
 
-        print("context", context)
-
         # Fill registration form
         form = FlowRegisterForm()
         if task_id:
@@ -56,10 +55,8 @@ class FlowReadView(View):
         context["form"] = form
 
         if task_id:
-            instructions = Instruction.objects.filter(task=task, type__flow_visible=True)
+            instructions = Instruction.objects.filter(task=task, type__flow_visible=True).select_related("type")
             context["instructions"] = instructions
-
-        
 
         return render(request, "flow/flow.html", context)
 
@@ -89,7 +86,7 @@ class FlowCreateTask(View):
     
     def post(self, request):
 
-        print("FlowCreateTask", request.POST)
+        logging.warning("FlowCreateTask:post" + str(request.POST))
 
         # Validate form
         form = FlowRegisterForm(request.POST)
@@ -106,7 +103,11 @@ class FlowCreateTask(View):
         user_data = json.loads(user_data.decode('utf-8'))
         user = User.objects.get(pk=user_data["id"])
         user.profile.companies.add(company)
-        user.save()
+        user.profile.full_name = request.POST["author_name"]
+        user.profile.save()
+
+        logging.warning("FlowCreateTask:post" + str(user))
+        logging.warning("FlowCreateTask:post" + str(user.profile.full_name))
 
         project = Project.objects.get(pk=request.POST["project"])
         action = Action.objects.get(pk=request.POST["action"])
@@ -132,74 +133,34 @@ class FlowCreateTask(View):
 
 flow_create_task = FlowCreateTask.as_view()
 
-class FlowTranscribe(View):
-    
-    def post(self, request):
-
-        audio_file = request.FILES['audio']
-        transcript = instruction_element.transcribe(audio_file)
-        instruction = Instruction.objects.get(pk=request.POST.get("instruction"))
-        instruction.data = {"pitch": transcript["text"]}
-        instruction.save()
-
-        response = {
-            "text":transcript["text"]
-        }
-
-        audio_file.close()
-
-        return JsonResponse(response, safe=False)
-    
-flow_transcribe = FlowTranscribe.as_view()
-
-class FlowAnalyse(View):
-
-    def post(self, request):
-
-        print("FlowAnalyse:post", request.POST)
-
-        pitch = Pitch.objects.get(pk=request.POST.get("pitch_id"))
-        pitch.analyse(request)
-        pitch.save()
-
-        return JsonResponse({"status": "ok"}, safe=False)
-
-flow_analyse = FlowAnalyse.as_view()
-
-class FlowAnalyseLong(View):
-
-    def post(self, request):
-        
-        from django.core.mail import send_mail
-        
-        pitch = Pitch.objects.get(pk=request.POST.get("pitch_id"))
-        pitch.analyse_long(request)
-        html = markdown.markdown(pitch.pitch_analysis_long)
-        html_message = render_to_string('flow/mail.html', {'pitch': pitch, 'pitch_analysis_long_html': html})
-        plain_message = strip_tags(html_message)
-        send_mail(
-            f'Análisis extendido de pitch sobre {pitch.startup_name}',
-            plain_message,
-            'nico@getworkwise.ai',
-            [pitch.author_email],
-            html_message=html_message,
-            fail_silently=False)
-
-        return JsonResponse({"status": "ok"}, safe=False)
-
-flow_analyse_long = FlowAnalyseLong.as_view()
-
-
 class FlowSendEmail(View): 
     
-    def post(self, request):
+    def post(self, request, flow_id, task_id):
+
+        from django.core.mail import EmailMultiAlternatives
 
         logging.warning("FlowSendEmail:post" + str(request.POST))
 
-        from django.core.mail import send_mail
-        send_mail('Subject here', 'Here is the message.', 'nico@getworkwise.ai', [
-            'bernardita.ihnen@getworkwise.ai',
-            'nicorivas@gmail.com'], fail_silently=False)
+        flow = Flow.objects.get(pk=flow_id)
+        task = Task.objects.get(pk=task_id)
+        instructions = Instruction.objects.filter(task=task, type__flow_visible=True)
+        pitch = instructions[0].data["power_pitch"]
+        analysis = task.active_document.reply
+        analysis_html = markdown.markdown(analysis)
+        html_message = render_to_string('flow/mail.html', {'task': task, 'pitch': pitch, 'analysis': analysis_html})
+        plain_message = strip_tags(html_message)
+
+        msg = EmailMultiAlternatives(
+            f'Análisis de pitch',
+            plain_message,
+            'nico@getworkwise.ai',
+            [task.created_by.email],
+            ["christian.ortiz@brinca.com "],
+            reply_to=["nico@getworkwise.ai"],
+            headers={"Message-ID": "foo"},
+        )
+        msg.attach_alternative(html_message, "text/html")
+        msg.send()
         
         return JsonResponse({"status": "ok"}, safe=False)
         

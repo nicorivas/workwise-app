@@ -1,0 +1,146 @@
+fade {
+    position: absolute;
+    bottom: 0px;
+    display: block;
+    width: 100%;
+    height: 50px;
+    background-image: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0), 
+        rgba(255, 255, 255, 1.0)
+    100%);
+}
+
+.instruction-element-feedback-wrapper {
+    position: relative;
+}
+
+.instruction-element-feedback {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #e5cde3;
+    border-radius: 5px;
+    width: 300px;
+    left: 40px;
+    top: 0px;
+    padding: 1em;
+    box-shadow: 0 0 7px #f2dbed;
+    transition: background-color 0.5s ease;
+    transform: translate(0, -20%);
+}
+
+.instruction-element-feedback--loading {
+    animation: colorChange 3s infinite;
+}
+
+.instruction-element-feedback-overlay {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* Fixed position relative to the viewport */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 999; /* Specify a stack order in case you're using a different order for other elements */
+
+}
+
+.instruction-element-feedback-overlay--visible {
+    display: flex;
+}
+
+.instruction-element-feedback--large {
+    justify-content: flex-start;
+    position: fixed; /* Fixed position relative to the viewport */
+    left: 50%;      /* Position the div 50% from the left of the viewport */
+    transform: translate(-50%, 0); /* Adjust the div's position to truly center it */
+    width: 500px;     /* Width of the overlay div, adjust as needed */
+    height: calc(100vh - 40px);    /* Height of the overlay div, adjust as needed */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    overflow-y: scroll; /* Enable scrolling if the content is long */
+    z-index: 1000;  /* Ensures the div stays on top of other content */
+    box-sizing: border-box;
+    padding: 40px;
+    box-shadow: none;
+}
+
+/* Keyframes for color change */
+@keyframes colorChange {
+  0% {
+    background-color: #ffb4c566; /* Light pink color */
+  }
+  50% {
+    background-color: #ffde5966; /* Magenta color */
+  }
+  100% {
+    background-color: #ffb4c566; /* Yellow color */
+  }
+}
+
+.instruction-element-feedback--large fade {
+    display: none;
+}
+
+.instruction-element-feedback--visible {
+    display: flex;
+}
+
+.instruction-element-feedback__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.instruction-element-feedback__header h3 {
+    font-size: 1em;
+    margin: 0;
+}
+
+.instruction-element-feedback__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 300px;
+    overflow-y: hidden;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.instruction-element-feedback__body__text {
+    height: inherit;
+}
+
+.instruction-element-feedback__body__text .text {
+    height: inherit;
+}
+
+.instruction-element-feedback--large .instruction-element-feedback__body {
+    height: auto;
+    overflow-y: scroll;
+}
+
+.instruction-element-feedback__body p {
+    margin-block-start: 0;
+    color: var(--color-text);
+    line-height: 1.5em;
+}
+
+.instruction-element-feedback__footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}

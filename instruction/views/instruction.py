@@ -1,4 +1,4 @@
-import urllib
+import urllib, logging, json
 
 from django.shortcuts import render
 from django.views import View
@@ -185,6 +185,19 @@ class InstructionDeleteView(View):
         return response
     
 instruction_delete_view = InstructionDeleteView.as_view()
+
+class InstructionSaveView(View):
+
+    def post(self, request, instruction_id):
+
+        instruction = get_object_or_404(Instruction, id=instruction_id)
+        logging.warning(f"InstructionSaveView.post: {request.POST}")
+        instruction.data = json.loads(request.POST.get("data"))
+        logging.warning(instruction.data)
+        instruction.save()
+        return JsonResponse({"status": "Saved"})
+
+instruction_save_view = InstructionSaveView.as_view()
 
 class InstructionCreateFromTemplateView(View):
     """

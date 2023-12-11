@@ -58,14 +58,12 @@ export default class AbstractComponent {
     callFunctions(e) {
         // Call registered functions.
         this.functions.forEach((funcObject) => {
-            console.log("AbstractComponent.buttonClick(): funcObject", funcObject);
             const {func, args} = funcObject;
             // We add the event to the arguments of the function, always at the end.
             args.push(e);
-            console.log("AbstractComponent.buttonClick(): call function", func, args);
             // Execute the function, when it finished executing, set state back to idle
             Promise.resolve(func(...args)).then((e) => {
-                console.log("AbstractComponent.buttonClick(): return function", func, args);
+                /**/
             });
         });
     }

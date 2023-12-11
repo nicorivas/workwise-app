@@ -9,7 +9,7 @@
         <p class="button__text">{{label}}</p>
     </div>
     {% else %}
-    <div class="button {{class}} {% if box %} button--box {% endif %}">
+    <div class="button {{class}} {% if box %} button--box {% endif %} {% if light %} button--light {% endif %}">
         <div class="button__loader" style="width: 25px;opacity:0;">{% include 'components/loader_button.html' %}</div>
         <p class="button__text">{{label}}</p>
         <div class="button__loader__placeholder" style="width: 25px;opacity:0;">{% include 'components/loader_button.html' %}</div>
