@@ -1,1 +1,8 @@
-.workwise-env
+*__pycache__
+*/__pycache__
+test
+build
+*.DS_Store
+*/.DS_Store
+venv/
+.env

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('instruction', '0036_remove_instructionelementchoices_format'),
+        ('instruction', '0034_instructionelementchoices_and_more'),
     ]
 
     operations = [
