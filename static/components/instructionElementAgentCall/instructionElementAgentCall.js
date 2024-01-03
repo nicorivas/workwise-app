@@ -27,6 +27,8 @@ export default class InstructionElementAgentCallComponent extends AbstractCompon
             "Crear planificación estratégica": this.agentCallWriteToDocument,
             "Evaluate pitch": this.agentCallWriteToDocument,
             "Analyze Power Pitch": this.agentCallWriteToDocument,
+            "Sales Pitch Sandler": this.agentCallWriteToDocument,
+            "Socialab Propuesta Análisis": this.agentCallWriteToDocument,
             "LinkedIn Post": this.agentCallWriteToFormat,
             "Project Charter Email": this.agentCallWriteToFormat,
             "Summary": this.agentCallWriteToFormat,
@@ -111,6 +113,10 @@ export default class InstructionElementAgentCallComponent extends AbstractCompon
             console.warn("InstructionComponent.writeToDocument(): Document not found");
         }
         
+    }
+
+    value() {
+        return "";
     }
 
 }

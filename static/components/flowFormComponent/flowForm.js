@@ -17,6 +17,7 @@ export default class FlowFormComponent extends AbstractComponent {
         this.task = null;
         // State
         this.state = {
+            register: jQuery("#btn-create-task").length > 0,
             currentStep: 0,
             steps: jQuery(".step").map(function () { return `#${this.id}`; }).get(),
             currentInstruction: 0,
@@ -31,7 +32,9 @@ export default class FlowFormComponent extends AbstractComponent {
 
     createComponents() {
         // Create task button, submission of first form
-        this.createTaskButton = new ButtonComponent('#btn-create-task', true, false);
+        if (this.state.register) {
+            this.createTaskButton = new ButtonComponent('#btn-create-task', true, false);
+        }
         
         // If we have a task, create component.
         if (jQuery("#task").length > 0 && jQuery("#task").data("id")) {
@@ -45,7 +48,9 @@ export default class FlowFormComponent extends AbstractComponent {
     }
 
     bindEvents() {
-        this.createTaskButton.bindEvent('click', this.createTaskHandler, null, this);
+        if (this.state.register) {
+            this.createTaskButton.bindEvent('click', this.createTaskHandler, null, this);
+        }
     }
 
     render() {
@@ -58,6 +63,12 @@ export default class FlowFormComponent extends AbstractComponent {
         // Update step indicator
         jQuery('.step-indicator .dot').removeClass('active');
         jQuery(`.step-indicator .dot:eq(${this.state.currentStep})`).addClass('active');
+
+        if (this.state.currentStep == 0) {
+            jQuery("#task-container").hide();
+        } else {
+            jQuery("#task-container").show();
+        }
     }
 
     destroy() {

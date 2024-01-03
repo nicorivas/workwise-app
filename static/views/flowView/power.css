@@ -5,7 +5,6 @@ html, body {
 }
 
 :root {
-    --color-text: #444;
     --border-color-normal: #eee;
     --border-radius: 5px;
     --wrapper-padding-normal: 10px;
@@ -13,13 +12,13 @@ html, body {
     --background-color-bright: #ffffff;
     --background-color-dark: #d4373f;
     --background-color-darker: #ad2128;
-    --background-button: #d4373f;
-    --background-button-hover: #ad2128;
-    --background-button-active: #ad2128;
+    --background-button: #376ad4;
+    --background-button-hover: #507ad4;
+    --background-button-active: #507ad4;
     --background-highlight-hover: #e5dcff;
     --background-color-alternate: #8155D0;
     --background-color-alternate-darker: #5f3aa5;
-    --color-text: #dd3a42;
+    --color-text: #585858;
     --background-color-soft: #eee;
     --color-error-light: #ffb5b5;
     --color-error-normal: #d68d8d;
@@ -66,7 +65,8 @@ h1 {
 }
 
 h2 {
-    margin-top: 0;
+    margin: 0;
+    padding: 0;
     font-weight: normal;
     font-size: 20px;
 }
@@ -127,7 +127,7 @@ h3 {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    padding: 1em;
+    padding: 2em;
 }
 
 .step__instruction.hidden {
@@ -567,6 +567,18 @@ input {
     color: var(--color-text)
 }
 
+.instruction-input {
+    width: 100%;
+    height: 100%;
+    color: #444;
+    border: 1px solid var(--border-color-normal);
+    border-radius: var(--border-radius);
+    padding: 1.0em;
+    margin: 2.0em;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+
 .instruction-element__text-input__textarea textarea {
     border: 1px solid var(--border-color-normal);
     border-radius: var(--border-radius);
@@ -574,6 +586,7 @@ input {
     font-size: 0.9em;
     color: #444;
     width: 100%;
+    height: 100%;
 }
 
 .transcribing {

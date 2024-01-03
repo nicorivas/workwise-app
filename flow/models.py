@@ -22,10 +22,14 @@ class Flow(models.Model):
     description = models.TextField(default="", null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     footer_text = models.TextField(default="", null=True, blank=True)
+    register = models.BooleanField(default=False)
     debug = models.BooleanField(default=False)
     style = models.CharField(max_length=32, choices=[("default", "Default"), ("web", "Web")], default="default")
     css = models.CharField(max_length=64, default="flow.css")
     instruction_types = models.ManyToManyField(InstructionType, blank=True)
+
+    def __str__(self):
+        return f"{self.pk}. {self.name}"
 
 # Create a Pitch model
 class Pitch(models.Model):

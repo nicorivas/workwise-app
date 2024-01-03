@@ -14,7 +14,9 @@
     </div>
     <div class="body">
         <!-- Task creation -->
+        {% if flow.register %}
         {% include 'flow/step_register.html' %}
+        {% endif %}
         <!-- Task -->
         <div id="task-container">
         {% include 'flow/task.html' %}

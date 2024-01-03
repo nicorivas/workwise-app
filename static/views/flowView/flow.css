@@ -125,10 +125,7 @@ h3 {
     flex-direction: column;
     justify-content: space-between;
     background-color: #fff;
-    height: 97%;
-    padding: 1em;
     border-radius: 8px;
-    margin: 5px;
     width: 100%;
 }
 

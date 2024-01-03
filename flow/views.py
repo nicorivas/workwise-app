@@ -27,7 +27,16 @@ class FlorIndexView(View):
     
     def get(self, request):
 
-        return render(request, "flow/index.html")
+        flows = Flow.objects.all()
+        context = {
+            "flows": flows,
+            "flow": flows[0]
+        }
+
+        if request.GET.get("source") == "menu":
+            return render(request, "flow/main.html", context)
+        else:
+            return render(request, "flow/index.html", context)
 
 flow_index = FlorIndexView.as_view()
 
@@ -105,9 +114,6 @@ class FlowCreateTask(View):
         user.profile.companies.add(company)
         user.profile.full_name = request.POST["author_name"]
         user.profile.save()
-
-        logging.warning("FlowCreateTask:post" + str(user))
-        logging.warning("FlowCreateTask:post" + str(user.profile.full_name))
 
         project = Project.objects.get(pk=request.POST["project"])
         action = Action.objects.get(pk=request.POST["action"])
