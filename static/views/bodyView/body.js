@@ -25,9 +25,10 @@ export default class BodyView extends AbstractView {
 
         // Sidebar
         this.sidebarComponent = new SidebarComponent("#sidebar");
-        this.sidebarComponent.buttonExplorer.bindEvent('click', this.sidebarButtonHandler, null, this, "explorer");
+        //this.sidebarComponent.buttonExplorer.bindEvent('click', this.sidebarButtonHandler, null, this, "explorer");
         this.sidebarComponent.buttonProjects.bindEvent('click', this.sidebarButtonHandler, null, this, "projects");
         this.sidebarComponent.buttonActions.bindEvent('click', this.sidebarButtonHandler, null, this, "actions");
+        this.sidebarComponent.buttonFlows.bindEvent('click', this.sidebarButtonHandler, null, this, "flow");
 
         // Others
         this.helpSidebarComponent = new HelpSidebarComponent("#help-sidebar");
@@ -42,14 +43,14 @@ export default class BodyView extends AbstractView {
 
     sidebarButtonHandler(view, url) {
         console.log("SidebarComponent.sidebarButtonHandler()", view, url);
-        view.sidebarComponent.select(url)
-        view.openMain(url)
+        view.sidebarComponent.select(url);
+        view.openMain(url);
     }
 
     openMain(url) {
         jQuery("#main-loader-wrapper").addClass("htmx-request");
         jQuery("#main").addClass("htmx-request");
-        this.sidebarComponent.select(url)
+        this.sidebarComponent.select(url);
         jQuery.ajax({
             url: `/${url}/?source=menu`,
             type: "GET",

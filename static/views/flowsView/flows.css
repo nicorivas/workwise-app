@@ -1,0 +1,9 @@
+#flows-table-container {
+    box-sizing: border-box;
+    background-color: var(--background-white);
+    padding: var(--wrapper-padding-large);
+    margin: var(--wrapper-padding-large);
+    border: 1px solid var(--border-color-normal);
+    border-radius: 5px;
+    width: 90%;
+}

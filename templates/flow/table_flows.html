@@ -1,0 +1,23 @@
+{% load keyvalue %}
+
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Created at</th>
+        <th></th>
+        <th></th>
+    </tr>
+</thead>
+<tbody>
+    {% for flow in flows|dictsort:"name" %}
+    <tr>
+        <td><a href="{% url 'flow:flow_read' flow.pk %}">{{ flow.name }}</a></td>
+        <td>{{ flow.description }}</td>
+        <!--<td>{{ flow.date_published|date:"M d, Y" }}</td>-->
+        <td></td>
+        <td class="right">
+            {% include "components/kebabComponent/kebab.html" with dataelementid=flow.pk name="context-document-kebab-"|addstr:flow.pk right=1 %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>

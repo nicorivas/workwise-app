@@ -1,0 +1,10 @@
+{% load static %}
+
+<div id="flows-table-container">
+    {% include 'components/tableComponent/table.html' with title="Flows" name="flows-table" table="flow/table_flows.html" %}
+</div>
+
+<script type="module">
+    import FlowsView from "{% static 'views/flowsView/flows.js' %}";
+    let flowsView = new FlowsView("#flows");
+</script>

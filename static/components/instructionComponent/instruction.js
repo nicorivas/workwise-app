@@ -231,6 +231,7 @@ export default class InstructionComponent extends AbstractComponent{
         return new Promise((resolve, reject) => {
             let data = {}
             for (let instructionElement of this.instructionElements) {
+                console.log(instructionElement);
                 console.log(instructionElement.id);
                 data[`${instructionElement.id}`] = instructionElement.value();
             }

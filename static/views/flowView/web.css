@@ -1,6 +1,6 @@
 :root {
     --color-text: #444;
-    --background-color: #f0fff9;
+    --background-color: #ecf3f8;
 }
 
 body {
@@ -17,6 +17,7 @@ body {
     border-radius: 10px;
     overflow-y: none;
     padding: 50px;
+    box-sizing: border-box;
 }
 
 .flow {
