@@ -18,7 +18,7 @@ class UserCreateView(View):
         if (created):
             user.first_name = request.POST.get('name')
         
-         # Intentar asignar la compañía basada en el subdominio
+        # Intentar asignar la compañía basada en el subdominio
         try:
             company = Company.objects.get(name=subdomain)
             user.profile.companies.add(company)

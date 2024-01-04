@@ -27,10 +27,17 @@ class FlorIndexView(View):
     
     def get(self, request):
 
-        flows = Flow.objects.all()
+        company_id = request.session.get('company_id')
+        if company_id is not None:
+            # Hay una compañía establecida en la sesión
+            flows = Flow.objects.filter(company_id=company_id)
+        else:
+            # No hay una compañía establecida en la sesión
+            flows = Flow.objects.all()
+
         context = {
             "flows": flows,
-            "flow": flows[0]
+            "flow": flows[0] if flows else None
         }
 
         if request.GET.get("source") == "menu":

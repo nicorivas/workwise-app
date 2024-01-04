@@ -5,12 +5,12 @@ from app.routing import router
 class CompanySerializerNormal(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'subdomain']
 
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Company
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'subdomain']
 
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()

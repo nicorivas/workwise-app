@@ -10,3 +10,9 @@ docker run -dp 8000:8000 workwiseapp
 Define the settings filename with the environment variable:
 
 `export DJANGO_SETTINGS_MODULE=app.settings_dev_local`
+
+
+## Requisitos
+Python 3.11.x o superior
+Django 4.2.8 o superior
+PostgreSQL 14.x o superior
