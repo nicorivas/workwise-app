@@ -23,17 +23,12 @@ else:
         load_dotenv()
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SECRET_KEY = os.getenv('SECRET_KEY')
-
 DEBUG = True
-
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
-
 INSTALLED_APPS = [
     'daphne',
     "explorer.apps.ExplorerConfig",
@@ -64,7 +59,7 @@ INSTALLED_APPS = [
     'channels_redis',
     'rest_framework',
     'django_filters',
-    "invitations",
+    'invitations',
 ]
 
 MIDDLEWARE = [
@@ -99,7 +94,6 @@ TEMPLATES = [
 ]
 
 ASGI_APPLICATION = 'app.asgi.application'
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -112,7 +106,6 @@ CHANNEL_LAYERS = {
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -123,12 +116,10 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT"),
     }
 }
-
 SITE_ID = 1
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -157,19 +148,14 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (BASE_DIR / "static",)
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -177,22 +163,8 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
-        "OPTIONS": {
-            "azure_container":"app",
-            "connection_string":"DefaultEndpointsProtocol=https;AccountName=workwisestorage;AccountKey=FMq36FZKDLkLNtBSRPiXU9hO6IDNx4s7lHa0KJpHzsjbUd6vdBvAfqRhu9G7s3DmrrEU/263CvJg+AStV+3fDg==;EndpointSuffix=core.windows.net"
-        },
-    },
-    "staticfiles": {
-        "BACKEND": "storages.backends.azure_storage.AzureStorage",
-        "OPTIONS": {
-            "azure_container":"app",
-            "connection_string":"DefaultEndpointsProtocol=https;AccountName=workwisestorage;AccountKey=FMq36FZKDLkLNtBSRPiXU9hO6IDNx4s7lHa0KJpHzsjbUd6vdBvAfqRhu9G7s3DmrrEU/263CvJg+AStV+3fDg==;EndpointSuffix=core.windows.net"
-        },
-    },
-}
+# En ambiente local se usa el storage local por tanto se prescinde de la variable STORAGES
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -220,13 +192,13 @@ LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.getenv('FROM_EMAIL', default='no-responder@getworkwise.ai')
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = 'email'

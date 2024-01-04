@@ -11,11 +11,22 @@ class UserCreateView(View):
 
     def post(self, request, company_id=None):
 
+        host = request.get_host()
+        subdomain = host.split('.')[0]
+
         user, created = User.objects.get_or_create(email=request.POST.get('email'), username=request.POST.get('email'))
         if (created):
             user.first_name = request.POST.get('name')
-        if request.POST.get("company"):
-            user.profile.companies.add(request.POST.get("company"))
+        
+         # Intentar asignar la compañía basada en el subdominio
+        try:
+            company = Company.objects.get(name=subdomain)
+            user.profile.companies.add(company)
+        except Company.DoesNotExist:
+            # Si la compañía basada en el subdominio no existe, usar el parámetro GET
+            if request.POST.get("company"):
+                user.profile.companies.add(request.POST.get("company"))
+
         user.save()
 
         return JsonResponse(UserSerializerNormal(user).data)

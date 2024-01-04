@@ -14,6 +14,7 @@ export default class ModalComponent extends AbstractComponent {
      */
     constructor(element) {
         super(element);
+        console.log("#"+this.$element.attr("id"))
         this.bootstrapModal = new bootstrap.Modal("#"+this.$element.attr("id"), {keyboard: false})
         this.init();
     }
