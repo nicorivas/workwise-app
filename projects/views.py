@@ -29,15 +29,14 @@ def index_context(request, context=None):
     if request.user.is_authenticated:
         projects = projects.filter(company=request.session.get("company_id"))
 
-    records = Record.objects.all()
-    project_create_form = ProjectCreateForm()
+    records = Record.objects.defer()
 
     if not context:
         context = {}
+        context["project_create_form"] = ProjectCreateForm()
 
     context["projects"] = projects
     context["records"] = records
-    context["project_create_form"] = project_create_form
 
     return context
 
@@ -54,14 +53,10 @@ def record(request):
     if request.method == "POST":
         audio_file = request.FILES.get("recorded_audio")
         language = request.POST.get("language")
-        record = Record.objects.create(language=language, voice_record=audio_file)
-        record.save()
+        Record.objects.create(language=language, voice_record=audio_file)
         messages.success(request, "Audio recording successfully added!")
-        return JsonResponse(
-            {
-                "success": True,
-            }
-        )
+        return JsonResponse({ "success": True })
+    
     context = {"page_title": "Record audio"}
     return render(request, "core/record.html", context)
 
@@ -78,7 +73,7 @@ class ProjectIndexView(View):
     def get(self, request):
         """Index view of projects, shows list.
         """
-        print("ProjectIndexView.get",request.GET)
+        print("ProjectIndexView.get", request.GET)
 
         context = index_context(request)
 

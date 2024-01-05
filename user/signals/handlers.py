@@ -25,7 +25,7 @@ def user_signed_up_(request, user, **kwargs):
     user.groups.add(group)
 
     # Crea el perfil del usuario
-    profile = Profile.objects.create(user=user)
+    profile = Profile.objects.get_or_create(user=user)
 
     # Añade la compañía al perfil
     profile.companies.add(company)

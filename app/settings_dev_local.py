@@ -241,3 +241,7 @@ OPEN_URLS = [
     "/instruction/*/element/*/call_prompt",
     "/media/*"
 ]
+
+ACCOUNT_FORMS = {
+    'signup': 'app.forms.CustomSignupForm',
+}
