@@ -11,10 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from dotenv import load_dotenv
 from pathlib import Path
-import os, logging
+import os
 
 from decouple import config
-import allauth
 
 if not os.getenv('IN_DOCKER'):
     load_dotenv()
@@ -121,6 +120,9 @@ SITE_ID = 1
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'app.validators.ValidatePasswordStrength',
+    },
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },

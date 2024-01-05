@@ -146,6 +146,9 @@ SITE_ID = 1
 
 AUTH_PASSWORD_VALIDATORS = [
     {
+        'NAME': 'app.validators.ValidatePasswordStrength',
+    },
+    {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
@@ -289,3 +292,8 @@ OPEN_URLS = [
     "/instruction/*/element/*/call_prompt",
     "/media/*",
 ]
+
+
+ACCOUNT_FORMS = {
+    'signup': 'app.forms.CustomSignupForm',
+}
